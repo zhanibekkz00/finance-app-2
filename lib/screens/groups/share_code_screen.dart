@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/group_service.dart';
+import 'package:finance_app/l10n/generated/app_localizations.dart';
 
 class ShareCodeScreen extends ConsumerStatefulWidget {
   const ShareCodeScreen({super.key});
@@ -50,6 +51,8 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
     final userId = ref.read(authProvider).userId;
     if (userId == null) return;
 
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       final code = await _groupService.createGroup(userId);
       if (mounted) {
@@ -61,9 +64,8 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
         } else {
           setState(() => _isLoading = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text(
-                    'Failed to create group. Check your connection or Firestore rules.')),
+            SnackBar(
+                content: Text(l10n.failedToCreateGroup)),
           );
         }
       }
@@ -71,7 +73,7 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
       if (mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('${l10n.unknown}: $e')),
         );
       }
     }
@@ -79,8 +81,10 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Joint Budget Group')),
+      appBar: AppBar(title: Text(l10n.jointBudgetGroup)),
       body: Center(
         child: _isLoading
             ? const CircularProgressIndicator()
@@ -90,9 +94,9 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (_inviteCode != null) ...[
-                      const Text(
-                        'Your Group Code',
-                        style: TextStyle(fontSize: 20, color: Colors.grey),
+                      Text(
+                        l10n.yourGroupCode,
+                        style: const TextStyle(fontSize: 20, color: Colors.grey),
                       ),
                       const SizedBox(height: 16),
                       Container(
@@ -126,42 +130,42 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
                               Clipboard.setData(
                                   ClipboardData(text: _inviteCode!));
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Code copied!')),
+                                SnackBar(content: Text(l10n.codeCopied)),
                               );
                             },
                             icon: const Icon(Icons.copy),
-                            label: const Text('Copy'),
+                            label: Text(l10n.copy),
                           ),
                           const SizedBox(width: 16),
                           ElevatedButton.icon(
                             onPressed: () {
                               Share.share(
-                                  'Join my budget group using this code: $_inviteCode');
+                                  l10n.shareMessage(_inviteCode!));
                             },
                             icon: const Icon(Icons.share),
-                            label: const Text('Share'),
+                            label: Text(l10n.share),
                           ),
                         ],
                       ),
                       const SizedBox(height: 24),
-                      const Text(
-                        'Share this code with your partner correctly to sync your budgets.',
+                      Text(
+                        l10n.shareCodeInstruction,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ] else ...[
                       const Icon(Icons.group_add, size: 64, color: Colors.grey),
                       const SizedBox(height: 24),
-                      const Text(
-                        'Create a Joint Group',
-                        style: TextStyle(
+                      Text(
+                        l10n.createJointGroup,
+                        style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
-                      const Text(
-                        'Create a group to share expenses and track budget together.',
+                      Text(
+                        l10n.createGroupInstruction,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton(
@@ -170,7 +174,7 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 32, vertical: 16),
                         ),
-                        child: const Text('Create Group'),
+                        child: Text(l10n.createGroup),
                       ),
                     ],
                   ],

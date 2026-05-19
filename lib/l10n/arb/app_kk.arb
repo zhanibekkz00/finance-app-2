@@ -58,5 +58,46 @@
   "logout": "Шығу",
   "notifications": "Хабарландырулар",
   "noNotifications": "Әзірге хабарландырулар жоқ",
-  "unknown": "Белгісіз"
+  "unknown": "Белгісіз",
+  "jointBudgetGroup": "Бірлескен бюджет тобы",
+  "yourGroupCode": "Сіздің топ кодыңыз",
+  "copy": "Көшіру",
+  "codeCopied": "Код көшірілді!",
+  "shareMessage": "Мына код арқылы менің бюджет тобыма қосылыңыз: {code}",
+  "@shareMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "shareCodeInstruction": "Бюджеттерді синхрондау үшін бұл кодты серіктесіңізбен бөлісіңіз.",
+  "createJointGroup": "Бірлескен топ құру",
+  "createGroupInstruction": "Шығындарды бөлісу және бюджетті бірге бақылау үшін топ құрыңыз.",
+  "createGroup": "Топ құру",
+  "failedToCreateGroup": "Топ құру мүмкін болмады.",
+  "enterInviteCode": "Шақыру кодын енгізіңіз",
+  "enterCodeInstruction": "Бюджетті біріктіру үшін серіктесіңіз ұсынған шақыру кодын енгізіңіз.",
+  "pleaseEnterCode": "Кодты енгізіңіз",
+  "joinedGroupSuccess": "Топқа сәтті қосылдыңыз!",
+  "invalidCodeError": "Қате код немесе топ табылмады",
+  "sharedWallet": "Бірлескен әмиян",
+  "week": "Апта",
+  "month": "Ай",
+  "year": "Жыл",
+  "allTime": "Барлық уақыт",
+  "totalGroupSpend": "Топтың жалпы шығындары",
+  "noDataForPeriod": "Бұл кезеңде деректер жоқ",
+  "whoOwesWhom": "Кім кімге қарыз",
+  "allSettledUp": "Барлығы есептелді!",
+  "owes": "қарыз",
+  "ok": "ОК",
+  "amountDetails": "Сомасы: {amount}",
+  "@amountDetails": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -185,4 +185,92 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get unknown => 'Белгісіз';
+
+  @override
+  String get jointBudgetGroup => 'Бірлескен бюджет тобы';
+
+  @override
+  String get yourGroupCode => 'Сіздің топ кодыңыз';
+
+  @override
+  String get copy => 'Көшіру';
+
+  @override
+  String get codeCopied => 'Код көшірілді!';
+
+  @override
+  String shareMessage(String code) {
+    return 'Мына код арқылы менің бюджет тобыма қосылыңыз: $code';
+  }
+
+  @override
+  String get shareCodeInstruction =>
+      'Бюджеттерді синхрондау үшін бұл кодты серіктесіңізбен бөлісіңіз.';
+
+  @override
+  String get createJointGroup => 'Бірлескен топ құру';
+
+  @override
+  String get createGroupInstruction =>
+      'Шығындарды бөлісу және бюджетті бірге бақылау үшін топ құрыңыз.';
+
+  @override
+  String get createGroup => 'Топ құру';
+
+  @override
+  String get failedToCreateGroup => 'Топ құру мүмкін болмады.';
+
+  @override
+  String get enterInviteCode => 'Шақыру кодын енгізіңіз';
+
+  @override
+  String get enterCodeInstruction =>
+      'Бюджетті біріктіру үшін серіктесіңіз ұсынған шақыру кодын енгізіңіз.';
+
+  @override
+  String get pleaseEnterCode => 'Кодты енгізіңіз';
+
+  @override
+  String get joinedGroupSuccess => 'Топқа сәтті қосылдыңыз!';
+
+  @override
+  String get invalidCodeError => 'Қате код немесе топ табылмады';
+
+  @override
+  String get sharedWallet => 'Бірлескен әмиян';
+
+  @override
+  String get week => 'Апта';
+
+  @override
+  String get month => 'Ай';
+
+  @override
+  String get year => 'Жыл';
+
+  @override
+  String get allTime => 'Барлық уақыт';
+
+  @override
+  String get totalGroupSpend => 'Топтың жалпы шығындары';
+
+  @override
+  String get noDataForPeriod => 'Бұл кезеңде деректер жоқ';
+
+  @override
+  String get whoOwesWhom => 'Кім кімге қарыз';
+
+  @override
+  String get allSettledUp => 'Барлығы есептелді!';
+
+  @override
+  String get owes => 'қарыз';
+
+  @override
+  String get ok => 'ОК';
+
+  @override
+  String amountDetails(String amount) {
+    return 'Сомасы: $amount';
+  }
 }

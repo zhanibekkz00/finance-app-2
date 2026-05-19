@@ -185,4 +185,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknown => 'Unknown';
+
+  @override
+  String get jointBudgetGroup => 'Joint Budget Group';
+
+  @override
+  String get yourGroupCode => 'Your Group Code';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get codeCopied => 'Code copied!';
+
+  @override
+  String shareMessage(String code) {
+    return 'Join my budget group using code: $code';
+  }
+
+  @override
+  String get shareCodeInstruction =>
+      'Share this code with your partner correctly to sync your budgets.';
+
+  @override
+  String get createJointGroup => 'Create a Joint Group';
+
+  @override
+  String get createGroupInstruction =>
+      'Create a group to share expenses and track budget together.';
+
+  @override
+  String get createGroup => 'Create Group';
+
+  @override
+  String get failedToCreateGroup => 'Failed to create group.';
+
+  @override
+  String get enterInviteCode => 'Enter Invite Code';
+
+  @override
+  String get enterCodeInstruction =>
+      'Enter the invite code shared by your partner to join their budget.';
+
+  @override
+  String get pleaseEnterCode => 'Please enter a code';
+
+  @override
+  String get joinedGroupSuccess => 'Successfully joined group!';
+
+  @override
+  String get invalidCodeError => 'Invalid code or group not found';
+
+  @override
+  String get sharedWallet => 'Shared Wallet';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get allTime => 'All Time';
+
+  @override
+  String get totalGroupSpend => 'Total Group Spend';
+
+  @override
+  String get noDataForPeriod => 'No data for this period';
+
+  @override
+  String get whoOwesWhom => 'Who owes whom';
+
+  @override
+  String get allSettledUp => 'All settled up!';
+
+  @override
+  String get owes => 'owes';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String amountDetails(String amount) {
+    return 'Amount: $amount';
+  }
 }

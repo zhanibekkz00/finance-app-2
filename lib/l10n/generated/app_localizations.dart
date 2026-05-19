@@ -453,6 +453,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown'**
   String get unknown;
+
+  /// No description provided for @jointBudgetGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Joint Budget Group'**
+  String get jointBudgetGroup;
+
+  /// No description provided for @yourGroupCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Group Code'**
+  String get yourGroupCode;
+
+  /// No description provided for @copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copy;
+
+  /// No description provided for @codeCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Code copied!'**
+  String get codeCopied;
+
+  /// No description provided for @shareMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Join my budget group using code: {code}'**
+  String shareMessage(String code);
+
+  /// No description provided for @shareCodeInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this code with your partner correctly to sync your budgets.'**
+  String get shareCodeInstruction;
+
+  /// No description provided for @createJointGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Joint Group'**
+  String get createJointGroup;
+
+  /// No description provided for @createGroupInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a group to share expenses and track budget together.'**
+  String get createGroupInstruction;
+
+  /// No description provided for @createGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Group'**
+  String get createGroup;
+
+  /// No description provided for @failedToCreateGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create group.'**
+  String get failedToCreateGroup;
+
+  /// No description provided for @enterInviteCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Invite Code'**
+  String get enterInviteCode;
+
+  /// No description provided for @enterCodeInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the invite code shared by your partner to join their budget.'**
+  String get enterCodeInstruction;
+
+  /// No description provided for @pleaseEnterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a code'**
+  String get pleaseEnterCode;
+
+  /// No description provided for @joinedGroupSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully joined group!'**
+  String get joinedGroupSuccess;
+
+  /// No description provided for @invalidCodeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid code or group not found'**
+  String get invalidCodeError;
+
+  /// No description provided for @sharedWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Wallet'**
+  String get sharedWallet;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @allTime.
+  ///
+  /// In en, this message translates to:
+  /// **'All Time'**
+  String get allTime;
+
+  /// No description provided for @totalGroupSpend.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Group Spend'**
+  String get totalGroupSpend;
+
+  /// No description provided for @noDataForPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for this period'**
+  String get noDataForPeriod;
+
+  /// No description provided for @whoOwesWhom.
+  ///
+  /// In en, this message translates to:
+  /// **'Who owes whom'**
+  String get whoOwesWhom;
+
+  /// No description provided for @allSettledUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All settled up!'**
+  String get allSettledUp;
+
+  /// No description provided for @owes.
+  ///
+  /// In en, this message translates to:
+  /// **'owes'**
+  String get owes;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @amountDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount: {amount}'**
+  String amountDetails(String amount);
 }
 
 class _AppLocalizationsDelegate

@@ -37,8 +37,8 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Shared Wallet',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text(l10n.sharedWallet,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -52,19 +52,19 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
             items: [
               DropdownMenuItem(
                 value: ChartFilter.week,
-                child: Text('Week', style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.week, style: const TextStyle(color: Colors.white)),
               ),
               DropdownMenuItem(
                 value: ChartFilter.month,
-                child: Text('Month', style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.month, style: const TextStyle(color: Colors.white)),
               ),
               DropdownMenuItem(
                 value: ChartFilter.year,
-                child: Text('Year', style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.year, style: const TextStyle(color: Colors.white)),
               ),
               DropdownMenuItem(
                 value: ChartFilter.all,
-                child: Text('All Time', style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.allTime, style: const TextStyle(color: Colors.white)),
               ),
             ],
             onChanged: (val) {
@@ -81,31 +81,31 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Dashboard',
-              style: TextStyle(
+            Text(
+              l10n.dashboard,
+              style: const TextStyle(
                   fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
             ),
             const SizedBox(height: 20),
             if (data.totalSpend == 0)
-              _buildEmptyState()
+              _buildEmptyState(l10n)
             else
-              _buildChartSection(data),
+              _buildChartSection(data, l10n),
             const SizedBox(height: 40),
-            const Text(
-              'Who owes whom',
-              style: TextStyle(
+            Text(
+              l10n.whoOwesWhom,
+              style: const TextStyle(
                   fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
             ),
             const SizedBox(height: 20),
-            _buildDebtsSection(data.debts),
+            _buildDebtsSection(data.debts, l10n),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(AppLocalizations l10n) {
     return GlassContainer(
       child: Container(
         height: 250,
@@ -115,9 +115,9 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
           children: [
             Icon(Icons.bar_chart_rounded, size: 60, color: Colors.white.withOpacity(0.3)),
             const SizedBox(height: 16),
-            const Text(
-              'Нет данных за этот период',
-              style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
+            Text(
+              l10n.noDataForPeriod,
+              style: const TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -125,7 +125,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     );
   }
 
-  Widget _buildChartSection(ChartData data) {
+  Widget _buildChartSection(ChartData data, AppLocalizations l10n) {
     final categories = data.categorySpend.entries.toList();
     // Sort by amount descending
     categories.sort((a, b) => b.value.compareTo(a.value));
@@ -133,9 +133,9 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     return NeoContainer(
       child: Column(
         children: [
-          const Text(
-            'Total Group Spend',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+          Text(
+            l10n.totalGroupSpend,
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const SizedBox(height: 8),
           Text(
@@ -164,8 +164,8 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                     // Show dialog with details on tap up
                     if (event is FlTapUpEvent && _touchedIndex != -1) {
                       final catEntry = categories[_touchedIndex];
-                      final catName = ref.read(categoryProvider.notifier).getCategoryById(catEntry.key)?.getLocalizedName(context) ?? 'Unknown';
-                      _showDetailsDialog(catName, catEntry.value);
+                      final catName = ref.read(categoryProvider.notifier).getCategoryById(catEntry.key)?.getLocalizedName(context) ?? l10n.unknown;
+                      _showDetailsDialog(catName, catEntry.value, l10n);
                     }
                   },
                 ),
@@ -194,13 +194,13 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildLegend(categories),
+          _buildLegend(categories, l10n),
         ],
       ),
     );
   }
 
-  void _showDetailsDialog(String categoryName, double amount) {
+  void _showDetailsDialog(String categoryName, double amount, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) {
@@ -209,13 +209,13 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(categoryName, style: const TextStyle(color: Colors.white)),
           content: Text(
-            'Amount: ${amount.toStringAsFixed(2)}',
+            l10n.amountDetails(amount.toStringAsFixed(2)),
             style: const TextStyle(color: Colors.white70, fontSize: 18),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK', style: TextStyle(color: Color(0xFF5E5CE6))),
+              child: Text(l10n.ok, style: const TextStyle(color: Color(0xFF5E5CE6))),
             ),
           ],
         );
@@ -223,7 +223,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     );
   }
 
-  Widget _buildLegend(List<MapEntry<String, double>> categories) {
+  Widget _buildLegend(List<MapEntry<String, double>> categories, AppLocalizations l10n) {
     return Wrap(
       spacing: 16,
       runSpacing: 12,
@@ -232,7 +232,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
         final idx = entry.key;
         final data = entry.value;
         final cat = ref.read(categoryProvider.notifier).getCategoryById(data.key);
-        final catName = cat?.getLocalizedName(context) ?? 'Unknown';
+        final catName = cat?.getLocalizedName(context) ?? l10n.unknown;
 
         return Row(
           mainAxisSize: MainAxisSize.min,
@@ -253,12 +253,12 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     );
   }
 
-  Widget _buildDebtsSection(List<Debt> debts) {
+  Widget _buildDebtsSection(List<Debt> debts, AppLocalizations l10n) {
     if (debts.isEmpty) {
-      return const GlassContainer(
+      return GlassContainer(
         child: Center(
-          child: Text('All settled up!',
-              style: TextStyle(color: Colors.white, fontSize: 16)),
+          child: Text(l10n.allSettledUp,
+              style: const TextStyle(color: Colors.white, fontSize: 16)),
         ),
       );
     }
@@ -283,7 +283,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${debt.from} owes ${debt.to}',
+                          '${debt.from} ${l10n.owes} ${debt.to}',
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,

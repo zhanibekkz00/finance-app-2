@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../services/group_service.dart';
+import 'package:finance_app/l10n/generated/app_localizations.dart';
 
 class JoinGroupScreen extends ConsumerStatefulWidget {
   const JoinGroupScreen({super.key});
@@ -24,9 +25,10 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
   }
 
   Future<void> _joinGroup() async {
+    final l10n = AppLocalizations.of(context)!;
     final code = _codeController.text.trim().toUpperCase();
     if (code.isEmpty) {
-      setState(() => _errorText = 'Please enter a code');
+      setState(() => _errorText = l10n.pleaseEnterCode);
       return;
     }
 
@@ -47,19 +49,21 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
         ref.invalidate(transactionProvider);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Successfully joined group!')),
+          SnackBar(content: Text(l10n.joinedGroupSuccess)),
         );
         Navigator.pop(context);
       } else {
-        setState(() => _errorText = 'Invalid code or group not found');
+        setState(() => _errorText = l10n.invalidCodeError);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Join Group')),
+      appBar: AppBar(title: Text(l10n.joinGroup)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -67,15 +71,15 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
           children: [
             const Icon(Icons.merge_type, size: 64, color: Colors.blue),
             const SizedBox(height: 24),
-            const Text(
-              'Enter Invite Code',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              l10n.enterInviteCode,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Enter the invite code shared by your partner to join their budget.',
+            Text(
+              l10n.enterCodeInstruction,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey),
+              style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 32),
             TextField(
@@ -110,7 +114,7 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Join Group', style: TextStyle(fontSize: 18)),
+                    : Text(l10n.joinGroup, style: const TextStyle(fontSize: 18)),
               ),
             ),
           ],

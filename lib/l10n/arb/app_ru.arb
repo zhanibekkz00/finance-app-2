@@ -58,5 +58,46 @@
   "logout": "Выход",
   "notifications": "Уведомления",
   "noNotifications": "Уведомлений пока нет",
-  "unknown": "Неизвестно"
+  "unknown": "Неизвестно",
+  "jointBudgetGroup": "Группа совместного бюджета",
+  "yourGroupCode": "Код вашей группы",
+  "copy": "Копировать",
+  "codeCopied": "Код скопирован!",
+  "shareMessage": "Присоединяйтесь к моей бюджетной группе по коду: {code}",
+  "@shareMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "shareCodeInstruction": "Поделитесь этим кодом со своим партнером, чтобы синхронизировать ваши бюджеты.",
+  "createJointGroup": "Создать совместную группу",
+  "createGroupInstruction": "Создайте группу для совместных расходов и отслеживания бюджета.",
+  "createGroup": "Создать группу",
+  "failedToCreateGroup": "Не удалось создать группу.",
+  "enterInviteCode": "Введите код приглашения",
+  "enterCodeInstruction": "Введите код приглашения, отправленный вашим партнером, чтобы объединить бюджет.",
+  "pleaseEnterCode": "Пожалуйста, введите код",
+  "joinedGroupSuccess": "Вы успешно присоединились к группе!",
+  "invalidCodeError": "Неверный код или группа не найдена",
+  "sharedWallet": "Совместный кошелек",
+  "week": "Неделя",
+  "month": "Месяц",
+  "year": "Год",
+  "allTime": "За всё время",
+  "totalGroupSpend": "Общие расходы группы",
+  "noDataForPeriod": "Нет данных за этот период",
+  "whoOwesWhom": "Кто кому должен",
+  "allSettledUp": "Все расчеты произведены!",
+  "owes": "должен",
+  "ok": "ОК",
+  "amountDetails": "Сумма: {amount}",
+  "@amountDetails": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

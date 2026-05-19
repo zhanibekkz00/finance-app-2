@@ -58,5 +58,46 @@
   "logout": "Logout",
   "notifications": "Notifications",
   "noNotifications": "No notifications yet",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "jointBudgetGroup": "Joint Budget Group",
+  "yourGroupCode": "Your Group Code",
+  "copy": "Copy",
+  "codeCopied": "Code copied!",
+  "shareMessage": "Join my budget group using code: {code}",
+  "@shareMessage": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "shareCodeInstruction": "Share this code with your partner correctly to sync your budgets.",
+  "createJointGroup": "Create a Joint Group",
+  "createGroupInstruction": "Create a group to share expenses and track budget together.",
+  "createGroup": "Create Group",
+  "failedToCreateGroup": "Failed to create group.",
+  "enterInviteCode": "Enter Invite Code",
+  "enterCodeInstruction": "Enter the invite code shared by your partner to join their budget.",
+  "pleaseEnterCode": "Please enter a code",
+  "joinedGroupSuccess": "Successfully joined group!",
+  "invalidCodeError": "Invalid code or group not found",
+  "sharedWallet": "Shared Wallet",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
+  "allTime": "All Time",
+  "totalGroupSpend": "Total Group Spend",
+  "noDataForPeriod": "No data for this period",
+  "whoOwesWhom": "Who owes whom",
+  "allSettledUp": "All settled up!",
+  "owes": "owes",
+  "ok": "OK",
+  "amountDetails": "Amount: {amount}",
+  "@amountDetails": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

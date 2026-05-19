@@ -185,4 +185,92 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unknown => 'Неизвестно';
+
+  @override
+  String get jointBudgetGroup => 'Группа совместного бюджета';
+
+  @override
+  String get yourGroupCode => 'Код вашей группы';
+
+  @override
+  String get copy => 'Копировать';
+
+  @override
+  String get codeCopied => 'Код скопирован!';
+
+  @override
+  String shareMessage(String code) {
+    return 'Присоединяйтесь к моей бюджетной группе по коду: $code';
+  }
+
+  @override
+  String get shareCodeInstruction =>
+      'Поделитесь этим кодом со своим партнером, чтобы синхронизировать ваши бюджеты.';
+
+  @override
+  String get createJointGroup => 'Создать совместную группу';
+
+  @override
+  String get createGroupInstruction =>
+      'Создайте группу для совместных расходов и отслеживания бюджета.';
+
+  @override
+  String get createGroup => 'Создать группу';
+
+  @override
+  String get failedToCreateGroup => 'Не удалось создать группу.';
+
+  @override
+  String get enterInviteCode => 'Введите код приглашения';
+
+  @override
+  String get enterCodeInstruction =>
+      'Введите код приглашения, отправленный вашим партнером, чтобы объединить бюджет.';
+
+  @override
+  String get pleaseEnterCode => 'Пожалуйста, введите код';
+
+  @override
+  String get joinedGroupSuccess => 'Вы успешно присоединились к группе!';
+
+  @override
+  String get invalidCodeError => 'Неверный код или группа не найдена';
+
+  @override
+  String get sharedWallet => 'Совместный кошелек';
+
+  @override
+  String get week => 'Неделя';
+
+  @override
+  String get month => 'Месяц';
+
+  @override
+  String get year => 'Год';
+
+  @override
+  String get allTime => 'За всё время';
+
+  @override
+  String get totalGroupSpend => 'Общие расходы группы';
+
+  @override
+  String get noDataForPeriod => 'Нет данных за этот период';
+
+  @override
+  String get whoOwesWhom => 'Кто кому должен';
+
+  @override
+  String get allSettledUp => 'Все расчеты произведены!';
+
+  @override
+  String get owes => 'должен';
+
+  @override
+  String get ok => 'ОК';
+
+  @override
+  String amountDetails(String amount) {
+    return 'Сумма: $amount';
+  }
 }
