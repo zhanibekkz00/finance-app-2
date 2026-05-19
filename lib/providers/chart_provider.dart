@@ -76,7 +76,8 @@ final chartProvider = Provider<ChartState>((ref) {
     catMap[tx.categoryId] = (catMap[tx.categoryId] ?? 0) + tx.amount;
     final dateKey = DateFormat('yyyy-MM-dd').format(tx.date);
     dateMap[dateKey] = (dateMap[dateKey] ?? 0) + tx.amount;
-    userMap[tx.userId] = (userMap[tx.userId] ?? 0) + tx.amount;
+    final userId = tx.userId ?? 'Unknown';
+    userMap[userId] = (userMap[userId] ?? 0) + tx.amount;
     total += tx.amount;
   }
 

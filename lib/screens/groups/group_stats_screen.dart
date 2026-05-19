@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/chart_provider.dart';
 import '../../providers/category_provider.dart';
+import '../../models/category_model.dart';
 import '../../widgets/neo_container.dart';
 import '../../widgets/glass_container.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
