@@ -236,13 +236,41 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l10n.totalBalance,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          l10n.totalBalance,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        // Currency Selector Dropdown
+                        DropdownButton<String>(
+                          value: currencyCode,
+                          dropdownColor: const Color(0xFF1E1E2C),
+                          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 16),
+                          underline: const SizedBox(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          items: const [
+                            DropdownMenuItem(value: 'KZT', child: Text('₸ KZT')),
+                            DropdownMenuItem(value: 'USD', child: Text('\$ USD')),
+                            DropdownMenuItem(value: 'EUR', child: Text('€ EUR')),
+                            DropdownMenuItem(value: 'RUB', child: Text('₽ RUB')),
+                          ],
+                          onChanged: (newCurrency) {
+                            if (newCurrency != null) {
+                              ref.read(settingsProvider.notifier).setCurrency(newCurrency);
+                            }
+                          },
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -252,10 +280,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           duration: const Duration(milliseconds: 200),
                           child: Text(
                             _isBalanceVisible
-                                ? NumberFormat.simpleCurrency(
-                                        locale: Localizations.localeOf(context).toString(),
-                                        name: currencyCode)
-                                    .format(totalBalance)
+                                ? DebtUtils.formatAmount(totalBalance, currencyCode)
                                 : '••••••',
                             style: const TextStyle(
                               color: Colors.white,
