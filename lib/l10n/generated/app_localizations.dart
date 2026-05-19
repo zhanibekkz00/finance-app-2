@@ -615,6 +615,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount: {amount}'**
   String amountDetails(String amount);
+
+  /// No description provided for @inGroupWith.
+  ///
+  /// In en, this message translates to:
+  /// **'You are in a group with: {partner}'**
+  String inGroupWith(String partner);
+
+  /// No description provided for @personalAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Account'**
+  String get personalAccount;
+
+  /// No description provided for @leaveGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Group'**
+  String get leaveGroup;
+
+  /// No description provided for @leaveGroupConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Group'**
+  String get leaveGroupConfirmTitle;
+
+  /// No description provided for @leaveGroupConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to leave? You will lose access to the shared balance, joint transactions history, and group statistics.'**
+  String get leaveGroupConfirmMessage;
+
+  /// No description provided for @leave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get leave;
+
+  /// No description provided for @setupGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Group'**
+  String get setupGroup;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @personalData.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Data'**
+  String get personalData;
+
+  /// No description provided for @yourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Name'**
+  String get yourName;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdated;
+
+  /// No description provided for @displayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name'**
+  String get displayName;
+
+  /// No description provided for @notSpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified'**
+  String get notSpecified;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
+
+  /// No description provided for @logoutAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logoutAccount;
 }
 
 class _AppLocalizationsDelegate

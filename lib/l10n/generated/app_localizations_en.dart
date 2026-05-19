@@ -273,4 +273,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String amountDetails(String amount) {
     return 'Amount: $amount';
   }
+
+  @override
+  String inGroupWith(String partner) {
+    return 'You are in a group with: $partner';
+  }
+
+  @override
+  String get personalAccount => 'Personal Account';
+
+  @override
+  String get leaveGroup => 'Leave Group';
+
+  @override
+  String get leaveGroupConfirmTitle => 'Leave Group';
+
+  @override
+  String get leaveGroupConfirmMessage =>
+      'Are you sure you want to leave? You will lose access to the shared balance, joint transactions history, and group statistics.';
+
+  @override
+  String get leave => 'Leave';
+
+  @override
+  String get setupGroup => 'Setup Group';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get personalData => 'Personal Data';
+
+  @override
+  String get yourName => 'Your Name';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get displayName => 'Display Name';
+
+  @override
+  String get notSpecified => 'Not specified';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get role => 'Role';
+
+  @override
+  String get logoutAccount => 'Log Out';
 }

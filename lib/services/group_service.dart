@@ -67,4 +67,15 @@ class GroupService {
       return null;
     }
   }
+
+  // Leave current group
+  Future<bool> leaveGroup() async {
+    try {
+      final response = await _apiService.delete('/groups/leave');
+      return response.statusCode == 200 || response.statusCode == 204;
+    } catch (e) {
+      debugPrint('Error leaving group: $e');
+      return false;
+    }
+  }
 }

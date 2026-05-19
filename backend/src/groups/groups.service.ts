@@ -63,6 +63,7 @@ export class GroupsService {
                             select: {
                                 id: true,
                                 email: true,
+                                displayName: true,
                             },
                         },
                     },
@@ -78,12 +79,33 @@ export class GroupsService {
     }
 
     async leaveGroup(userId: string) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: { groupId: true },
+        });
+
+        if (!user?.groupId) {
+            return { success: false, message: 'User is not in a group' };
+        }
+
+        const groupId = user.groupId;
+
         await this.prisma.user.update({
             where: { id: userId },
             data: { groupId: null },
         });
 
-        // Optional: Clean up empty groups
+        const remainingUsers = await this.prisma.user.count({
+            where: { groupId: groupId },
+        });
+
+        if (remainingUsers === 0) {
+            await this.prisma.group.delete({
+                where: { id: groupId },
+            });
+        }
+
+        return { success: true };
     }
 
     async getGroupStats(userId: string) {

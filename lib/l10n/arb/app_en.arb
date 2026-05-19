@@ -99,5 +99,28 @@
         "type": "String"
       }
     }
-  }
+  },
+  "inGroupWith": "You are in a group with: {partner}",
+  "@inGroupWith": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      }
+    }
+  },
+  "personalAccount": "Personal Account",
+  "leaveGroup": "Leave Group",
+  "leaveGroupConfirmTitle": "Leave Group",
+  "leaveGroupConfirmMessage": "Are you sure you want to leave? You will lose access to the shared balance, joint transactions history, and group statistics.",
+  "leave": "Leave",
+  "setupGroup": "Setup Group",
+  "profile": "Profile",
+  "personalData": "Personal Data",
+  "yourName": "Your Name",
+  "profileUpdated": "Profile updated",
+  "displayName": "Display Name",
+  "notSpecified": "Not specified",
+  "account": "Account",
+  "role": "Role",
+  "logoutAccount": "Log Out"
 }

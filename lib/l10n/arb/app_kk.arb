@@ -99,5 +99,28 @@
         "type": "String"
       }
     }
-  }
+  },
+  "inGroupWith": "Сіз келесі серіктеспен бір топтасыз: {partner}",
+  "@inGroupWith": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      }
+    }
+  },
+  "personalAccount": "Жеке аккаунт",
+  "leaveGroup": "Топтан шығу",
+  "leaveGroupConfirmTitle": "Топтан шығу",
+  "leaveGroupConfirmMessage": "Шынымен топтан шыққыңыз келе ме? Сіз ортақ балансқа, бірлескен транзакциялар тарихына және топ статистикасына қол жеткізуден айырыласыз.",
+  "leave": "Шығу",
+  "setupGroup": "Топты құру немесе оған қосылу",
+  "profile": "Профиль",
+  "personalData": "Жеке деректер",
+  "yourName": "Сіздің атыңыз",
+  "profileUpdated": "Профиль жаңартылды",
+  "displayName": "Көрсетілетін есім",
+  "notSpecified": "Көрсетілмеген",
+  "account": "Аккаунт",
+  "role": "Рөл",
+  "logoutAccount": "Аккаунттан шығу"
 }

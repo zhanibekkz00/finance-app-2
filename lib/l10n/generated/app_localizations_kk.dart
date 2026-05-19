@@ -273,4 +273,55 @@ class AppLocalizationsKk extends AppLocalizations {
   String amountDetails(String amount) {
     return 'Сомасы: $amount';
   }
+
+  @override
+  String inGroupWith(String partner) {
+    return 'Сіз келесі серіктеспен бір топтасыз: $partner';
+  }
+
+  @override
+  String get personalAccount => 'Жеке аккаунт';
+
+  @override
+  String get leaveGroup => 'Топтан шығу';
+
+  @override
+  String get leaveGroupConfirmTitle => 'Топтан шығу';
+
+  @override
+  String get leaveGroupConfirmMessage =>
+      'Шынымен топтан шыққыңыз келе ме? Сіз ортақ балансқа, бірлескен транзакциялар тарихына және топ статистикасына қол жеткізуден айырыласыз.';
+
+  @override
+  String get leave => 'Шығу';
+
+  @override
+  String get setupGroup => 'Топты құру немесе оған қосылу';
+
+  @override
+  String get profile => 'Профиль';
+
+  @override
+  String get personalData => 'Жеке деректер';
+
+  @override
+  String get yourName => 'Сіздің атыңыз';
+
+  @override
+  String get profileUpdated => 'Профиль жаңартылды';
+
+  @override
+  String get displayName => 'Көрсетілетін есім';
+
+  @override
+  String get notSpecified => 'Көрсетілмеген';
+
+  @override
+  String get account => 'Аккаунт';
+
+  @override
+  String get role => 'Рөл';
+
+  @override
+  String get logoutAccount => 'Аккаунттан шығу';
 }

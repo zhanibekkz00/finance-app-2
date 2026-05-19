@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
+import '../providers/group_provider.dart';
+import '../providers/balance_provider.dart';
+import '../providers/transaction_provider.dart';
+import '../providers/chart_provider.dart';
+import '../services/group_service.dart';
+import '../widgets/glass_container.dart';
+import '../widgets/neo_container.dart';
 import '../app.dart';
+import 'package:finance_app/l10n/generated/app_localizations.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -12,6 +20,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _nameController = TextEditingController();
+  final _groupService = GroupService();
   bool _isEditing = false;
   bool _isLoading = false;
 
@@ -28,6 +37,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _saveName() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoading = true);
     await ref.read(authProvider.notifier).updateProfile(
       displayName: _nameController.text.trim(),
@@ -38,16 +48,74 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Профиль обновлен')),
+        SnackBar(content: Text(l10n.profileUpdated)),
       );
     }
+  }
+
+  Future<void> _leaveGroup() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _isLoading = true);
+
+    final success = await _groupService.leaveGroup();
+    if (mounted) {
+      setState(() => _isLoading = false);
+      if (success) {
+        // Invalidate all related providers to clear state and transition to personal wallet
+        ref.invalidate(groupProvider);
+        ref.invalidate(balanceProvider);
+        ref.invalidate(transactionProvider);
+        ref.invalidate(chartProvider);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.personalAccount)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unknown)),
+        );
+      }
+    }
+  }
+
+  void _confirmLeaveGroup() {
+    final l10n = AppLocalizations.of(context)!;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E2C),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(l10n.leaveGroupConfirmTitle, style: const TextStyle(color: Colors.white)),
+        content: Text(
+          l10n.leaveGroupConfirmMessage,
+          style: const TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _leaveGroup();
+            },
+            child: Text(l10n.leave, style: const TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final groupAsync = ref.watch(groupProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -67,13 +135,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const CircleAvatar(
-                        radius: 50,
+                        radius: 40,
                         backgroundColor: Colors.white24,
-                        child: Icon(Icons.person, size: 50, color: Colors.white),
+                        child: Icon(Icons.person, size: 40, color: Colors.white),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        authState.displayName ?? 'Пользователь',
+                        authState.displayName ?? l10n.unknown,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -96,7 +164,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSectionTitle('Личные данные'),
+                  _buildSectionTitle(l10n.personalData),
                   const SizedBox(height: 15),
                   if (_isEditing)
                     Row(
@@ -104,9 +172,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Expanded(
                           child: TextField(
                             controller: _nameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Ваше имя',
-                              border: OutlineInputBorder(),
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              labelText: l10n.yourName,
+                              labelStyle: const TextStyle(color: Colors.grey),
+                              border: const OutlineInputBorder(),
                             ),
                           ),
                         ),
@@ -127,23 +197,126 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   else
                     _buildProfileItem(
                       icon: Icons.badge,
-                      label: 'Отображаемое имя',
-                      value: authState.displayName ?? 'Не указано',
+                      label: l10n.displayName,
+                      value: authState.displayName ?? l10n.notSpecified,
                       onEdit: () {
                         setState(() => _isEditing = true);
                       },
                     ),
                   _buildProfileItem(
                     icon: Icons.email,
-                    label: 'Email',
-                    value: authState.email ?? 'Не указан',
+                    label: l10n.email,
+                    value: authState.email ?? l10n.notSpecified,
                   ),
                   const SizedBox(height: 30),
-                  _buildSectionTitle('Аккаунт'),
+                  _buildSectionTitle(l10n.jointBudget),
+                  const SizedBox(height: 15),
+                  groupAsync.when(
+                    data: (group) {
+                      if (group != null) {
+                        final partner = group.users
+                            .where((u) => u.id != authState.userId)
+                            .firstOrNull;
+                        final partnerText = partner != null
+                            ? (partner.displayName ?? partner.email)
+                            : l10n.unknown;
+
+                        return GlassContainer(
+                          borderRadius: 20,
+                          padding: 16.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.group, color: Colors.blueAccent),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      l10n.inGroupWith(partnerText),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton.icon(
+                                  onPressed: _confirmLeaveGroup,
+                                  icon: const Icon(Icons.logout, color: Colors.redAccent, size: 18),
+                                  label: Text(
+                                    l10n.leaveGroup,
+                                    style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    backgroundColor: Colors.redAccent.withOpacity(0.1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return GlassContainer(
+                          borderRadius: 20,
+                          padding: 16.0,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.person_outline, color: Colors.grey),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      l10n.personalAccount,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, AppRoutes.settings);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: Text(l10n.setupGroup),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (err, stack) => Text(
+                      'Error: $err',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  _buildSectionTitle(l10n.account),
                   const SizedBox(height: 15),
                   _buildProfileItem(
                     icon: Icons.security,
-                    label: 'Роль',
+                    label: l10n.role,
                     value: authState.role ?? 'User',
                   ),
                   const SizedBox(height: 40),
@@ -167,8 +340,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           );
                         }
                       },
-                      child: const Text('Выйти из аккаунта',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(l10n.logoutAccount,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -220,13 +393,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white)),
               ],
             ),
           ),
           if (onEdit != null)
             IconButton(
-              icon: const Icon(Icons.edit_note),
+              icon: const Icon(Icons.edit_note, color: Colors.white70),
               onPressed: onEdit,
             ),
         ],

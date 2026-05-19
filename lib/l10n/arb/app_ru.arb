@@ -99,5 +99,28 @@
         "type": "String"
       }
     }
-  }
+  },
+  "inGroupWith": "Вы в группе с: {partner}",
+  "@inGroupWith": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      }
+    }
+  },
+  "personalAccount": "Личный аккаунт",
+  "leaveGroup": "Выйти из группы",
+  "leaveGroupConfirmTitle": "Выход из группы",
+  "leaveGroupConfirmMessage": "Вы уверены, что хотите выйти? Вы потеряете доступ к общему балансу, истории совместных транзакций и статистике группы.",
+  "leave": "Выйти",
+  "setupGroup": "Создать или подключиться к группе",
+  "profile": "Профиль",
+  "personalData": "Личные данные",
+  "yourName": "Ваше имя",
+  "profileUpdated": "Профиль обновлен",
+  "displayName": "Отображаемое имя",
+  "notSpecified": "Не указано",
+  "account": "Аккаунт",
+  "role": "Роль",
+  "logoutAccount": "Выйти из аккаунта"
 }

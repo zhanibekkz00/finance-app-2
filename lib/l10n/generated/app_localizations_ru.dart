@@ -273,4 +273,55 @@ class AppLocalizationsRu extends AppLocalizations {
   String amountDetails(String amount) {
     return 'Сумма: $amount';
   }
+
+  @override
+  String inGroupWith(String partner) {
+    return 'Вы в группе с: $partner';
+  }
+
+  @override
+  String get personalAccount => 'Личный аккаунт';
+
+  @override
+  String get leaveGroup => 'Выйти из группы';
+
+  @override
+  String get leaveGroupConfirmTitle => 'Выход из группы';
+
+  @override
+  String get leaveGroupConfirmMessage =>
+      'Вы уверены, что хотите выйти? Вы потеряете доступ к общему балансу, истории совместных транзакций и статистике группы.';
+
+  @override
+  String get leave => 'Выйти';
+
+  @override
+  String get setupGroup => 'Создать или подключиться к группе';
+
+  @override
+  String get profile => 'Профиль';
+
+  @override
+  String get personalData => 'Личные данные';
+
+  @override
+  String get yourName => 'Ваше имя';
+
+  @override
+  String get profileUpdated => 'Профиль обновлен';
+
+  @override
+  String get displayName => 'Отображаемое имя';
+
+  @override
+  String get notSpecified => 'Не указано';
+
+  @override
+  String get account => 'Аккаунт';
+
+  @override
+  String get role => 'Роль';
+
+  @override
+  String get logoutAccount => 'Выйти из аккаунта';
 }
