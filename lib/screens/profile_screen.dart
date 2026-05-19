@@ -353,6 +353,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       label: l10n.role,
                       value: authState.role ?? 'User',
                     ),
+                    if (authState.role == 'admin') ...[
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueGrey[800],
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoutes.admin);
+                          },
+                          icon: const Icon(Icons.admin_panel_settings),
+                          label: const Text('Админ панель',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 40),
                     SizedBox(
                       width: double.infinity,
