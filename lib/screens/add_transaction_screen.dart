@@ -23,7 +23,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   bool _isRecurring = false;
   RecurrenceInterval _recurrenceInterval = RecurrenceInterval.monthly;
   String? _selectedCategoryId;
-  String _selectedCurrency = 'USD';
+  String _selectedCurrency = 'KZT';
 
   final _currencies = ['USD', 'EUR', 'RUB', 'KZT'];
 
