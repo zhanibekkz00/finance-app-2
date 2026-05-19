@@ -711,6 +711,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log Out'**
   String get logoutAccount;
+
+  /// No description provided for @waitingForPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for partner...'**
+  String get waitingForPartner;
+
+  /// No description provided for @inGroupWithMultiple.
+  ///
+  /// In en, this message translates to:
+  /// **'You are in a group with: {partner} and {count} more'**
+  String inGroupWithMultiple(String partner, String count);
 }
 
 class _AppLocalizationsDelegate

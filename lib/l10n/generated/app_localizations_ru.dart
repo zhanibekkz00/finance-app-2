@@ -324,4 +324,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get logoutAccount => 'Выйти из аккаунта';
+
+  @override
+  String get waitingForPartner => 'Ожидание партнера...';
+
+  @override
+  String inGroupWithMultiple(String partner, String count) {
+    return 'Вы в группе с: $partner и еще $count';
+  }
 }

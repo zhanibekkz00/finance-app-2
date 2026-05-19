@@ -122,5 +122,17 @@
   "notSpecified": "Көрсетілмеген",
   "account": "Аккаунт",
   "role": "Рөл",
-  "logoutAccount": "Аккаунттан шығу"
+  "logoutAccount": "Аккаунттан шығу",
+  "waitingForPartner": "Серіктесті күту...",
+  "inGroupWithMultiple": "Сіз келесі серіктеспен және тағы {count} адаммен бір топтасыз: {partner}",
+  "@inGroupWithMultiple": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

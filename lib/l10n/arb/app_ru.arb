@@ -122,5 +122,17 @@
   "notSpecified": "Не указано",
   "account": "Аккаунт",
   "role": "Роль",
-  "logoutAccount": "Выйти из аккаунта"
+  "logoutAccount": "Выйти из аккаунта",
+  "waitingForPartner": "Ожидание партнера...",
+  "inGroupWithMultiple": "Вы в группе с: {partner} и еще {count}",
+  "@inGroupWithMultiple": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

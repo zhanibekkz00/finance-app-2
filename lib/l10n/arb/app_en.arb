@@ -122,5 +122,17 @@
   "notSpecified": "Not specified",
   "account": "Account",
   "role": "Role",
-  "logoutAccount": "Log Out"
+  "logoutAccount": "Log Out",
+  "waitingForPartner": "Waiting for partner...",
+  "inGroupWithMultiple": "You are in a group with: {partner} and {count} more",
+  "@inGroupWithMultiple": {
+    "placeholders": {
+      "partner": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

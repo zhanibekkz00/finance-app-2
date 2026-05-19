@@ -28,6 +28,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   void initState() {
     super.initState();
     _nameController.text = ref.read(authProvider).displayName ?? '';
+    
+    // Refresh group info on open to handle real-time sync when screen is entered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(groupProvider.notifier).refresh();
+      ref.read(authProvider.notifier).fetchProfile();
+    });
   }
 
   @override
@@ -108,6 +114,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  Future<void> _onRefresh() async {
+    await ref.read(groupProvider.notifier).refresh();
+    await ref.read(authProvider.notifier).fetchProfile();
+  }
+
+  String _formatPartnerText(AppLocalizations l10n, List<GroupMember> users, String? currentUserId) {
+    if (currentUserId == null) return l10n.unknown;
+
+    // Filter out the current user (case-insensitively, trimmed)
+    final partners = users
+        .where((u) => u.id.trim().toLowerCase() != currentUserId.trim().toLowerCase())
+        .toList();
+
+    if (partners.isEmpty) {
+      return l10n.waitingForPartner;
+    }
+
+    final firstPartner = partners.first;
+    final partnerName = firstPartner.displayName ?? firstPartner.email;
+
+    if (partners.length == 1) {
+      return l10n.inGroupWith(partnerName);
+    } else {
+      final extraCount = partners.length - 1;
+      return l10n.inGroupWithMultiple(partnerName, extraCount.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
@@ -116,239 +150,240 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 200,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        backgroundColor: const Color(0xFF1E1E2C),
+        color: const Color(0xFF6A11CB),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(), // Ensures pull-to-refresh works even if content is small
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 200,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white24,
-                        child: Icon(Icons.person, size: 40, color: Colors.white),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        authState.displayName ?? l10n.unknown,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white24,
+                          child: Icon(Icons.person, size: 40, color: Colors.white),
                         ),
-                      ),
-                      Text(
-                        authState.email ?? '',
-                        style: const TextStyle(color: Colors.white70, fontSize: 14),
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        Text(
+                          authState.displayName ?? l10n.unknown,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          authState.email ?? '',
+                          style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSectionTitle(l10n.personalData),
-                  const SizedBox(height: 15),
-                  if (_isEditing)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _nameController,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              labelText: l10n.yourName,
-                              labelStyle: const TextStyle(color: Colors.grey),
-                              border: const OutlineInputBorder(),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionTitle(l10n.personalData),
+                    const SizedBox(height: 15),
+                    if (_isEditing)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _nameController,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                labelText: l10n.yourName,
+                                labelStyle: const TextStyle(color: Colors.grey),
+                                border: const OutlineInputBorder(),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        if (_isLoading)
-                          const CircularProgressIndicator()
-                        else
+                          const SizedBox(width: 10),
+                          if (_isLoading)
+                            const CircularProgressIndicator()
+                          else
+                            IconButton(
+                              icon: const Icon(Icons.check, color: Colors.green),
+                              onPressed: _saveName,
+                            ),
                           IconButton(
-                            icon: const Icon(Icons.check, color: Colors.green),
-                            onPressed: _saveName,
+                            icon: const Icon(Icons.close, color: Colors.red),
+                            onPressed: () => setState(() => _isEditing = false),
                           ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.red),
-                          onPressed: () => setState(() => _isEditing = false),
-                        ),
-                      ],
-                    )
-                  else
+                        ],
+                      )
+                    else
+                      _buildProfileItem(
+                        icon: Icons.badge,
+                        label: l10n.displayName,
+                        value: authState.displayName ?? l10n.notSpecified,
+                        onEdit: () {
+                          setState(() => _isEditing = true);
+                        },
+                      ),
                     _buildProfileItem(
-                      icon: Icons.badge,
-                      label: l10n.displayName,
-                      value: authState.displayName ?? l10n.notSpecified,
-                      onEdit: () {
-                        setState(() => _isEditing = true);
-                      },
+                      icon: Icons.email,
+                      label: l10n.email,
+                      value: authState.email ?? l10n.notSpecified,
                     ),
-                  _buildProfileItem(
-                    icon: Icons.email,
-                    label: l10n.email,
-                    value: authState.email ?? l10n.notSpecified,
-                  ),
-                  const SizedBox(height: 30),
-                  _buildSectionTitle(l10n.jointBudget),
-                  const SizedBox(height: 15),
-                  groupAsync.when(
-                    data: (group) {
-                      if (group != null) {
-                        final partner = group.users
-                            .where((u) => u.id != authState.userId)
-                            .firstOrNull;
-                        final partnerText = partner != null
-                            ? (partner.displayName ?? partner.email)
-                            : l10n.unknown;
+                    const SizedBox(height: 30),
+                    _buildSectionTitle(l10n.jointBudget),
+                    const SizedBox(height: 15),
+                    groupAsync.when(
+                      data: (group) {
+                        if (group != null) {
+                          final partnerDisplayString = _formatPartnerText(l10n, group.users, authState.userId);
 
-                        return GlassContainer(
-                          borderRadius: 20,
-                          padding: 16.0,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(Icons.group, color: Colors.blueAccent),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      l10n.inGroupWith(partnerText),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton.icon(
-                                  onPressed: _confirmLeaveGroup,
-                                  icon: const Icon(Icons.logout, color: Colors.redAccent, size: 18),
-                                  label: Text(
-                                    l10n.leaveGroup,
-                                    style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    backgroundColor: Colors.redAccent.withOpacity(0.1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return GlassContainer(
-                          borderRadius: 20,
-                          padding: 16.0,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.person_outline, color: Colors.grey),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          return GlassContainer(
+                            borderRadius: 20,
+                            padding: 16.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    Text(
-                                      l10n.personalAccount,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
+                                    const Icon(Icons.group, color: Colors.blueAccent),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        partnerDisplayString,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, AppRoutes.settings);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                const SizedBox(height: 16),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    onPressed: _confirmLeaveGroup,
+                                    icon: const Icon(Icons.logout, color: Colors.redAccent, size: 18),
+                                    label: Text(
+                                      l10n.leaveGroup,
+                                      style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      backgroundColor: Colors.redAccent.withOpacity(0.1),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                child: Text(l10n.setupGroup),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Text(
-                      'Error: $err',
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  _buildSectionTitle(l10n.account),
-                  const SizedBox(height: 15),
-                  _buildProfileItem(
-                    icon: Icons.security,
-                    label: l10n.role,
-                    value: authState.role ?? 'User',
-                  ),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () async {
-                        await ref.read(authProvider.notifier).logout();
-                        if (context.mounted) {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            AppRoutes.onboarding,
-                            (route) => false,
+                              ],
+                            ),
+                          );
+                        } else {
+                          return GlassContainer(
+                            borderRadius: 20,
+                            padding: 16.0,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.person_outline, color: Colors.grey),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        l10n.personalAccount,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, AppRoutes.settings);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Text(l10n.setupGroup),
+                                ),
+                              ],
+                            ),
                           );
                         }
                       },
-                      child: Text(l10n.logoutAccount,
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      loading: () => const Center(child: CircularProgressIndicator()),
+                      error: (err, stack) => Text(
+                        'Error: $err',
+                        style: const TextStyle(color: Colors.red),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                    _buildSectionTitle(l10n.account),
+                    const SizedBox(height: 15),
+                    _buildProfileItem(
+                      icon: Icons.security,
+                      label: l10n.role,
+                      value: authState.role ?? 'User',
+                    ),
+                    const SizedBox(height: 40),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () async {
+                          await ref.read(authProvider.notifier).logout();
+                          if (context.mounted) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              AppRoutes.onboarding,
+                              (route) => false,
+                            );
+                          }
+                        },
+                        child: Text(l10n.logoutAccount,
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

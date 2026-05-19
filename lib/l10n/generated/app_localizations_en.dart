@@ -324,4 +324,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logoutAccount => 'Log Out';
+
+  @override
+  String get waitingForPartner => 'Waiting for partner...';
+
+  @override
+  String inGroupWithMultiple(String partner, String count) {
+    return 'You are in a group with: $partner and $count more';
+  }
 }

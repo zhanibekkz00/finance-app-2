@@ -324,4 +324,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get logoutAccount => 'Аккаунттан шығу';
+
+  @override
+  String get waitingForPartner => 'Серіктесті күту...';
+
+  @override
+  String inGroupWithMultiple(String partner, String count) {
+    return 'Сіз келесі серіктеспен және тағы $count адаммен бір топтасыз: $partner';
+  }
 }
