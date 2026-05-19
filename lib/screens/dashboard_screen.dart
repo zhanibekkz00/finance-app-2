@@ -13,6 +13,8 @@ import '../widgets/category_quick_selector.dart';
 import '../widgets/transaction_share_helper.dart';
 import '../widgets/glass_container.dart';
 import '../widgets/neo_container.dart';
+import '../providers/balance_provider.dart';
+import '../providers/settings_provider.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -24,6 +26,7 @@ class DashboardScreen extends ConsumerStatefulWidget {
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   final _searchCtrl = TextEditingController();
   String _searchQuery = '';
+  bool _isBalanceVisible = true;
 
   @override
   void dispose() {
@@ -73,7 +76,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 TransactionShareHelper.shareTransaction(
                   context,
                   tx,
-                  category?.getLocalizedName(context) ?? 'Unknown',
+                  category?.getLocalizedName(context) ?? l10n.unknown,
                 );
               },
             ),
@@ -165,6 +168,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     final txState = ref.watch(transactionProvider);
     ref.watch(categoryProvider); // Watch for category changes
+    final totalBalance = ref.watch(balanceProvider);
+    final currencyCode = ref.watch(settingsProvider).currencyCode;
 
     final l10n = AppLocalizations.of(context)!;
 
@@ -183,7 +188,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -210,23 +215,93 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ),
       body: Column(
         children: [
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeOut,
+            builder: (context, animValue, child) {
+              return Opacity(
+                opacity: animValue,
+                child: Transform.translate(
+                  offset: Offset(0, 20 * (1 - animValue)),
+                  child: child,
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+              child: GlassContainer(
+                borderRadius: 24,
+                padding: 16.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.totalBalance,
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 200),
+                          child: Text(
+                            _isBalanceVisible
+                                ? NumberFormat.simpleCurrency(
+                                        locale: Localizations.localeOf(context).toString(),
+                                        name: currencyCode)
+                                    .format(totalBalance)
+                                : '••••••',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            _isBalanceVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.white.withOpacity(0.7),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isBalanceVisible = !_isBalanceVisible;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchCtrl,
-              decoration: InputDecoration(
-                labelText: l10n.search,
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+            child: GlassContainer(
+              borderRadius: 16,
+              padding: 0,
+              child: TextField(
+                controller: _searchCtrl,
+                decoration: InputDecoration(
+                  labelText: l10n.search,
+                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+                  prefixIcon: Icon(Icons.search, color: Colors.white.withOpacity(0.4)),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.05),
-                hintStyle: const TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.white),
+                onChanged: (v) => setState(() => _searchQuery = v),
               ),
-              style: const TextStyle(color: Colors.white),
-              onChanged: (v) => setState(() => _searchQuery = v),
             ),
           ),
           Expanded(
@@ -253,19 +328,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               gradient: LinearGradient(
                                 colors: category != null
                                     ? [
-                                        Color(category.colorValue).withOpacity(0.8),
-                                        Color(category.colorValue),
+                                        Color(category.colorValue).withOpacity(0.3),
+                                        Color(category.colorValue).withOpacity(0.85),
                                       ]
-                                    : [Colors.grey.withOpacity(0.8), Colors.grey],
+                                    : [Colors.grey.withOpacity(0.3), Colors.grey.withOpacity(0.85)],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                               boxShadow: [
                                 BoxShadow(
                                   color: category != null
-                                      ? Color(category.colorValue).withOpacity(0.3)
-                                      : Colors.grey.withOpacity(0.3),
-                                  blurRadius: 8,
+                                      ? Color(category.colorValue).withOpacity(0.15)
+                                      : Colors.grey.withOpacity(0.05),
+                                  blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 )
                               ],
@@ -300,8 +375,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         children: [
                           Expanded(
                               child: Text(
-                            category?.getLocalizedName(context) ?? 'Unknown',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            category?.getLocalizedName(context) ?? l10n.unknown,
+                            style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
                           )),
                           if (tx.isPinned)
                             const Icon(
@@ -316,12 +391,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         children: [
                           if (tx.note.isNotEmpty)
                             Text(tx.note,
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey)),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white.withOpacity(0.65))),
                           Text(
                             DateFormat.yMMMd(Localizations.localeOf(context).toString())
                                 .format(tx.date),
-                            style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                            style: TextStyle(color: Colors.white.withOpacity(0.4)),
                           ),
                         ],
                       ),
@@ -358,9 +433,38 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppRoutes.addTransaction),
-        child: const Icon(Icons.add),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF6366F1), // Indigo
+              Color(0xFFEC4899), // Pink
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withOpacity(0.4),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+            BoxShadow(
+              color: const Color(0xFFEC4899).withOpacity(0.4),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.addTransaction),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          highlightElevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: const Icon(Icons.add, color: Colors.white, size: 28),
+        ),
       ),
     );
   }

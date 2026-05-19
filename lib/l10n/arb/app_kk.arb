@@ -57,5 +57,6 @@
   "joinGroup": "Топқа қосылу",
   "logout": "Шығу",
   "notifications": "Хабарландырулар",
-  "noNotifications": "Әзірге хабарландырулар жоқ"
+  "noNotifications": "Әзірге хабарландырулар жоқ",
+  "unknown": "Белгісіз"
 }

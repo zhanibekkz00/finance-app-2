@@ -57,9 +57,9 @@ class AppTheme {
       secondary: _secondaryColor,
       error: _errorColor,
       surface: const Color(0xFF0F172A), // Slate 900
-      background: const Color(0xFF020617), // Slate 950
+      background: const Color(0xFF12121A), // Graphite background
     ),
-    scaffoldBackgroundColor: const Color(0xFF020617),
+    scaffoldBackgroundColor: const Color(0xFF12121A),
     cardTheme: CardThemeData(
       color: const Color(0xFF1E293B), // Slate 800
       elevation: 0,

@@ -57,5 +57,6 @@
   "joinGroup": "Присоединиться к группе",
   "logout": "Выход",
   "notifications": "Уведомления",
-  "noNotifications": "Уведомлений пока нет"
+  "noNotifications": "Уведомлений пока нет",
+  "unknown": "Неизвестно"
 }

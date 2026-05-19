@@ -182,4 +182,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get noNotifications => 'Әзірге хабарландырулар жоқ';
+
+  @override
+  String get unknown => 'Белгісіз';
 }

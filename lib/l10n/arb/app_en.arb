@@ -57,5 +57,6 @@
   "joinGroup": "Join Group",
   "logout": "Logout",
   "notifications": "Notifications",
-  "noNotifications": "No notifications yet"
+  "noNotifications": "No notifications yet",
+  "unknown": "Unknown"
 }

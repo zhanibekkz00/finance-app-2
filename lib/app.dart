@@ -16,6 +16,7 @@ import 'screens/groups/group_stats_screen.dart';
 import 'screens/debts/debts_screen.dart';
 import 'screens/debts/add_debt_screen.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'theme/app_theme.dart';
 
 class AppRoutes {
   static const String onboarding = '/onboarding';
@@ -58,10 +59,8 @@ class AppRoot extends ConsumerWidget {
     return MaterialApp(
       title: 'Finance App',
       debugShowCheckedModeBanner: false,
-      theme: settings.themeMode == ThemeMode.dark
-          ? ThemeData.dark()
-          : ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       themeMode: settings.themeMode,
       locale: settings.locale,
       supportedLocales: AppLocalizations.supportedLocales,

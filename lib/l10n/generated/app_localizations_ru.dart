@@ -182,4 +182,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noNotifications => 'Уведомлений пока нет';
+
+  @override
+  String get unknown => 'Неизвестно';
 }

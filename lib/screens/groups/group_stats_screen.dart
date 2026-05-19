@@ -26,7 +26,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     final statsAsync = ref.watch(groupStatsProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2C), // Neomorphic background
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Neomorphic background
       appBar: AppBar(
         title: const Text('Shared Wallet', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,

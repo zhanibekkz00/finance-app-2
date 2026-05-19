@@ -13,7 +13,7 @@ export class AdminService {
     });
     const totalTransactionVolume = aggregations._sum.amount ? Number(aggregations._sum.amount) : 0;
 
-    const newUsersPerDay = [];
+    const newUsersPerDay: number[] = [];
     for (let i = 6; i >= 0; i--) {
       const gte = new Date();
       gte.setDate(gte.getDate() - i);
