@@ -723,6 +723,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You are in a group with: {partner} and {count} more'**
   String inGroupWithMultiple(String partner, String count);
+
+  /// No description provided for @debtTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt: {name}'**
+  String debtTo(String name);
+
+  /// No description provided for @creditFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'{bank} (Credit)'**
+  String creditFrom(String bank);
+
+  /// No description provided for @debtMortgage.
+  ///
+  /// In en, this message translates to:
+  /// **'Mortgage'**
+  String get debtMortgage;
+
+  /// No description provided for @debtInstallment.
+  ///
+  /// In en, this message translates to:
+  /// **'Installment'**
+  String get debtInstallment;
+
+  /// No description provided for @debtPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Debt'**
+  String get debtPrivate;
+
+  /// No description provided for @debtBankLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Loan'**
+  String get debtBankLoan;
+
+  /// No description provided for @paymentOfDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment of Debt'**
+  String get paymentOfDebt;
+
+  /// No description provided for @gettingLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting a Loan'**
+  String get gettingLoan;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPassword;
+
+  /// No description provided for @passwordRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Password Recovery'**
+  String get passwordRecovery;
+
+  /// No description provided for @enterYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get enterYourEmail;
+
+  /// No description provided for @codeSentToEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset code sent to email'**
+  String get codeSentToEmail;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password successfully changed!'**
+  String get passwordResetSuccess;
+
+  /// No description provided for @enterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter OTP Code'**
+  String get enterOtp;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get reset;
+
+  /// No description provided for @invalidCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or expired reset code'**
+  String get invalidCode;
+
+  /// No description provided for @emailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Email not found'**
+  String get emailNotFound;
+
+  /// No description provided for @checkConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection'**
+  String get checkConnection;
+
+  /// No description provided for @failedToSendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send code, try again later'**
+  String get failedToSendCode;
 }
 
 class _AppLocalizationsDelegate

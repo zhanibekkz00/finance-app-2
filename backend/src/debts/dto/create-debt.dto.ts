@@ -1,4 +1,4 @@
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class CreateDebtDto {
   @IsString()
@@ -10,4 +10,8 @@ export class CreateDebtDto {
   @IsNumber()
   @IsPositive()
   amount: number;
+
+  @IsString()
+  @IsOptional()
+  currency?: string;
 }

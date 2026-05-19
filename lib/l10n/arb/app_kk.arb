@@ -134,5 +134,42 @@
         "type": "String"
       }
     }
-  }
+  },
+  "debtTo": "Қарыз: {name}",
+  "@debtTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "creditFrom": "{bank} (Несие)",
+  "@creditFrom": {
+    "placeholders": {
+      "bank": {
+        "type": "String"
+      }
+    }
+  },
+  "debtMortgage": "Ипотека",
+  "debtInstallment": "Бөліп төлеу",
+  "debtPrivate": "Жеке қарыз",
+  "debtBankLoan": "Несие",
+  "paymentOfDebt": "Қарызды өтеу",
+  "gettingLoan": "Қарыз алу",
+  "forgotPassword": "Құпия сөзді ұмыттыңыз ба?",
+  "passwordRecovery": "Құпия сөзді қалпына келтіру",
+  "enterYourEmail": "Электрондық поштаңызды енгізіңіз",
+  "codeSentToEmail": "Қалпына келтіру коды поштаға жіберілді",
+  "newPassword": "Жаңа құпия сөз",
+  "passwordsDoNotMatch": "Құпия сөздер сәйкес келмейді",
+  "passwordResetSuccess": "Құпия сөз сәтті өзгертілді!",
+  "enterOtp": "OTP кодын енгізіңіз",
+  "confirmNewPassword": "Жаңа құпия сөзді растаңыз",
+  "send": "Жіберу",
+  "reset": "Құпия сөзді қалпына келтіру",
+  "invalidCode": "Қате немесе ескірген код",
+  "emailNotFound": "Email табылмады",
+  "checkConnection": "Қосылымды тексеріңіз",
+  "failedToSendCode": "Жіберу қатесі, кейінірек қайталап көріңіз"
 }

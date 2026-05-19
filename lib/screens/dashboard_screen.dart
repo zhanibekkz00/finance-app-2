@@ -12,9 +12,9 @@ import 'category_stats_screen.dart';
 import '../widgets/category_quick_selector.dart';
 import '../widgets/transaction_share_helper.dart';
 import '../widgets/glass_container.dart';
-import '../widgets/neo_container.dart';
 import '../providers/balance_provider.dart';
 import '../providers/settings_provider.dart';
+import '../utils/debt_utils.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -313,6 +313,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 final category = ref
                     .read(categoryProvider.notifier)
                     .getCategoryById(tx.categoryId);
+                final debtInfo = DebtUtils.parseDebtTransaction(l10n, tx);
+
+                // Styling configuration
+                final isDebt = debtInfo != null;
+                final displayTitle = isDebt ? debtInfo.title : (category?.getLocalizedName(context) ?? l10n.unknown);
+                final displaySubtitle = isDebt ? debtInfo.subtitle : tx.note;
+                
+                // Color formatting
+                Color amountColor;
+                if (isDebt) {
+                  amountColor = Colors.amberAccent; // Amber/Gold for debt related transactions
+                } else if (tx.type == TransactionType.income) {
+                  amountColor = const Color(0xFF32D74B); // Mint
+                } else {
+                  amountColor = const Color(0xFFFF375F); // Pink
+                }
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
@@ -321,37 +337,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     child: ListTile(
                       leading: Stack(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: category != null
-                                    ? [
-                                        Color(category.colorValue).withOpacity(0.3),
-                                        Color(category.colorValue).withOpacity(0.85),
-                                      ]
-                                    : [Colors.grey.withOpacity(0.3), Colors.grey.withOpacity(0.85)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                          if (isDebt)
+                            DebtUtils.getDebtIcon(debtInfo.creditorName, debtInfo.type, size: 22)
+                          else
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: category != null
+                                      ? [
+                                          Color(category.colorValue).withOpacity(0.3),
+                                          Color(category.colorValue).withOpacity(0.85),
+                                        ]
+                                      : [Colors.grey.withOpacity(0.3), Colors.grey.withOpacity(0.85)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: category != null
+                                        ? Color(category.colorValue).withOpacity(0.15)
+                                        : Colors.grey.withOpacity(0.05),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ],
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: category != null
-                                      ? Color(category.colorValue).withOpacity(0.15)
-                                      : Colors.grey.withOpacity(0.05),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                )
-                              ],
+                              child: Icon(
+                                category != null
+                                    ? IconData(category.iconCode, fontFamily: 'MaterialIcons')
+                                    : Icons.help_outline,
+                                color: Colors.white,
+                              ),
                             ),
-                            child: Icon(
-                              category != null
-                                  ? IconData(category.iconCode, fontFamily: 'MaterialIcons')
-                                  : Icons.help_outline,
-                              color: Colors.white,
-                            ),
-                          ),
                           if (tx.isPinned)
                             Positioned(
                               right: 0,
@@ -375,7 +394,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         children: [
                           Expanded(
                               child: Text(
-                            category?.getLocalizedName(context) ?? l10n.unknown,
+                            displayTitle,
                             style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
                           )),
                           if (tx.isPinned)
@@ -389,8 +408,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (tx.note.isNotEmpty)
-                            Text(tx.note,
+                          if (displaySubtitle.isNotEmpty)
+                            Text(displaySubtitle,
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.white.withOpacity(0.65))),
                           Text(
@@ -408,11 +427,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                '${tx.type == TransactionType.income ? '+' : '-'}${tx.amount} ${tx.currency}',
+                                '${tx.type == TransactionType.income ? '+' : '-'}${DebtUtils.formatAmount(tx.amount, tx.currency)}',
                                 style: TextStyle(
-                                  color: tx.type == TransactionType.income
-                                      ? const Color(0xFF32D74B) // Mint
-                                      : const Color(0xFFFF375F), // Pink
+                                  color: amountColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),

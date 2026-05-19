@@ -332,4 +332,77 @@ class AppLocalizationsKk extends AppLocalizations {
   String inGroupWithMultiple(String partner, String count) {
     return 'Сіз келесі серіктеспен және тағы $count адаммен бір топтасыз: $partner';
   }
+
+  @override
+  String debtTo(String name) {
+    return 'Қарыз: $name';
+  }
+
+  @override
+  String creditFrom(String bank) {
+    return '$bank (Несие)';
+  }
+
+  @override
+  String get debtMortgage => 'Ипотека';
+
+  @override
+  String get debtInstallment => 'Бөліп төлеу';
+
+  @override
+  String get debtPrivate => 'Жеке қарыз';
+
+  @override
+  String get debtBankLoan => 'Несие';
+
+  @override
+  String get paymentOfDebt => 'Қарызды өтеу';
+
+  @override
+  String get gettingLoan => 'Қарыз алу';
+
+  @override
+  String get forgotPassword => 'Құпия сөзді ұмыттыңыз ба?';
+
+  @override
+  String get passwordRecovery => 'Құпия сөзді қалпына келтіру';
+
+  @override
+  String get enterYourEmail => 'Электрондық поштаңызды енгізіңіз';
+
+  @override
+  String get codeSentToEmail => 'Қалпына келтіру коды поштаға жіберілді';
+
+  @override
+  String get newPassword => 'Жаңа құпия сөз';
+
+  @override
+  String get passwordsDoNotMatch => 'Құпия сөздер сәйкес келмейді';
+
+  @override
+  String get passwordResetSuccess => 'Құпия сөз сәтті өзгертілді!';
+
+  @override
+  String get enterOtp => 'OTP кодын енгізіңіз';
+
+  @override
+  String get confirmNewPassword => 'Жаңа құпия сөзді растаңыз';
+
+  @override
+  String get send => 'Жіберу';
+
+  @override
+  String get reset => 'Құпия сөзді қалпына келтіру';
+
+  @override
+  String get invalidCode => 'Қате немесе ескірген код';
+
+  @override
+  String get emailNotFound => 'Email табылмады';
+
+  @override
+  String get checkConnection => 'Қосылымды тексеріңіз';
+
+  @override
+  String get failedToSendCode => 'Жіберу қатесі, кейінірек қайталап көріңіз';
 }

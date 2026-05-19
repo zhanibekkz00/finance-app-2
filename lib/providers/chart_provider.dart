@@ -19,15 +19,19 @@ class ChartData {
   final Map<String, double> categorySpend;
   final Map<String, double> dateSpend;
   final Map<String, double> userSpend;
+  final Map<String, double> userIncome;
   final List<Debt> debts;
   final double totalSpend;
+  final double totalIncome;
   
   ChartData({
     required this.categorySpend,
     required this.dateSpend,
     required this.userSpend,
+    required this.userIncome,
     required this.debts,
     required this.totalSpend,
+    required this.totalIncome,
   });
 }
 
@@ -62,30 +66,36 @@ final chartProvider = Provider<ChartState>((ref) {
   }
 
   final filteredTxs = txs.where((tx) {
-    if (tx.type != TransactionType.expense) return false;
     if (startDate != null && tx.date.isBefore(startDate)) return false;
     return true;
   }).toList();
 
   final Map<String, double> catMap = {};
   final Map<String, double> dateMap = {};
-  final Map<String, double> userMap = {};
-  double total = 0;
+  final Map<String, double> userSpendMap = {};
+  final Map<String, double> userIncomeMap = {};
+  double totalSpend = 0;
+  double totalIncome = 0;
 
   for (var tx in filteredTxs) {
-    catMap[tx.categoryId] = (catMap[tx.categoryId] ?? 0) + tx.amount;
-    final dateKey = DateFormat('yyyy-MM-dd').format(tx.date);
-    dateMap[dateKey] = (dateMap[dateKey] ?? 0) + tx.amount;
     final userId = tx.userId ?? 'Unknown';
-    userMap[userId] = (userMap[userId] ?? 0) + tx.amount;
-    total += tx.amount;
+    if (tx.type == TransactionType.expense) {
+      catMap[tx.categoryId] = (catMap[tx.categoryId] ?? 0) + tx.amount;
+      final dateKey = DateFormat('yyyy-MM-dd').format(tx.date);
+      dateMap[dateKey] = (dateMap[dateKey] ?? 0) + tx.amount;
+      userSpendMap[userId] = (userSpendMap[userId] ?? 0) + tx.amount;
+      totalSpend += tx.amount;
+    } else if (tx.type == TransactionType.income) {
+      userIncomeMap[userId] = (userIncomeMap[userId] ?? 0) + tx.amount;
+      totalIncome += tx.amount;
+    }
   }
 
   // Calculate debts
   final debts = <Debt>[];
-  if (userMap.isNotEmpty) {
-    final average = total / userMap.length;
-    List<Map<String, dynamic>> balances = userMap.entries.map((e) {
+  if (userSpendMap.isNotEmpty) {
+    final average = totalSpend / userSpendMap.length;
+    List<Map<String, dynamic>> balances = userSpendMap.entries.map((e) {
       return {'name': e.key, 'balance': e.value - average};
     }).toList();
 
@@ -122,9 +132,11 @@ final chartProvider = Provider<ChartState>((ref) {
     data: ChartData(
       categorySpend: catMap,
       dateSpend: dateMap,
-      userSpend: userMap,
+      userSpend: userSpendMap,
+      userIncome: userIncomeMap,
       debts: debts,
-      totalSpend: total,
+      totalSpend: totalSpend,
+      totalIncome: totalIncome,
     ),
   );
 });

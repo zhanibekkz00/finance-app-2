@@ -134,5 +134,42 @@
         "type": "String"
       }
     }
-  }
+  },
+  "debtTo": "Debt: {name}",
+  "@debtTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "creditFrom": "{bank} (Credit)",
+  "@creditFrom": {
+    "placeholders": {
+      "bank": {
+        "type": "String"
+      }
+    }
+  },
+  "debtMortgage": "Mortgage",
+  "debtInstallment": "Installment",
+  "debtPrivate": "Private Debt",
+  "debtBankLoan": "Bank Loan",
+  "paymentOfDebt": "Payment of Debt",
+  "gettingLoan": "Getting a Loan",
+  "forgotPassword": "Forgot password?",
+  "passwordRecovery": "Password Recovery",
+  "enterYourEmail": "Enter your email",
+  "codeSentToEmail": "Reset code sent to email",
+  "newPassword": "New Password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "passwordResetSuccess": "Password successfully changed!",
+  "enterOtp": "Enter OTP Code",
+  "confirmNewPassword": "Confirm New Password",
+  "send": "Send",
+  "reset": "Reset Password",
+  "invalidCode": "Invalid or expired reset code",
+  "emailNotFound": "Email not found",
+  "checkConnection": "Check your connection",
+  "failedToSendCode": "Failed to send code, try again later"
 }

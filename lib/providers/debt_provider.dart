@@ -59,12 +59,13 @@ class DebtNotifier extends StateNotifier<DebtState> {
     }
   }
 
-  Future<bool> addDebt(String type, String creditorName, double amount) async {
+  Future<bool> addDebt(String type, String creditorName, double amount, String currency) async {
     try {
       final response = await _apiService.post('/debts', {
         'type': type,
         'creditorName': creditorName,
         'amount': amount,
+        'currency': currency,
       });
 
       if (response.statusCode == 201) {

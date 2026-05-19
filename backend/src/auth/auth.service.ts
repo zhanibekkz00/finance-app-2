@@ -1,15 +1,19 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, BadRequestException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private mailerService: MailerService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -151,5 +155,67 @@ export class AuthService {
         avatarUrl: true,
       }
     });
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Email не найден');
+    }
+
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiry = new Date();
+    expiry.setMinutes(expiry.getMinutes() + 15);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetOtp: otpCode,
+        resetOtpExpiry: expiry,
+      },
+    });
+
+    try {
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Password Reset OTP - Finance App',
+        text: `Your password reset code is: ${otpCode}. It will expire in 15 minutes.`,
+      });
+    } catch (e) {
+      console.error('Failed to send SMTP email:', e);
+      throw new InternalServerErrorException('Ошибка отправки, попробуйте позже');
+    }
+
+    return { success: true };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user || !user.resetOtp || user.resetOtp !== dto.token) {
+      throw new BadRequestException('Invalid or expired reset code');
+    }
+
+    if (user.resetOtpExpiry && user.resetOtpExpiry < new Date()) {
+      throw new BadRequestException('Invalid or expired reset code');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash,
+        resetOtp: null,
+        resetOtpExpiry: null,
+      },
+    });
+
+    return { success: true };
   }
 }

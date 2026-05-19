@@ -2,25 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/debt_provider.dart';
 import '../../models/debt_model.dart';
+import '../../utils/debt_utils.dart';
+import '../../widgets/glass_container.dart';
+import 'package:finance_app/l10n/generated/app_localizations.dart';
 
 class DebtsScreen extends ConsumerWidget {
   const DebtsScreen({super.key});
 
   void _showPayModal(BuildContext context, WidgetRef ref, DebtModel debt) {
     final ctrl = TextEditingController();
+    final l10n = AppLocalizations.of(context)!;
+    final formattedRemaining = DebtUtils.formatAmount(debt.remainingAmount, debt.currency);
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Внести платеж'),
-        content: TextField(
-          controller: ctrl,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(
-            labelText: 'Сумма (Остаток: ${debt.remainingAmount})',
-          ),
+        backgroundColor: const Color(0xFF1E1E2C),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(l10n.confirm, style: const TextStyle(color: Colors.white)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${l10n.amount} (${l10n.amountDetails(formattedRemaining)})',
+              style: const TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: ctrl,
+              style: const TextStyle(color: Colors.white),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                hintText: '0.00',
+                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white38),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent),
+                ),
+              ),
+            ),
+          ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Отмена')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel, style: const TextStyle(color: Colors.grey)),
+          ),
           TextButton(
             onPressed: () async {
               final val = double.tryParse(ctrl.text);
@@ -33,7 +63,7 @@ class DebtsScreen extends ConsumerWidget {
                 );
               }
             },
-            child: const Text('Оплатить'),
+            child: Text(l10n.confirm, style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -43,60 +73,107 @@ class DebtsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(debtProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Долги и кредиты')),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(l10n.sharedWallet, style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: state.isLoading && state.debts.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : state.debts.isEmpty
-              ? const Center(child: Text('Нет активных долгов'))
+              ? const Center(
+                  child: Text(
+                    'Нет активных долгов',
+                    style: TextStyle(color: Colors.white60, fontSize: 16),
+                  ),
+                )
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: state.debts.length,
                   itemBuilder: (context, index) {
                     final d = state.debts[index];
                     final progress = 1 - (d.remainingAmount / d.totalAmount);
+                    final formattedRemaining = DebtUtils.formatAmount(d.remainingAmount, d.currency);
+                    final formattedTotal = DebtUtils.formatAmount(d.totalAmount, d.currency);
+                    final title = DebtUtils.getDebtTitle(l10n, d.creditorName, d.type);
 
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: GlassContainer(
+                        borderRadius: 20,
+                        padding: 16,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(d.type, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                Row(
+                                  children: [
+                                    DebtUtils.getDebtIcon(d.creditorName, d.type, size: 20),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      title,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.grey),
+                                  icon: const Icon(Icons.delete, color: Colors.white60),
                                   onPressed: () {
-                                     ref.read(debtProvider.notifier).deleteDebt(d.id);
+                                    ref.read(debtProvider.notifier).deleteDebt(d.id);
                                   },
                                 ),
                               ],
                             ),
-                            Text(d.creditorName, style: const TextStyle(fontSize: 18)),
                             const SizedBox(height: 12),
-                            LinearProgressIndicator(value: progress.clamp(0.0, 1.0)),
-                            const SizedBox(height: 8),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: LinearProgressIndicator(
+                                value: progress.clamp(0.0, 1.0),
+                                minHeight: 6,
+                                backgroundColor: Colors.white10,
+                                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Осталось: ${d.remainingAmount.toStringAsFixed(2)}'),
-                                Text('Всего: ${d.totalAmount.toStringAsFixed(2)}'),
+                                Text(
+                                  'Осталось: $formattedRemaining',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                                ),
+                                Text(
+                                  'Всего: $formattedTotal',
+                                  style: const TextStyle(color: Colors.white38, fontSize: 14),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 16),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: ElevatedButton(
-                                onPressed: d.remainingAmount > 0
-                                    ? () => _showPayModal(context, ref, d)
-                                    : null,
-                                child: const Text('Внести платеж'),
+                            if (d.remainingAmount > 0)
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blueAccent,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  onPressed: () => _showPayModal(context, ref, d),
+                                  child: const Text('Внести платеж'),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -105,7 +182,8 @@ class DebtsScreen extends ConsumerWidget {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/add_debt'),
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'providers/settings_provider.dart';
 import 'providers/auth_provider.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/auth/onboarding_screen.dart';
+import 'screens/auth/forgot_password_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/add_transaction_screen.dart';
 import 'screens/settings_screen.dart';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String onboarding = '/onboarding';
   static const String login =
       '/login'; // Keep the route name but use AuthScreen
+  static const String forgotPassword = '/forgot_password';
   static const String dashboard = '/dashboard';
   static const String addTransaction = '/add_transaction';
   static const String settings = '/settings';
@@ -74,6 +76,7 @@ class AppRoot extends ConsumerWidget {
       routes: {
         AppRoutes.onboarding: (context) => const OnboardingScreen(),
         AppRoutes.login: (context) => const AuthScreen(),
+        AppRoutes.forgotPassword: (context) => const ForgotPasswordScreen(),
         AppRoutes.dashboard: (context) => const DashboardScreen(),
         AppRoutes.addTransaction: (context) => const AddTransactionScreen(),
         AppRoutes.settings: (context) => const SettingsScreen(),

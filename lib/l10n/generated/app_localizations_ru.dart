@@ -332,4 +332,77 @@ class AppLocalizationsRu extends AppLocalizations {
   String inGroupWithMultiple(String partner, String count) {
     return 'Вы в группе с: $partner и еще $count';
   }
+
+  @override
+  String debtTo(String name) {
+    return 'Долг: $name';
+  }
+
+  @override
+  String creditFrom(String bank) {
+    return '$bank (Кредит)';
+  }
+
+  @override
+  String get debtMortgage => 'Ипотека';
+
+  @override
+  String get debtInstallment => 'Рассрочка';
+
+  @override
+  String get debtPrivate => 'Частный долг';
+
+  @override
+  String get debtBankLoan => 'Кредит';
+
+  @override
+  String get paymentOfDebt => 'Погашение долга';
+
+  @override
+  String get gettingLoan => 'Получение займа';
+
+  @override
+  String get forgotPassword => 'Забыли пароль?';
+
+  @override
+  String get passwordRecovery => 'Восстановление пароля';
+
+  @override
+  String get enterYourEmail => 'Введите ваш email';
+
+  @override
+  String get codeSentToEmail => 'Код отправлен на почту';
+
+  @override
+  String get newPassword => 'Новый пароль';
+
+  @override
+  String get passwordsDoNotMatch => 'Пароли не совпадают';
+
+  @override
+  String get passwordResetSuccess => 'Пароль успешно изменен!';
+
+  @override
+  String get enterOtp => 'Введите OTP-код';
+
+  @override
+  String get confirmNewPassword => 'Подтвердите новый пароль';
+
+  @override
+  String get send => 'Отправить';
+
+  @override
+  String get reset => 'Сбросить пароль';
+
+  @override
+  String get invalidCode => 'Неверный или просроченный код';
+
+  @override
+  String get emailNotFound => 'Email не найден';
+
+  @override
+  String get checkConnection => 'Проверьте соединение';
+
+  @override
+  String get failedToSendCode => 'Ошибка отправки, попробуйте позже';
 }

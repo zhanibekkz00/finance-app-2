@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/chart_provider.dart';
 import '../../providers/category_provider.dart';
+import '../../providers/group_provider.dart';
 import '../../models/category_model.dart';
 import '../../widgets/neo_container.dart';
 import '../../widgets/glass_container.dart';
@@ -33,6 +34,20 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final chartState = ref.watch(chartProvider);
     final data = chartState.data;
+
+    final groupState = ref.watch(groupProvider);
+    final groupInfo = groupState.value;
+
+    String getUserName(String userId) {
+      if (groupInfo != null) {
+        for (var member in groupInfo.users) {
+          if (member.id == userId) {
+            return member.displayName ?? member.email;
+          }
+        }
+      }
+      return userId;
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -87,10 +102,29 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                   fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
             ),
             const SizedBox(height: 20),
-            if (data.totalSpend == 0)
-              _buildEmptyState(l10n)
-            else
-              _buildChartSection(data, l10n),
+
+            // 1. Expenses Chart
+            _buildUserPieChart(
+              title: l10n.totalGroupSpend,
+              totalAmount: data.totalSpend,
+              userAmountMap: data.userSpend,
+              getUserName: getUserName,
+              l10n: l10n,
+              isExpense: true,
+            ),
+
+            const SizedBox(height: 20),
+
+            // 2. Incomes Chart
+            _buildUserPieChart(
+              title: l10n.income,
+              totalAmount: data.totalIncome,
+              userAmountMap: data.userIncome,
+              getUserName: getUserName,
+              l10n: l10n,
+              isExpense: false,
+            ),
+
             const SizedBox(height: 40),
             Text(
               l10n.whoOwesWhom,
@@ -98,93 +132,81 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                   fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
             ),
             const SizedBox(height: 20),
-            _buildDebtsSection(data.debts, l10n),
+            _buildDebtsSection(data.debts, getUserName, l10n),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildEmptyState(AppLocalizations l10n) {
-    return GlassContainer(
-      child: Container(
-        height: 250,
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.bar_chart_rounded, size: 60, color: Colors.white.withOpacity(0.3)),
-            const SizedBox(height: 16),
-            Text(
-              l10n.noDataForPeriod,
-              style: const TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-          ],
+  Widget _buildUserPieChart({
+    required String title,
+    required double totalAmount,
+    required Map<String, double> userAmountMap,
+    required String Function(String) getUserName,
+    required AppLocalizations l10n,
+    required bool isExpense,
+  }) {
+    if (totalAmount == 0 || userAmountMap.isEmpty) {
+      return NeoContainer(
+        child: Container(
+          height: 180,
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 16),
+              Icon(Icons.pie_chart_outline, size: 48, color: Colors.white.withOpacity(0.3)),
+              const SizedBox(height: 8),
+              Text(
+                l10n.noDataForPeriod,
+                style: const TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
-  Widget _buildChartSection(ChartData data, AppLocalizations l10n) {
-    final categories = data.categorySpend.entries.toList();
-    // Sort by amount descending
-    categories.sort((a, b) => b.value.compareTo(a.value));
+    final entries = userAmountMap.entries.toList();
+    entries.sort((a, b) => b.value.compareTo(a.value));
 
     return NeoContainer(
       child: Column(
         children: [
           Text(
-            l10n.totalGroupSpend,
-            style: const TextStyle(fontSize: 16, color: Colors.grey),
+            title,
+            style: const TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           Text(
-            '${data.totalSpend.toStringAsFixed(0)} ₸',
+            '${totalAmount.toStringAsFixed(0)} ₸',
             style: const TextStyle(
                 fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           const SizedBox(height: 30),
           SizedBox(
-            height: 220,
+            height: 200,
             child: PieChart(
               PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    setState(() {
-                      if (!event.isInterestedForInteractions ||
-                          pieTouchResponse == null ||
-                          pieTouchResponse.touchedSection == null) {
-                        _touchedIndex = -1;
-                        return;
-                      }
-                      _touchedIndex =
-                          pieTouchResponse.touchedSection!.touchedSectionIndex;
-                    });
-                    
-                    // Show dialog with details on tap up
-                    if (event is FlTapUpEvent && _touchedIndex != -1) {
-                      final catEntry = categories[_touchedIndex];
-                      final catName = ref.read(categoryProvider.notifier).getCategoryById(catEntry.key)?.getLocalizedName(context) ?? l10n.unknown;
-                      _showDetailsDialog(catName, catEntry.value, l10n);
-                    }
-                  },
-                ),
                 sectionsSpace: 2,
-                centerSpaceRadius: 50,
-                sections: categories.asMap().entries.map((entry) {
+                centerSpaceRadius: 45,
+                sections: entries.asMap().entries.map((entry) {
                   final idx = entry.key;
-                  final catEntry = entry.value;
-                  final isTouched = idx == _touchedIndex;
-                  final radius = isTouched ? 50.0 : 40.0;
-                  final fontSize = isTouched ? 16.0 : 12.0;
+                  final userEntry = entry.value;
+                  final percent = (userEntry.value / totalAmount * 100).toStringAsFixed(0);
 
                   return PieChartSectionData(
                     color: _chartColors[idx % _chartColors.length],
-                    value: catEntry.value,
-                    title: '${(catEntry.value / data.totalSpend * 100).toStringAsFixed(0)}%',
-                    radius: radius,
-                    titleStyle: TextStyle(
-                      fontSize: fontSize,
+                    value: userEntry.value,
+                    title: '$percent%',
+                    radius: 40.0,
+                    titleStyle: const TextStyle(
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -194,71 +216,50 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildLegend(categories, l10n),
+          // Legend
+          Wrap(
+            spacing: 16,
+            runSpacing: 12,
+            alignment: WrapAlignment.center,
+            children: entries.asMap().entries.map((entry) {
+              final idx = entry.key;
+              final userEntry = entry.value;
+              final userName = getUserName(userEntry.key);
+
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: _chartColors[idx % _chartColors.length],
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '$userName (${userEntry.value.toStringAsFixed(0)} ₸)',
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
         ],
       ),
     );
   }
 
-  void _showDetailsDialog(String categoryName, double amount, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF1E1E2C),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(categoryName, style: const TextStyle(color: Colors.white)),
-          content: Text(
-            l10n.amountDetails(amount.toStringAsFixed(2)),
-            style: const TextStyle(color: Colors.white70, fontSize: 18),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.ok, style: const TextStyle(color: Color(0xFF5E5CE6))),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildLegend(List<MapEntry<String, double>> categories, AppLocalizations l10n) {
-    return Wrap(
-      spacing: 16,
-      runSpacing: 12,
-      alignment: WrapAlignment.center,
-      children: categories.asMap().entries.map((entry) {
-        final idx = entry.key;
-        final data = entry.value;
-        final cat = ref.read(categoryProvider.notifier).getCategoryById(data.key);
-        final catName = cat?.getLocalizedName(context) ?? l10n.unknown;
-
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: _chartColors[idx % _chartColors.length],
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(catName, style: const TextStyle(color: Colors.white70)),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildDebtsSection(List<Debt> debts, AppLocalizations l10n) {
+  Widget _buildDebtsSection(List<Debt> debts, String Function(String) getUserName, AppLocalizations l10n) {
     if (debts.isEmpty) {
       return GlassContainer(
         child: Center(
-          child: Text(l10n.allSettledUp,
-              style: const TextStyle(color: Colors.white, fontSize: 16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(l10n.allSettledUp,
+                style: const TextStyle(color: Colors.white, fontSize: 16)),
+          ),
         ),
       );
     }
@@ -283,7 +284,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${debt.from} ${l10n.owes} ${debt.to}',
+                          '${getUserName(debt.from)} ${l10n.owes} ${getUserName(debt.to)}',
                           style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,

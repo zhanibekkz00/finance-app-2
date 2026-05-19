@@ -157,6 +157,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     return null;
                   },
                 ),
+                if (_isLogin)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.forgotPassword);
+                      },
+                      child: Text(l10n.forgotPassword),
+                    ),
+                  ),
                 if (!_isLogin) ...[
                   const SizedBox(height: 16),
                   TextFormField(

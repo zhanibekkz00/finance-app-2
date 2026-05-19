@@ -12,13 +12,19 @@ export class DebtsService {
   ) {}
 
   async findAll(userId: string) {
-    return this.prisma.debt.findMany({
+    const debts = await this.prisma.debt.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
+    return debts.map((d) => ({
+      ...d,
+      lender: d.creditorName,
+      provider: d.creditorName,
+    }));
   }
 
   async create(userId: string, dto: CreateDebtDto) {
+    const currency = dto.currency || 'USD';
     const debt = await this.prisma.debt.create({
       data: {
         userId,
@@ -26,6 +32,7 @@ export class DebtsService {
         creditorName: dto.creditorName,
         totalAmount: dto.amount,
         remainingAmount: dto.amount,
+        currency,
       },
     });
 
@@ -38,7 +45,7 @@ export class DebtsService {
         type: 'income',
         amount: dto.amount,
         date: new Date(),
-        currency: 'USD',
+        currency,
         isRecurring: false,
         recurrenceInterval: 'none',
         isPinned: false,
@@ -46,7 +53,11 @@ export class DebtsService {
       }
     });
 
-    return debt;
+    return {
+      ...debt,
+      lender: debt.creditorName,
+      provider: debt.creditorName,
+    };
   }
 
   async pay(userId: string, id: string, dto: PayDebtDto) {
@@ -80,7 +91,7 @@ export class DebtsService {
         type: 'expense',
         amount: dto.amount,
         date: new Date(),
-        currency: 'USD',
+        currency: debt.currency,
         isRecurring: false,
         recurrenceInterval: 'none',
         isPinned: false,
@@ -88,7 +99,11 @@ export class DebtsService {
       }
     });
 
-    return updatedDebt;
+    return {
+      ...updatedDebt,
+      lender: updatedDebt.creditorName,
+      provider: updatedDebt.creditorName,
+    };
   }
 
   async delete(userId: string, id: string) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/debt_provider.dart';
+import '../../providers/settings_provider.dart';
 
 class AddDebtScreen extends ConsumerStatefulWidget {
   const AddDebtScreen({super.key});
@@ -14,7 +15,20 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
   final _creditorCtrl = TextEditingController();
   String _type = 'Кредит';
   final List<String> _types = ['Кредит', 'Ипотека', 'Рассрочка', 'Частный долг'];
+  String _currency = 'USD';
+  final List<String> _currencies = ['USD', 'KZT', 'RUB', 'EUR'];
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-populate default currency from user settings
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _currency = ref.read(settingsProvider).currencyCode;
+      });
+    });
+  }
 
   void _saveDebt() async {
     final amount = double.tryParse(_amountCtrl.text);
@@ -29,8 +43,9 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
 
     final success = await ref.read(debtProvider.notifier).addDebt(
       _type,
-      _creditorCtrl.text,
+      _creditorCtrl.text.trim(),
       amount,
+      _currency,
     );
 
     if (!mounted) return;
@@ -65,10 +80,27 @@ class _AddDebtScreenState extends ConsumerState<AddDebtScreen> {
               decoration: const InputDecoration(labelText: 'Кредитор (Банк/человек)'),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _amountCtrl,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(labelText: 'Сумма'),
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: TextField(
+                    controller: _amountCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(labelText: 'Сумма'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
+                  child: DropdownButtonFormField<String>(
+                    value: _currency,
+                    items: _currencies.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                    onChanged: (val) => setState(() => _currency = val!),
+                    decoration: const InputDecoration(labelText: 'Валюта'),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 32),
             SizedBox(

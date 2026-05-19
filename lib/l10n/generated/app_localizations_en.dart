@@ -332,4 +332,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String inGroupWithMultiple(String partner, String count) {
     return 'You are in a group with: $partner and $count more';
   }
+
+  @override
+  String debtTo(String name) {
+    return 'Debt: $name';
+  }
+
+  @override
+  String creditFrom(String bank) {
+    return '$bank (Credit)';
+  }
+
+  @override
+  String get debtMortgage => 'Mortgage';
+
+  @override
+  String get debtInstallment => 'Installment';
+
+  @override
+  String get debtPrivate => 'Private Debt';
+
+  @override
+  String get debtBankLoan => 'Bank Loan';
+
+  @override
+  String get paymentOfDebt => 'Payment of Debt';
+
+  @override
+  String get gettingLoan => 'Getting a Loan';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get passwordRecovery => 'Password Recovery';
+
+  @override
+  String get enterYourEmail => 'Enter your email';
+
+  @override
+  String get codeSentToEmail => 'Reset code sent to email';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordResetSuccess => 'Password successfully changed!';
+
+  @override
+  String get enterOtp => 'Enter OTP Code';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get reset => 'Reset Password';
+
+  @override
+  String get invalidCode => 'Invalid or expired reset code';
+
+  @override
+  String get emailNotFound => 'Email not found';
+
+  @override
+  String get checkConnection => 'Check your connection';
+
+  @override
+  String get failedToSendCode => 'Failed to send code, try again later';
 }

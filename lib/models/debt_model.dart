@@ -4,6 +4,7 @@ class DebtModel {
   final String creditorName;
   final double totalAmount;
   final double remainingAmount;
+  final String currency;
 
   DebtModel({
     required this.id,
@@ -11,6 +12,7 @@ class DebtModel {
     required this.creditorName,
     required this.totalAmount,
     required this.remainingAmount,
+    required this.currency,
   });
 
   factory DebtModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class DebtModel {
       creditorName: json['creditorName'] ?? 'Неизвестно',
       totalAmount: double.tryParse(json['totalAmount'].toString()) ?? 0.0,
       remainingAmount: double.tryParse(json['remainingAmount'].toString()) ?? 0.0,
+      currency: json['currency'] ?? 'USD',
     );
   }
 }

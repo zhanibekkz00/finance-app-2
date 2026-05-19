@@ -134,5 +134,42 @@
         "type": "String"
       }
     }
-  }
+  },
+  "debtTo": "Долг: {name}",
+  "@debtTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "creditFrom": "{bank} (Кредит)",
+  "@creditFrom": {
+    "placeholders": {
+      "bank": {
+        "type": "String"
+      }
+    }
+  },
+  "debtMortgage": "Ипотека",
+  "debtInstallment": "Рассрочка",
+  "debtPrivate": "Частный долг",
+  "debtBankLoan": "Кредит",
+  "paymentOfDebt": "Погашение долга",
+  "gettingLoan": "Получение займа",
+  "forgotPassword": "Забыли пароль?",
+  "passwordRecovery": "Восстановление пароля",
+  "enterYourEmail": "Введите ваш email",
+  "codeSentToEmail": "Код отправлен на почту",
+  "newPassword": "Новый пароль",
+  "passwordsDoNotMatch": "Пароли не совпадают",
+  "passwordResetSuccess": "Пароль успешно изменен!",
+  "enterOtp": "Введите OTP-код",
+  "confirmNewPassword": "Подтвердите новый пароль",
+  "send": "Отправить",
+  "reset": "Сбросить пароль",
+  "invalidCode": "Неверный или просроченный код",
+  "emailNotFound": "Email не найден",
+  "checkConnection": "Проверьте соединение",
+  "failedToSendCode": "Ошибка отправки, попробуйте позже"
 }
