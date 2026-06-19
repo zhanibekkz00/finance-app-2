@@ -59,11 +59,16 @@ class CategoryQuickSelector extends ConsumerWidget {
                       return ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Color(category.colorValue),
-                          child: Icon(
-                            IconData(category.iconCode,
-                                fontFamily: 'MaterialIcons'),
-                            color: Colors.white,
-                          ),
+                          backgroundImage: category.imageUrl != null
+                              ? NetworkImage(category.imageUrl!)
+                              : null,
+                          child: category.imageUrl != null
+                              ? null
+                              : Icon(
+                                  IconData(category.iconCode,
+                                      fontFamily: 'MaterialIcons'),
+                                  color: Colors.white,
+                                ),
                         ),
                         title: Text(category.getLocalizedName(context)),
                         trailing: isSelected

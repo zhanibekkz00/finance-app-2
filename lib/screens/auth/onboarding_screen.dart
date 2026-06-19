@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../app.dart';
+import 'package:finance_app/l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -12,21 +13,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<Map<String, dynamic>> _pages = [
-    {
-      'title': 'Welcome',
-      'description': 'Track your expenses easily.',
-      'color': Colors.blueAccent,
-    },
-    {
-      'title': 'Analyze',
-      'description': 'See where your money goes.',
-      'color': Colors.greenAccent,
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final List<Map<String, dynamic>> pages = [
+      {
+        'title': l10n.welcome,
+        'description': l10n.onboardingTrackExpenses,
+        'image': 'assets/images/track_expenses.png',
+        'gradient': const [Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)],
+      },
+      {
+        'title': l10n.onboardingAnalyze,
+        'description': l10n.onboardingSeeMoney,
+        'image': 'assets/images/analytics.png',
+        'gradient': const [Color(0xFF141E30), Color(0xFF243B55), Color(0xFF2c3e50)],
+      },
+    ];
+
     return Scaffold(
       body: Stack(
         children: [
@@ -37,50 +42,80 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 _currentPage = index;
               });
             },
-            itemCount: _pages.length,
+            itemCount: pages.length,
             itemBuilder: (context, index) {
-              return _buildPage(context, _pages[index], index == _pages.length - 1);
+              return _buildPage(context, pages[index]);
             },
           ),
           Positioned(
             bottom: 50,
-            left: 20,
-            right: 20,
+            left: 24,
+            right: 24,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
                   onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.login),
-                  child: const Text('Skip', style: TextStyle(color: Colors.white)),
+                  child: Text(
+                    l10n.skip,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 Row(
                   children: List.generate(
-                    _pages.length,
-                    (index) => Container(
+                    pages.length,
+                    (index) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: 10,
-                      height: 10,
+                      width: _currentPage == index ? 24 : 8,
+                      height: 8,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _currentPage == index ? Colors.white : Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(4),
+                        color: _currentPage == index ? Colors.indigoAccent : Colors.white24,
                       ),
                     ),
                   ),
                 ),
-                if (_currentPage < _pages.length - 1)
-                  TextButton(
+                if (_currentPage < pages.length - 1)
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigoAccent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    ),
                     onPressed: () {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     },
-                    child: const Text('Next', style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      l10n.next,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                   )
                 else
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.tealAccent[400],
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    ),
                     onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.login),
-                    child: const Text('Get Started'),
+                    child: Text(
+                      l10n.getStarted,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                   ),
               ],
             ),
@@ -90,22 +125,62 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildPage(BuildContext context, Map<String, dynamic> page, bool isLast) {
+  Widget _buildPage(BuildContext context, Map<String, dynamic> page) {
     return Container(
-      color: page['color'],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            page['title'],
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            page['description'],
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
-          ),
-        ],
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: page['gradient'] as List<Color>,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Image.asset(
+                  page['image'] as String,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 24, right: 24, bottom: 140),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white.withOpacity(0.12)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    page['title'] as String,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    page['description'] as String,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white70,
+                          height: 1.5,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

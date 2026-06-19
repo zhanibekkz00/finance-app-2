@@ -60,6 +60,35 @@ class UserProfile {
   }
 }
 
+class SupportMessageModel {
+  final String id;
+  final String userId;
+  final String message;
+  final bool isRead;
+  final DateTime createdAt;
+  final String userEmail;
+
+  SupportMessageModel({
+    required this.id,
+    required this.userId,
+    required this.message,
+    required this.isRead,
+    required this.createdAt,
+    required this.userEmail,
+  });
+
+  factory SupportMessageModel.fromMap(Map<String, dynamic> data) {
+    return SupportMessageModel(
+      id: data['id'] ?? '',
+      userId: data['userId'] ?? '',
+      message: data['message'] ?? '',
+      isRead: data['isRead'] ?? false,
+      createdAt: data['createdAt'] != null ? DateTime.parse(data['createdAt']) : DateTime.now(),
+      userEmail: data['user']?['email'] ?? 'Unknown User',
+    );
+  }
+}
+
 // --- State ---
 
 class AdminState {
@@ -67,6 +96,7 @@ class AdminState {
   final AdminStats? stats;
   final List<UserProfile> users;
   final List<CategoryModel> globalCategories;
+  final List<SupportMessageModel> supportMessages;
   final String? errorMessage;
 
   AdminState({
@@ -74,6 +104,7 @@ class AdminState {
     this.stats,
     this.users = const [],
     this.globalCategories = const [],
+    this.supportMessages = const [],
     this.errorMessage,
   });
 
@@ -82,6 +113,7 @@ class AdminState {
     AdminStats? stats,
     List<UserProfile>? users,
     List<CategoryModel>? globalCategories,
+    List<SupportMessageModel>? supportMessages,
     String? errorMessage,
   }) {
     return AdminState(
@@ -89,6 +121,7 @@ class AdminState {
       stats: stats ?? this.stats,
       users: users ?? this.users,
       globalCategories: globalCategories ?? this.globalCategories,
+      supportMessages: supportMessages ?? this.supportMessages,
       errorMessage: errorMessage,
     );
   }
@@ -107,19 +140,23 @@ class AdminNotifier extends StateNotifier<AdminState> {
       final dashboardResponse = await _apiService.get('/admin/dashboard');
       final usersResponse = await _apiService.get('/admin/users');
       final catsResponse = await _apiService.get('/admin/categories');
+      final supportResponse = await _apiService.get('/support');
 
       if (dashboardResponse.statusCode == 200 && usersResponse.statusCode == 200) {
         final dashboardData = jsonDecode(dashboardResponse.body);
         final usersData = jsonDecode(usersResponse.body) as List;
         final catsData = catsResponse.statusCode == 200 ? jsonDecode(catsResponse.body) as List : [];
+        final supportData = supportResponse.statusCode == 200 ? jsonDecode(supportResponse.body) as List : [];
 
         final users = usersData.map((d) => UserProfile.fromMap(d)).toList();
         final globalCategories = catsData.map((d) => CategoryModel.fromMap(d)).toList();
+        final supportMessages = supportData.map((d) => SupportMessageModel.fromMap(d)).toList();
 
         state = state.copyWith(
           isLoading: false,
           users: users,
           globalCategories: globalCategories,
+          supportMessages: supportMessages,
           stats: AdminStats.fromMap(dashboardData),
         );
       } else {
@@ -213,6 +250,30 @@ class AdminNotifier extends StateNotifier<AdminState> {
     } catch (e) {
       debugPrint('Error sending notification: $e');
       rethrow;
+    }
+  }
+
+  Future<void> markSupportMessageAsRead(String id) async {
+    try {
+      final response = await _apiService.patch('/support/$id/read', {});
+      if (response.statusCode == 200) {
+        final updated = state.supportMessages.map((msg) {
+          if (msg.id == id) {
+            return SupportMessageModel(
+              id: msg.id,
+              userId: msg.userId,
+              message: msg.message,
+              isRead: true,
+              createdAt: msg.createdAt,
+              userEmail: msg.userEmail,
+            );
+          }
+          return msg;
+        }).toList();
+        state = state.copyWith(supportMessages: updated);
+      }
+    } catch (e) {
+      debugPrint('Error marking support message as read: $e');
     }
   }
 

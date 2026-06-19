@@ -114,11 +114,23 @@ class _EditTransactionScreenState extends ConsumerState<EditTransactionScreen> {
                         value: c.id,
                         child: Row(
                           children: [
-                            Icon(
-                                IconData(c.iconCode,
-                                    fontFamily: 'MaterialIcons'),
-                                color: Color(c.colorValue),
-                                size: 16),
+                            c.imageUrl != null
+                                ? Container(
+                                    width: 16,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: NetworkImage(c.imageUrl!),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                : Icon(
+                                    IconData(c.iconCode,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Color(c.colorValue),
+                                    size: 16),
                             const SizedBox(width: 8),
                             Text(c.getLocalizedName(context)),
                           ],
@@ -168,7 +180,10 @@ class _EditTransactionScreenState extends ConsumerState<EditTransactionScreen> {
                 value: _recurrenceInterval,
                 items: RecurrenceInterval.values
                     .where((e) => e != RecurrenceInterval.none)
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e.name)))
+                    .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(_formatInterval(e, l10n)),
+                        ))
                     .toList(),
                 onChanged: (v) => setState(() => _recurrenceInterval = v!),
               ),
@@ -217,5 +232,17 @@ class _EditTransactionScreenState extends ConsumerState<EditTransactionScreen> {
         ),
       ),
     );
+  }
+
+  String _formatInterval(RecurrenceInterval interval, AppLocalizations l10n) {
+    switch (interval) {
+      case RecurrenceInterval.daily:
+        return l10n.daily;
+      case RecurrenceInterval.weekly:
+        return l10n.weekly;
+      case RecurrenceInterval.monthly:
+      default:
+        return l10n.monthly;
+    }
   }
 }

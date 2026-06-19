@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/settings_provider.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
@@ -61,7 +62,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_isLogin ? l10n.login : 'Ошибка регистрации'),
+          content: Text(_isLogin ? l10n.loginFailed : l10n.registrationFailed),
         ),
       );
     }
@@ -71,10 +72,29 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = ref.watch(authProvider);
+    final settings = ref.watch(settingsProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isLogin ? l10n.login : 'Регистрация'),
+        title: Text(_isLogin ? l10n.login : l10n.registration),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            tooltip: l10n.language,
+            onPressed: () {
+              final current = settings.locale.languageCode;
+              Locale newLocale;
+              if (current == 'ru') {
+                newLocale = const Locale('kk');
+              } else if (current == 'kk') {
+                newLocale = const Locale('en');
+              } else {
+                newLocale = const Locale('ru');
+              }
+              ref.read(settingsProvider.notifier).setLocale(newLocale);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -95,7 +115,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 ),
                 const SizedBox(height: 32),
                 Text(
-                  _isLogin ? 'С возвращением!' : 'Создать аккаунт',
+                  _isLogin ? l10n.welcomeBack : l10n.createAccount,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -104,8 +124,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 const SizedBox(height: 8),
                 Text(
                   _isLogin
-                      ? 'Введите данные для входа'
-                      : 'Заполните форму для регистрации',
+                      ? l10n.enterLoginDetails
+                      : l10n.fillRegistrationForm,
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey[600]),
                 ),
@@ -120,10 +140,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Введите email';
+                      return l10n.pleaseEnterEmail;
                     }
                     if (value != 'admin' && !value.contains('@')) {
-                      return 'Введите корректный email';
+                      return l10n.pleaseEnterValidEmail;
                     }
                     return null;
                   },
@@ -149,10 +169,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   obscureText: _obscureText,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Введите пароль';
+                      return l10n.pleaseEnterPassword;
                     }
                     if (value.length < 6) {
-                      return 'Пароль должен быть не менее 6 символов';
+                      return l10n.passwordLengthError;
                     }
                     return null;
                   },
@@ -172,7 +192,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   TextFormField(
                     controller: _confirmPassCtrl,
                     decoration: InputDecoration(
-                      labelText: 'Подтвердите пароль',
+                      labelText: l10n.confirmPassword,
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.lock_clock_outlined),
                       suffixIcon: IconButton(
@@ -189,10 +209,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     obscureText: _obscureText,
                     validator: (value) {
                       if (!_isLogin && (value == null || value.isEmpty)) {
-                        return 'Подтвердите пароль';
+                        return l10n.confirmPassword;
                       }
                       if (!_isLogin && value != _passCtrl.text) {
-                        return 'Пароли не совпадают';
+                        return l10n.passwordsDoNotMatch;
                       }
                       return null;
                     },
@@ -210,7 +230,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         ),
                         onPressed: _submit,
                         child: Text(
-                          _isLogin ? l10n.login : 'Зарегистрироваться',
+                          _isLogin ? l10n.login : l10n.register,
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -219,8 +239,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   onPressed: _toggleMode,
                   child: Text(
                     _isLogin
-                        ? 'Нет аккаунта? Зарегистрироваться'
-                        : 'Уже есть аккаунт? Войти',
+                        ? l10n.noAccountRegister
+                        : l10n.alreadyHaveAccountLogin,
                   ),
                 ),
               ],

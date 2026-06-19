@@ -41,11 +41,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           .read(authProvider.notifier)
                           .login(_emailCtrl.text, _passCtrl.text);
                       if (success && mounted) {
-                        Navigator.pushReplacementNamed(P
+                        Navigator.pushReplacementNamed(
                             context, AppRoutes.dashboard);
                       } else if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Login failed')),
+                          SnackBar(content: Text(l10n.loginFailed)),
                         );
                       }
                     },

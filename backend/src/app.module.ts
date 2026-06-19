@@ -12,6 +12,10 @@ import { GroupsModule } from './groups/groups.module';
 import { DebtsModule } from './debts/debts.module';
 import { AdminModule } from './admin/admin.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { BudgetsModule } from './budgets/budgets.module';
+import { SupportModule } from './support/support.module';
+import { SavingsGoalsModule } from './savings-goals/savings-goals.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -43,6 +47,10 @@ import { NotificationsModule } from './notifications/notifications.module';
     DebtsModule,
     AdminModule,
     NotificationsModule,
+    BudgetsModule,
+    SupportModule,
+    SavingsGoalsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

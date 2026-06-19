@@ -22,6 +22,7 @@ class TransactionModel {
   final RecurrenceInterval recurrenceInterval;
   final DateTime? nextOccurrence;
   final bool isPinned;
+  final int reminderDaysBefore;
   final String? userId; // Added for joint budget
   final String? groupId; // Added for joint budget
 
@@ -37,6 +38,7 @@ class TransactionModel {
     this.recurrenceInterval = RecurrenceInterval.none,
     this.nextOccurrence,
     this.isPinned = false,
+    this.reminderDaysBefore = 0,
     this.userId,
     this.groupId,
   });
@@ -53,6 +55,7 @@ class TransactionModel {
     RecurrenceInterval? recurrenceInterval,
     DateTime? nextOccurrence,
     bool? isPinned,
+    int? reminderDaysBefore,
     String? userId,
     String? groupId,
   }) {
@@ -68,6 +71,7 @@ class TransactionModel {
       recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
       nextOccurrence: nextOccurrence ?? this.nextOccurrence,
       isPinned: isPinned ?? this.isPinned,
+      reminderDaysBefore: reminderDaysBefore ?? this.reminderDaysBefore,
       userId: userId ?? this.userId,
       groupId: groupId ?? this.groupId,
     );
@@ -86,6 +90,7 @@ class TransactionModel {
       'recurrenceInterval': recurrenceInterval.name,
       'nextOccurrence': nextOccurrence?.toIso8601String(),
       'isPinned': isPinned, // Use native bool
+      'reminderDaysBefore': reminderDaysBefore,
       'userId': userId,
       'groupId': groupId,
     };
@@ -116,6 +121,7 @@ class TransactionModel {
           ? DateTime.parse(map['nextOccurrence'])
           : null,
       isPinned: map['isPinned'] == true || map['isPinned'] == 1,
+      reminderDaysBefore: int.tryParse(map['reminderDaysBefore'].toString()) ?? 0,
       userId: map['userId'],
       groupId: map['groupId'],
     );

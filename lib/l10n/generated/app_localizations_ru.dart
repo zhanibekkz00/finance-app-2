@@ -24,13 +24,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get darkMode => 'Темная тема';
 
   @override
+  String get themeLight => 'Светлая';
+
+  @override
+  String get themeDark => 'Тёмная';
+
+  @override
+  String get themeSystem => 'Системная';
+
+  @override
+  String get sectionAppearance => 'Внешний вид';
+
+  @override
+  String get sectionDataNotifications => 'Данные и уведомления';
+
+  @override
   String get language => 'Язык';
 
   @override
   String get exportData => 'Экспорт данных';
 
   @override
-  String get scheduleReminder => 'Напоминание';
+  String get scheduleReminder => 'Связаться с админом';
 
   @override
   String get exportSuccess => 'Экспорт выполнен';
@@ -185,6 +200,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unknown => 'Неизвестно';
+
+  @override
+  String get summary => 'Итого';
+
+  @override
+  String get noNote => 'Без примечания';
 
   @override
   String get jointBudgetGroup => 'Группа совместного бюджета';
@@ -405,4 +426,354 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get failedToSendCode => 'Ошибка отправки, попробуйте позже';
+
+  @override
+  String get budgets => 'Бюджеты';
+
+  @override
+  String get addBudget => 'Добавить бюджет';
+
+  @override
+  String get monthlyLimit => 'Лимит на месяц';
+
+  @override
+  String get spent => 'Потрачено';
+
+  @override
+  String get remaining => 'Осталось';
+
+  @override
+  String exceedsBudgetBy(String amount) {
+    return '⚠️ Превышает лимит на $amount';
+  }
+
+  @override
+  String remainingBudget(String amount) {
+    return 'Осталось по лимиту: $amount';
+  }
+
+  @override
+  String get editBudget => 'Изменить';
+
+  @override
+  String get deleteBudget => 'Удалить бюджет';
+
+  @override
+  String get budgetSaved => 'Бюджет сохранен!';
+
+  @override
+  String get adminAnnouncement => 'Объявление от админа';
+
+  @override
+  String get viewDetails => 'Прочитать';
+
+  @override
+  String get dismiss => 'Скрыть';
+
+  @override
+  String get registration => 'Регистрация';
+
+  @override
+  String get registrationFailed => 'Ошибка регистрации';
+
+  @override
+  String get welcomeBack => 'С возвращением!';
+
+  @override
+  String get createAccount => 'Создать аккаунт';
+
+  @override
+  String get enterLoginDetails => 'Введите данные для входа';
+
+  @override
+  String get fillRegistrationForm => 'Заполните форму для регистрации';
+
+  @override
+  String get pleaseEnterEmail => 'Введите email';
+
+  @override
+  String get pleaseEnterValidEmail => 'Введите корректный email';
+
+  @override
+  String get pleaseEnterPassword => 'Введите пароль';
+
+  @override
+  String get passwordLengthError => 'Пароль должен быть не менее 6 символов';
+
+  @override
+  String get confirmPassword => 'Подтвердите пароль';
+
+  @override
+  String get register => 'Зарегистрироваться';
+
+  @override
+  String get noAccountRegister => 'Нет аккаунта? Зарегистрироваться';
+
+  @override
+  String get alreadyHaveAccountLogin => 'Уже есть аккаунт? Войти';
+
+  @override
+  String get loginFailed => 'Ошибка входа';
+
+  @override
+  String get onboardingTrackExpenses => 'Легко отслеживайте свои расходы.';
+
+  @override
+  String get onboardingAnalyze => 'Анализ';
+
+  @override
+  String get onboardingSeeMoney => 'Смотрите, куда уходят ваши деньги.';
+
+  @override
+  String get skip => 'Пропустить';
+
+  @override
+  String get next => 'Далее';
+
+  @override
+  String get getStarted => 'Начать';
+
+  @override
+  String get contactAdmin => 'Связаться с администратором';
+
+  @override
+  String get supportMessage => 'Сообщение';
+
+  @override
+  String get messageSent => 'Сообщение успешно отправлено!';
+
+  @override
+  String get adminMessages => 'Сообщения';
+
+  @override
+  String get noMessages => 'Сообщений нет';
+
+  @override
+  String get markAsRead => 'Прочитано';
+
+  @override
+  String get savingsGoals => 'Накопления';
+
+  @override
+  String get savingsGoalsManage => 'Управление целями';
+
+  @override
+  String get addSavingsGoal => 'Добавить цель накопления';
+
+  @override
+  String get savingsGoalName => 'Название цели (например: Машина)';
+
+  @override
+  String get targetAmount => 'Целевая сумма';
+
+  @override
+  String get currentAmount => 'Начальная сумма';
+
+  @override
+  String get targetDate => 'Целевая дата';
+
+  @override
+  String get addMoney => 'Пополнить';
+
+  @override
+  String get amountToAdd => 'Сумма пополнения';
+
+  @override
+  String get goalCompleted => 'Цель достигнута!';
+
+  @override
+  String get noGoalsYet => 'Пока нет активных целей накопления';
+
+  @override
+  String get deleteGoal => 'Удалить цель';
+
+  @override
+  String get editGoal => 'Редактировать цель';
+
+  @override
+  String get savingGoalSaved => 'Цель сохранена!';
+
+  @override
+  String get debts => 'Долги';
+
+  @override
+  String get noDebts => 'Нет активных долгов';
+
+  @override
+  String get addDebt => 'Добавить долг';
+
+  @override
+  String get creditor => 'Кредитор (Банк/человек)';
+
+  @override
+  String get debtType => 'Тип долга';
+
+  @override
+  String get currency => 'Валюта';
+
+  @override
+  String get total => 'Всего';
+
+  @override
+  String get makePayment => 'Внести платеж';
+
+  @override
+  String get invalidPaymentAmount => 'Неверная сумма платежа';
+
+  @override
+  String get invalidInputData => 'Пожалуйста, введите корректные данные';
+
+  @override
+  String get addDebtError => 'Ошибка при добавлении долга';
+
+  @override
+  String get kaspiCalculator => 'Калькулятор Kaspi';
+
+  @override
+  String get earlyRepaymentSavings =>
+      'При досрочном погашении сегодня, вы сэкономите на процентах:';
+
+  @override
+  String get earlyRepaymentNote =>
+      'Вся сумма пойдет на уменьшение основного долга, аннулируя будущие проценты.';
+
+  @override
+  String get close => 'Закрыть';
+
+  @override
+  String get earlyRepayment => 'Досрочное погашение';
+
+  @override
+  String get kaspiProduct => 'Продукт Kaspi';
+
+  @override
+  String get kaspiCredit => 'Кредит / Kaspi Red';
+
+  @override
+  String get kaspiInstallment => 'Рассрочка (Пятница)';
+
+  @override
+  String get annualRateLabel => 'Годовая ставка (%)';
+
+  @override
+  String get rateHint => 'Например, 24';
+
+  @override
+  String get termLabel => 'Срок';
+
+  @override
+  String monthsCount(String count) {
+    return '$count мес.';
+  }
+
+  @override
+  String get dateOfIssue => 'Дата оформления';
+
+  @override
+  String kaspiInstallmentInfo(String months) {
+    return 'Kaspi Рассрочка • $months мес.';
+  }
+
+  @override
+  String kaspiCreditInfo(String rate, String months) {
+    return 'Kaspi Кредит • $rate% • $months мес.';
+  }
+
+  @override
+  String get subscriptions => 'Подписки';
+
+  @override
+  String get activeSubscriptions => 'Активные подписки';
+
+  @override
+  String get upcomingPayments => 'Ближайшие платежи';
+
+  @override
+  String get totalMonthlySpend => 'Траты в месяц';
+
+  @override
+  String get payNow => 'Оплатить';
+
+  @override
+  String get addSubscription => 'Добавить подписку';
+
+  @override
+  String get billingCycle => 'Период оплаты';
+
+  @override
+  String get reminder => 'Напоминание';
+
+  @override
+  String get daysBefore => 'дн. до оплаты';
+
+  @override
+  String get weekly => 'Еженедельно';
+
+  @override
+  String get monthly => 'Ежемесячно';
+
+  @override
+  String get yearly => 'Ежегодно';
+
+  @override
+  String get noSubscriptions => 'Нет подписок';
+
+  @override
+  String get subscriptionAdded => 'Подписка успешно добавлена';
+
+  @override
+  String get subscriptionDeleted => 'Подписка удалена';
+
+  @override
+  String get subscriptionPaid => 'Subscription paid';
+
+  @override
+  String get name => 'Название';
+
+  @override
+  String get daily => 'Ежедневно';
+
+  @override
+  String get reminderToday => 'В день оплаты';
+
+  @override
+  String get reminder1Day => 'За 1 день';
+
+  @override
+  String get reminder2Days => 'За 2 дня';
+
+  @override
+  String get reminder3Days => 'За 3 дня';
+
+  @override
+  String get splitTransaction => 'Разделить транзакцию';
+
+  @override
+  String splitRemaining(String amount) {
+    return 'Осталось распределить: $amount';
+  }
+
+  @override
+  String splitOverallocated(String amount) {
+    return 'Лишнее распределение: $amount';
+  }
+
+  @override
+  String get splitSuccess => 'Транзакция успешно разделена!';
+
+  @override
+  String get addSplitPart => 'Добавить часть';
+
+  @override
+  String splitPartTitle(int index) {
+    return 'Часть $index';
+  }
+
+  @override
+  String get splitValidationError =>
+      'Сумма частей должна быть в точности равна общей сумме транзакции';
+
+  @override
+  String get selectCategoryError =>
+      'Пожалуйста, выберите категории для всех частей';
 }

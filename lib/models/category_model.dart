@@ -7,6 +7,8 @@ class CategoryModel {
   final int colorValue; // Store color as int (ARGB)
   final bool isDefault;
   final int iconCode;
+  final String? imageUrl;
+  final String type; // 'expense' or 'income'
 
   CategoryModel({
     required this.id,
@@ -14,6 +16,8 @@ class CategoryModel {
     required this.colorValue,
     required this.iconCode,
     this.isDefault = false,
+    this.imageUrl,
+    this.type = 'expense',
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +27,8 @@ class CategoryModel {
       'colorValue': colorValue,
       'iconCode': iconCode,
       'isDefault': isDefault,
+      'imageUrl': imageUrl,
+      'type': type,
     };
   }
 
@@ -30,9 +36,11 @@ class CategoryModel {
     return CategoryModel(
       id: map['id'],
       name: map['name'],
-      colorValue: map['colorValue'],
-      iconCode: map['iconCode'],
+      colorValue: int.tryParse(map['colorValue'].toString()) ?? 0xFF9E9E9E,
+      iconCode: int.tryParse(map['iconCode'].toString()) ?? 58826,
       isDefault: map['isDefault'] == true || map['isDefault'] == 1,
+      imageUrl: map['imageUrl'],
+      type: map['type'] ?? 'expense',
     );
   }
 }
@@ -42,9 +50,8 @@ extension CategoryLocalization on CategoryModel {
     final l10n = AppLocalizations.of(context);
     if (l10n == null) return name;
 
-    if (isDefault) {
-      switch (name) {
-        case 'Еда':
+    switch (name) {
+      case 'Еда':
         case 'Food':
         case 'Тамақ':
           return l10n.categoryFood;
@@ -61,7 +68,6 @@ extension CategoryLocalization on CategoryModel {
         case 'Жалақы':
           return l10n.categorySalary;
       }
-    }
     return name;
   }
 }

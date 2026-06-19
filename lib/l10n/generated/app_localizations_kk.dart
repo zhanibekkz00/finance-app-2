@@ -24,13 +24,28 @@ class AppLocalizationsKk extends AppLocalizations {
   String get darkMode => 'Қараңғы режим';
 
   @override
+  String get themeLight => 'Ашық';
+
+  @override
+  String get themeDark => 'Қараңғы';
+
+  @override
+  String get themeSystem => 'Жүйелік';
+
+  @override
+  String get sectionAppearance => 'Сыртқы түр';
+
+  @override
+  String get sectionDataNotifications => 'Деректер мен хабарландырулар';
+
+  @override
   String get language => 'Тіл';
 
   @override
   String get exportData => 'Деректерді экспорттау';
 
   @override
-  String get scheduleReminder => 'Еске салғышты жоспарлау';
+  String get scheduleReminder => 'Админмен байланысу';
 
   @override
   String get exportSuccess => 'Сәтті экспортталды';
@@ -185,6 +200,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get unknown => 'Белгісіз';
+
+  @override
+  String get summary => 'Жиынтық';
+
+  @override
+  String get noNote => 'Ескертпе жоқ';
 
   @override
   String get jointBudgetGroup => 'Бірлескен бюджет тобы';
@@ -401,8 +422,357 @@ class AppLocalizationsKk extends AppLocalizations {
   String get emailNotFound => 'Email табылмады';
 
   @override
-  String get checkConnection => 'Қосылымды тексеріңіз';
+  String get checkConnection => 'Байланысты тексеріңіз';
 
   @override
-  String get failedToSendCode => 'Жіберу қатесі, кейінірек қайталап көріңіз';
+  String get failedToSendCode => 'Жіберу қатесі, кейінірек қайталаңыз';
+
+  @override
+  String get budgets => 'Бюджеттер';
+
+  @override
+  String get addBudget => 'Бюджет қосу';
+
+  @override
+  String get monthlyLimit => 'Айлық лимит';
+
+  @override
+  String get spent => 'Жұмсалды';
+
+  @override
+  String get remaining => 'Қалды';
+
+  @override
+  String exceedsBudgetBy(String amount) {
+    return '⚠️ Лимиттен $amount асып кетті';
+  }
+
+  @override
+  String remainingBudget(String amount) {
+    return 'Лимит бойынша қалды: $amount';
+  }
+
+  @override
+  String get editBudget => 'Өзгерту';
+
+  @override
+  String get deleteBudget => 'Бюджетті өшіру';
+
+  @override
+  String get budgetSaved => 'Бюджет сақталды!';
+
+  @override
+  String get adminAnnouncement => 'Әкімші хабарландыруы';
+
+  @override
+  String get viewDetails => 'Оқу';
+
+  @override
+  String get dismiss => 'Жасыру';
+
+  @override
+  String get registration => 'Тіркелу';
+
+  @override
+  String get registrationFailed => 'Тіркелу қатесі';
+
+  @override
+  String get welcomeBack => 'Қайта оралуыңызбен!';
+
+  @override
+  String get createAccount => 'Аккаунт құру';
+
+  @override
+  String get enterLoginDetails => 'Кіру деректерін енгізіңіз';
+
+  @override
+  String get fillRegistrationForm => 'Тіркелу үшін пішінді толтырыңыз';
+
+  @override
+  String get pleaseEnterEmail => 'Электронды поштаны енгізіңіз';
+
+  @override
+  String get pleaseEnterValidEmail => 'Дұрыс электронды поштаны енгізіңіз';
+
+  @override
+  String get pleaseEnterPassword => 'Құпия сөзді енгізіңіз';
+
+  @override
+  String get passwordLengthError => 'Құпия сөз кемінде 6 таңбадан тұруы керек';
+
+  @override
+  String get confirmPassword => 'Құпия сөзді растаңыз';
+
+  @override
+  String get register => 'Тіркелу';
+
+  @override
+  String get noAccountRegister => 'Аккаунт жоқ па? Тіркеліңіз';
+
+  @override
+  String get alreadyHaveAccountLogin => 'Аккаунт бар ма? Кіріңіз';
+
+  @override
+  String get loginFailed => 'Кіру қатесі';
+
+  @override
+  String get onboardingTrackExpenses => 'Шығындарыңызды оңай бақылаңыз.';
+
+  @override
+  String get onboardingAnalyze => 'Талдау';
+
+  @override
+  String get onboardingSeeMoney => 'Ақшаңыздың қайда жұмсалатынын көріңіз.';
+
+  @override
+  String get skip => 'Өткізу';
+
+  @override
+  String get next => 'Келесі';
+
+  @override
+  String get getStarted => 'Бастау';
+
+  @override
+  String get contactAdmin => 'Администратормен байланысу';
+
+  @override
+  String get supportMessage => 'Хабарлама';
+
+  @override
+  String get messageSent => 'Хабарлама сәтті жіберілді!';
+
+  @override
+  String get adminMessages => 'Хабарламалар';
+
+  @override
+  String get noMessages => 'Хабарламалар жоқ';
+
+  @override
+  String get markAsRead => 'Оқылды';
+
+  @override
+  String get savingsGoals => 'Жинақтар';
+
+  @override
+  String get savingsGoalsManage => 'Мақсаттарды басқару';
+
+  @override
+  String get addSavingsGoal => 'Жинақтау мақсатын қосу';
+
+  @override
+  String get savingsGoalName => 'Мақсат атауы (мысалы: Көлік)';
+
+  @override
+  String get targetAmount => 'Мақсатты сома';
+
+  @override
+  String get currentAmount => 'Бастапқы сома';
+
+  @override
+  String get targetDate => 'Мақсатты күн';
+
+  @override
+  String get addMoney => 'Толықтыру';
+
+  @override
+  String get amountToAdd => 'Толықтыру сомасы';
+
+  @override
+  String get goalCompleted => 'Мақсатқа қол жеткізілді!';
+
+  @override
+  String get noGoalsYet => 'Белсенді жинақтау мақсаттары әлі жоқ';
+
+  @override
+  String get deleteGoal => 'Мақсатты өшіру';
+
+  @override
+  String get editGoal => 'Мақсатты өзгерту';
+
+  @override
+  String get savingGoalSaved => 'Мақсат сақталды!';
+
+  @override
+  String get debts => 'Қарыздар';
+
+  @override
+  String get noDebts => 'Белсенді қарыздар жоқ';
+
+  @override
+  String get addDebt => 'Қарыз қосу';
+
+  @override
+  String get creditor => 'Кредитор (Банк/адам)';
+
+  @override
+  String get debtType => 'Қарыз түрі';
+
+  @override
+  String get currency => 'Валюта';
+
+  @override
+  String get total => 'Барлығы';
+
+  @override
+  String get makePayment => 'Төлем жасау';
+
+  @override
+  String get invalidPaymentAmount => 'Қате төлем сомасы';
+
+  @override
+  String get invalidInputData => 'Дұрыс деректерді енгізіңіз';
+
+  @override
+  String get addDebtError => 'Қарызды қосу кезіндегі қате';
+
+  @override
+  String get kaspiCalculator => 'Kaspi калькуляторы';
+
+  @override
+  String get earlyRepaymentSavings =>
+      'Бүгін мерзімінен бұрын өтесеңіз, пайыздарды үнемдейсіз:';
+
+  @override
+  String get earlyRepaymentNote =>
+      'Барлық сома негізгі борышты азайтуға бағытталады, болашақ пайыздар жойылады.';
+
+  @override
+  String get close => 'Жабу';
+
+  @override
+  String get earlyRepayment => 'Мерзімінен бұрын өтеу';
+
+  @override
+  String get kaspiProduct => 'Kaspi өнімі';
+
+  @override
+  String get kaspiCredit => 'Несие / Kaspi Red';
+
+  @override
+  String get kaspiInstallment => 'Бөліп төлеу (Жұма)';
+
+  @override
+  String get annualRateLabel => 'Жылдық мөлшерлеме (%)';
+
+  @override
+  String get rateHint => 'Мысалы, 24';
+
+  @override
+  String get termLabel => 'Мерзімі';
+
+  @override
+  String monthsCount(String count) {
+    return '$count ай';
+  }
+
+  @override
+  String get dateOfIssue => 'Ресімделген күні';
+
+  @override
+  String kaspiInstallmentInfo(String months) {
+    return 'Kaspi Бөліп төлеу • $months ай';
+  }
+
+  @override
+  String kaspiCreditInfo(String rate, String months) {
+    return 'Kaspi Несие • $rate% • $months ай';
+  }
+
+  @override
+  String get subscriptions => 'Жазылымдар';
+
+  @override
+  String get activeSubscriptions => 'Белсенді жазылымдар';
+
+  @override
+  String get upcomingPayments => 'Жақын арадағы төлемдер';
+
+  @override
+  String get totalMonthlySpend => 'Айына жұмсалатын қаражат';
+
+  @override
+  String get payNow => 'Төлеу';
+
+  @override
+  String get addSubscription => 'Жазылымды қосу';
+
+  @override
+  String get billingCycle => 'Төлем кезеңі';
+
+  @override
+  String get reminder => 'Еске салу';
+
+  @override
+  String get daysBefore => 'күн бұрын еске салу';
+
+  @override
+  String get weekly => 'Апта сайын';
+
+  @override
+  String get monthly => 'Ай сайын';
+
+  @override
+  String get yearly => 'Жыл сайын';
+
+  @override
+  String get noSubscriptions => 'Жазылымдар жоқ';
+
+  @override
+  String get subscriptionAdded => 'Жазылым сәтті қосылды';
+
+  @override
+  String get subscriptionDeleted => 'Жазылым жойылды';
+
+  @override
+  String get subscriptionPaid => 'Жазылым төленді';
+
+  @override
+  String get name => 'Атауы';
+
+  @override
+  String get daily => 'Күнделікті';
+
+  @override
+  String get reminderToday => 'Төлем күнінде';
+
+  @override
+  String get reminder1Day => '1 күн бұрын';
+
+  @override
+  String get reminder2Days => '2 күн бұрын';
+
+  @override
+  String get reminder3Days => '3 күн бұрын';
+
+  @override
+  String get splitTransaction => 'Транзакцияны бөлу';
+
+  @override
+  String splitRemaining(String amount) {
+    return 'Бөлуге қалды: $amount';
+  }
+
+  @override
+  String splitOverallocated(String amount) {
+    return 'Артық бөлу: $amount';
+  }
+
+  @override
+  String get splitSuccess => 'Транзакция сәтті бөлінді!';
+
+  @override
+  String get addSplitPart => 'Бөлікті қосу';
+
+  @override
+  String splitPartTitle(int index) {
+    return 'Бөлік $index';
+  }
+
+  @override
+  String get splitValidationError =>
+      'Бөліктердің жалпы сомасы бастапқы транзакция сомасына тең болуы керек';
+
+  @override
+  String get selectCategoryError => 'Барлық бөліктер үшін санаттарды таңдаңыз';
 }

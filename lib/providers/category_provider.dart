@@ -10,38 +10,19 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
   final ApiService _apiService = ApiService();
   final Ref _ref;
 
-  CategoryNotifier(this._ref) : super([]) {
-    _init();
-  }
-
-  void _init() {
-    _ref.listen(authProvider, (previous, next) {
-      if (next.status == AuthStatus.authenticated &&
-          previous?.status != AuthStatus.authenticated) {
-        fetchCategories();
-      } else if (next.status == AuthStatus.unauthenticated) {
-        state = [];
-      }
-    });
-
-    final currentAuth = _ref.read(authProvider);
-    if (currentAuth.status == AuthStatus.authenticated) {
+  CategoryNotifier(this._ref, AuthState authState) : super([]) {
+    if (authState.status == AuthStatus.authenticated) {
       fetchCategories();
     }
   }
+
 
   Future<void> fetchCategories() async {
     try {
       final response = await _apiService.get('/categories');
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        final categories = data.map((json) => CategoryModel(
-          id: json['id'],
-          name: json['name'],
-          colorValue: (json['colorValue'] as num).toInt(),
-          iconCode: json['iconCode'],
-          isDefault: json['isDefault'] ?? false,
-        )).toList();
+        final categories = data.map((json) => CategoryModel.fromMap(json)).toList();
 
         if (categories.isEmpty) {
           state = _getDefaultList();
@@ -66,6 +47,7 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
         colorValue: 0xFFF44336,
         iconCode: 0xe25a,
         isDefault: true,
+        type: 'expense',
       ),
       CategoryModel(
         id: '00000000-0000-0000-0000-000000000002',
@@ -73,6 +55,7 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
         colorValue: 0xFF9C27B0,
         iconCode: 0xe338,
         isDefault: true,
+        type: 'expense',
       ),
       CategoryModel(
         id: '00000000-0000-0000-0000-000000000003',
@@ -80,6 +63,7 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
         colorValue: 0xFF2196F3,
         iconCode: 0xe539,
         isDefault: true,
+        type: 'expense',
       ),
       CategoryModel(
         id: '00000000-0000-0000-0000-000000000004',
@@ -87,6 +71,7 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
         colorValue: 0xFF4CAF50,
         iconCode: 0xe263,
         isDefault: true,
+        type: 'income',
       ),
     ];
   }
@@ -97,6 +82,8 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
         'name': category.name,
         'colorValue': category.colorValue,
         'iconCode': category.iconCode,
+        'imageUrl': category.imageUrl,
+        'type': category.type,
       });
 
       if (response.statusCode == 201) {
@@ -104,6 +91,24 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
       }
     } catch (e) {
       debugPrint('CategoryNotifier: Error adding category: $e');
+    }
+  }
+
+  Future<void> updateCategory(String id, CategoryModel category) async {
+    try {
+      final response = await _apiService.patch('/categories/$id', {
+        'name': category.name,
+        'colorValue': category.colorValue,
+        'iconCode': category.iconCode,
+        'imageUrl': category.imageUrl,
+        'type': category.type,
+      });
+
+      if (response.statusCode == 200) {
+        await fetchCategories();
+      }
+    } catch (e) {
+      debugPrint('CategoryNotifier: Error updating category: $e');
     }
   }
 
@@ -130,5 +135,6 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
 
 final categoryProvider =
     StateNotifierProvider<CategoryNotifier, List<CategoryModel>>((ref) {
-  return CategoryNotifier(ref);
+  final authState = ref.watch(authProvider);
+  return CategoryNotifier(ref, authState);
 });

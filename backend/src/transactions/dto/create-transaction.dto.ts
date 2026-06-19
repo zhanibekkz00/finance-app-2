@@ -38,6 +38,10 @@ export class CreateTransactionDto {
   isPinned?: boolean;
 
   @IsOptional()
+  @IsNumber()
+  reminderDaysBefore?: number;
+
+  @IsOptional()
   @IsString()
   groupId?: string;
 }

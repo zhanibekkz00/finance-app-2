@@ -34,6 +34,10 @@ model User {
   categories   Category[]
   transactions Transaction[]
   debts        Debt[]
+  budgets      Budget[]
+  supportMessages SupportMessage[]
+  savingsGoals SavingsGoal[]
+  notificationReads NotificationRead[]
 
   @@map("users")
 }
@@ -95,11 +99,14 @@ model Category {
   colorValue  BigInt    @map("color_value")
   iconCode    Int       @map("icon_code")
   isDefault   Boolean   @default(false) @map("is_default")
+  imageUrl    String?   @map("image_url")
+  type        String    @default("expense")
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
   // Relations
   user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
+  budgets      Budget[]
 
   @@index([userId])
   @@map("categories")
@@ -134,6 +141,7 @@ model Transaction {
   recurrenceInterval RecurrenceInterval @default(none) @map("recurrence_interval")
   nextOccurrence    DateTime?         @map("next_occurrence") @db.Timestamptz(6)
   isPinned          Boolean           @default(false) @map("is_pinned")
+  reminderDaysBefore Int              @default(0) @map("reminder_days_before")
   createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -164,6 +172,10 @@ model Debt {
   totalAmount     Decimal  @db.Decimal(12, 2) @map("total_amount")
   remainingAmount Decimal  @db.Decimal(12, 2) @map("remaining_amount")
   currency        String   @default("USD")
+  bankProduct     String?  @map("bank_product")
+  annualRate      Float?   @map("annual_rate")
+  termMonths      Int?     @map("term_months")
+  startDate       DateTime? @map("start_date") @db.Timestamptz(6)
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -183,6 +195,80 @@ model Notification {
   body      String
   target    String   @default("all")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  reads     NotificationRead[]
 
   @@map("notifications")
+}
+
+model NotificationRead {
+  id             String       @id @default(uuid()) @db.Uuid
+  userId         String       @map("user_id") @db.Uuid
+  notificationId String       @map("notification_id") @db.Uuid
+  readAt         DateTime     @default(now()) @map("read_at") @db.Timestamptz(6)
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, notificationId])
+  @@map("notification_reads")
+}
+
+// =========================
+// 7. Бюджеты
+// =========================
+
+model Budget {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  categoryId  String   @map("category_id") @db.Uuid
+  amount      Float
+  month       Int
+  year        Int
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId, month, year])
+  @@index([userId])
+  @@map("budgets")
+}
+
+// =========================
+// 8. Сообщения поддержки
+// =========================
+
+model SupportMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  message   String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  isRead    Boolean  @default(false) @map("is_read")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("support_messages")
+}
+
+// =========================
+// 9. Цели накопления (Savings Goals)
+// =========================
+
+model SavingsGoal {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  name            String
+  targetAmount    Decimal  @db.Decimal(12, 2) @map("target_amount")
+  currentAmount   Decimal  @db.Decimal(12, 2) @map("current_amount") @default(0)
+  currency        String   @default("USD")
+  targetDate      DateTime? @map("target_date") @db.Timestamptz(6)
+  colorValue      BigInt?  @map("color_value")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("savings_goals")
 }

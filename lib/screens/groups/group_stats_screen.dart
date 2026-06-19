@@ -5,7 +5,7 @@ import '../../providers/chart_provider.dart';
 import '../../providers/category_provider.dart';
 import '../../providers/group_provider.dart';
 import '../../models/category_model.dart';
-import '../../widgets/neo_container.dart';
+
 import '../../widgets/glass_container.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
 
@@ -49,37 +49,41 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
       return userId;
     }
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : const Color(0xFF0F172A);
+    final subTextColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black.withOpacity(0.65);
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(l10n.sharedWallet,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: textColor),
         actions: [
           // Filter Dropdown
           DropdownButton<ChartFilter>(
             value: chartState.filter,
-            dropdownColor: const Color(0xFF1E1E2C),
-            icon: const Icon(Icons.filter_list, color: Colors.white),
+            dropdownColor: isDark ? const Color(0xFF1E1E2C) : Colors.white,
+            icon: Icon(Icons.filter_list, color: textColor),
             underline: const SizedBox(),
             items: [
               DropdownMenuItem(
                 value: ChartFilter.week,
-                child: Text(l10n.week, style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.week, style: TextStyle(color: textColor)),
               ),
               DropdownMenuItem(
                 value: ChartFilter.month,
-                child: Text(l10n.month, style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.month, style: TextStyle(color: textColor)),
               ),
               DropdownMenuItem(
                 value: ChartFilter.year,
-                child: Text(l10n.year, style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.year, style: TextStyle(color: textColor)),
               ),
               DropdownMenuItem(
                 value: ChartFilter.all,
-                child: Text(l10n.allTime, style: const TextStyle(color: Colors.white)),
+                child: Text(l10n.allTime, style: TextStyle(color: textColor)),
               ),
             ],
             onChanged: (val) {
@@ -98,8 +102,8 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
           children: [
             Text(
               l10n.dashboard,
-              style: const TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 24, fontWeight: FontWeight.w800, color: textColor),
             ),
             const SizedBox(height: 20),
 
@@ -111,6 +115,9 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
               getUserName: getUserName,
               l10n: l10n,
               isExpense: true,
+              isDark: isDark,
+              textColor: textColor,
+              subTextColor: subTextColor,
             ),
 
             const SizedBox(height: 20),
@@ -123,16 +130,19 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
               getUserName: getUserName,
               l10n: l10n,
               isExpense: false,
+              isDark: isDark,
+              textColor: textColor,
+              subTextColor: subTextColor,
             ),
 
             const SizedBox(height: 40),
             Text(
               l10n.whoOwesWhom,
-              style: const TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 24, fontWeight: FontWeight.w800, color: textColor),
             ),
             const SizedBox(height: 20),
-            _buildDebtsSection(data.debts, getUserName, l10n),
+            _buildDebtsSection(data.debts, getUserName, l10n, textColor, subTextColor),
           ],
         ),
       ),
@@ -146,9 +156,17 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     required String Function(String) getUserName,
     required AppLocalizations l10n,
     required bool isExpense,
+    required bool isDark,
+    required Color textColor,
+    required Color subTextColor,
   }) {
+    final cardBgColor = isDark ? Colors.white.withOpacity(0.03) : Colors.white.withOpacity(0.85);
+    final cardBorderColor = isDark ? Colors.white.withOpacity(0.15) : Colors.black.withOpacity(0.08);
+
     if (totalAmount == 0 || userAmountMap.isEmpty) {
-      return NeoContainer(
+      return GlassContainer(
+        backgroundColor: cardBgColor,
+        borderGradient: LinearGradient(colors: [cardBorderColor, cardBorderColor]),
         child: Container(
           height: 180,
           alignment: Alignment.center,
@@ -160,11 +178,11 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                 style: const TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 16),
-              Icon(Icons.pie_chart_outline, size: 48, color: Colors.white.withOpacity(0.3)),
+              Icon(Icons.pie_chart_outline, size: 48, color: isDark ? Colors.white.withOpacity(0.3) : Colors.black.withOpacity(0.25)),
               const SizedBox(height: 8),
               Text(
                 l10n.noDataForPeriod,
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
+                style: TextStyle(color: subTextColor, fontSize: 14),
               ),
             ],
           ),
@@ -175,7 +193,9 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     final entries = userAmountMap.entries.toList();
     entries.sort((a, b) => b.value.compareTo(a.value));
 
-    return NeoContainer(
+    return GlassContainer(
+      backgroundColor: cardBgColor,
+      borderGradient: LinearGradient(colors: [cardBorderColor, cardBorderColor]),
       child: Column(
         children: [
           Text(
@@ -185,8 +205,8 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
           const SizedBox(height: 8),
           Text(
             '${totalAmount.toStringAsFixed(0)} ₸',
-            style: const TextStyle(
-                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+                fontSize: 32, fontWeight: FontWeight.bold, color: textColor),
           ),
           const SizedBox(height: 30),
           SizedBox(
@@ -205,10 +225,10 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                     value: userEntry.value,
                     title: '$percent%',
                     radius: 40.0,
-                    titleStyle: const TextStyle(
+                    titleStyle: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : Colors.black87,
                     ),
                   );
                 }).toList(),
@@ -240,7 +260,7 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                   const SizedBox(width: 8),
                   Text(
                     '$userName (${userEntry.value.toStringAsFixed(0)} ₸)',
-                    style: const TextStyle(color: Colors.white70),
+                    style: TextStyle(color: subTextColor),
                   ),
                 ],
               );
@@ -251,14 +271,14 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
     );
   }
 
-  Widget _buildDebtsSection(List<Debt> debts, String Function(String) getUserName, AppLocalizations l10n) {
+  Widget _buildDebtsSection(List<Debt> debts, String Function(String) getUserName, AppLocalizations l10n, Color textColor, Color subTextColor) {
     if (debts.isEmpty) {
       return GlassContainer(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(l10n.allSettledUp,
-                style: const TextStyle(color: Colors.white, fontSize: 16)),
+                style: TextStyle(color: textColor, fontSize: 16)),
           ),
         ),
       );
@@ -285,8 +305,8 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                       children: [
                         Text(
                           '${getUserName(debt.from)} ${l10n.owes} ${getUserName(debt.to)}',
-                          style: const TextStyle(
-                              color: Colors.white,
+                          style: TextStyle(
+                              color: textColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 16),
                         ),
@@ -295,8 +315,8 @@ class _GroupStatsScreenState extends ConsumerState<GroupStatsScreen> {
                   ),
                   Text(
                     '${debt.amount.toStringAsFixed(0)} ₸',
-                    style: const TextStyle(
-                        color: Colors.white,
+                    style: TextStyle(
+                        color: textColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                   ),

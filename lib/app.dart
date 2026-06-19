@@ -8,6 +8,8 @@ import 'screens/auth/onboarding_screen.dart';
 import 'screens/auth/forgot_password_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/add_transaction_screen.dart';
+import 'screens/reports_screen.dart';
+import 'screens/budgets_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/admin/admin_home_screen.dart';
 import 'widgets/admin_wrapper.dart';
@@ -16,8 +18,10 @@ import 'screens/profile_screen.dart';
 import 'screens/groups/group_stats_screen.dart';
 import 'screens/debts/debts_screen.dart';
 import 'screens/debts/add_debt_screen.dart';
+import 'screens/savings_goals_screen.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'theme/app_theme.dart';
+import 'screens/analytics_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/onboarding';
@@ -31,8 +35,11 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String profile = '/profile';
   static const String groupStats = '/group_stats';
+  static const String budgets = '/budgets';
   static const String debts = '/debts';
   static const String addDebt = '/add_debt';
+  static const String savingsGoals = '/savings_goals';
+  static const String analytics = '/analytics';
 }
 
 class AppRoot extends ConsumerWidget {
@@ -85,8 +92,11 @@ class AppRoot extends ConsumerWidget {
         AppRoutes.notifications: (context) => const NotificationsScreen(),
         AppRoutes.profile: (context) => const ProfileScreen(),
         AppRoutes.groupStats: (context) => const GroupStatsScreen(),
+        AppRoutes.budgets: (context) => const BudgetsScreen(),
         AppRoutes.debts: (context) => const DebtsScreen(),
         AppRoutes.addDebt: (context) => const AddDebtScreen(),
+        AppRoutes.savingsGoals: (context) => const SavingsGoalsScreen(),
+        AppRoutes.analytics: (context) => const AnalyticsScreen(),
       },
     );
   }

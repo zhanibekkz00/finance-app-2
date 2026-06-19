@@ -24,13 +24,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get darkMode => 'Dark Mode';
 
   @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get sectionAppearance => 'Appearance';
+
+  @override
+  String get sectionDataNotifications => 'Data & Notifications';
+
+  @override
   String get language => 'Language';
 
   @override
   String get exportData => 'Export Data';
 
   @override
-  String get scheduleReminder => 'Schedule Reminder';
+  String get scheduleReminder => 'Contact admin';
 
   @override
   String get exportSuccess => 'Export Success';
@@ -185,6 +200,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknown => 'Unknown';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get noNote => 'No note';
 
   @override
   String get jointBudgetGroup => 'Joint Budget Group';
@@ -405,4 +426,353 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToSendCode => 'Failed to send code, try again later';
+
+  @override
+  String get budgets => 'Budgets';
+
+  @override
+  String get addBudget => 'Add Budget';
+
+  @override
+  String get monthlyLimit => 'Monthly Limit';
+
+  @override
+  String get spent => 'Spent';
+
+  @override
+  String get remaining => 'Remaining';
+
+  @override
+  String exceedsBudgetBy(String amount) {
+    return '⚠️ Exceeds budget by $amount';
+  }
+
+  @override
+  String remainingBudget(String amount) {
+    return 'Remaining budget: $amount';
+  }
+
+  @override
+  String get editBudget => 'Edit Budget';
+
+  @override
+  String get deleteBudget => 'Delete Budget';
+
+  @override
+  String get budgetSaved => 'Budget saved!';
+
+  @override
+  String get adminAnnouncement => 'Admin Announcement';
+
+  @override
+  String get viewDetails => 'Read';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get registration => 'Registration';
+
+  @override
+  String get registrationFailed => 'Registration failed';
+
+  @override
+  String get welcomeBack => 'Welcome back!';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get enterLoginDetails => 'Enter your login details';
+
+  @override
+  String get fillRegistrationForm => 'Fill out the registration form';
+
+  @override
+  String get pleaseEnterEmail => 'Please enter email';
+
+  @override
+  String get pleaseEnterValidEmail => 'Please enter a valid email';
+
+  @override
+  String get pleaseEnterPassword => 'Please enter password';
+
+  @override
+  String get passwordLengthError => 'Password must be at least 6 characters';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get noAccountRegister => 'Don\'t have an account? Register';
+
+  @override
+  String get alreadyHaveAccountLogin => 'Already have an account? Login';
+
+  @override
+  String get loginFailed => 'Login failed';
+
+  @override
+  String get onboardingTrackExpenses => 'Track your expenses easily.';
+
+  @override
+  String get onboardingAnalyze => 'Analyze';
+
+  @override
+  String get onboardingSeeMoney => 'See where your money goes.';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get contactAdmin => 'Contact Administrator';
+
+  @override
+  String get supportMessage => 'Message';
+
+  @override
+  String get messageSent => 'Message sent successfully!';
+
+  @override
+  String get adminMessages => 'Messages';
+
+  @override
+  String get noMessages => 'No messages found';
+
+  @override
+  String get markAsRead => 'Mark as read';
+
+  @override
+  String get savingsGoals => 'Savings Goals';
+
+  @override
+  String get savingsGoalsManage => 'Manage Goals';
+
+  @override
+  String get addSavingsGoal => 'Add Savings Goal';
+
+  @override
+  String get savingsGoalName => 'Goal Name (e.g., Car)';
+
+  @override
+  String get targetAmount => 'Target Amount';
+
+  @override
+  String get currentAmount => 'Initial Savings';
+
+  @override
+  String get targetDate => 'Target Date';
+
+  @override
+  String get addMoney => 'Add Money';
+
+  @override
+  String get amountToAdd => 'Amount to Add';
+
+  @override
+  String get goalCompleted => 'Goal Completed!';
+
+  @override
+  String get noGoalsYet => 'No active savings goals yet';
+
+  @override
+  String get deleteGoal => 'Delete Goal';
+
+  @override
+  String get editGoal => 'Edit Goal';
+
+  @override
+  String get savingGoalSaved => 'Goal saved!';
+
+  @override
+  String get debts => 'Debts';
+
+  @override
+  String get noDebts => 'No active debts';
+
+  @override
+  String get addDebt => 'Add Debt';
+
+  @override
+  String get creditor => 'Creditor (Bank/Person)';
+
+  @override
+  String get debtType => 'Debt Type';
+
+  @override
+  String get currency => 'Currency';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get makePayment => 'Make Payment';
+
+  @override
+  String get invalidPaymentAmount => 'Invalid payment amount';
+
+  @override
+  String get invalidInputData => 'Please enter valid data';
+
+  @override
+  String get addDebtError => 'Error adding debt';
+
+  @override
+  String get kaspiCalculator => 'Kaspi Calculator';
+
+  @override
+  String get earlyRepaymentSavings =>
+      'If repaid early today, you will save on interest:';
+
+  @override
+  String get earlyRepaymentNote =>
+      'The entire amount will go towards reducing the principal debt, canceling future interest.';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get earlyRepayment => 'Early Repayment';
+
+  @override
+  String get kaspiProduct => 'Kaspi Product';
+
+  @override
+  String get kaspiCredit => 'Credit / Kaspi Red';
+
+  @override
+  String get kaspiInstallment => 'Installment (Friday)';
+
+  @override
+  String get annualRateLabel => 'Annual Rate (%)';
+
+  @override
+  String get rateHint => 'e.g., 24';
+
+  @override
+  String get termLabel => 'Term';
+
+  @override
+  String monthsCount(String count) {
+    return '$count months';
+  }
+
+  @override
+  String get dateOfIssue => 'Date of Issue';
+
+  @override
+  String kaspiInstallmentInfo(String months) {
+    return 'Kaspi Installment • $months mo.';
+  }
+
+  @override
+  String kaspiCreditInfo(String rate, String months) {
+    return 'Kaspi Credit • $rate% • $months mo.';
+  }
+
+  @override
+  String get subscriptions => 'Subscriptions';
+
+  @override
+  String get activeSubscriptions => 'Active Subscriptions';
+
+  @override
+  String get upcomingPayments => 'Upcoming Payments';
+
+  @override
+  String get totalMonthlySpend => 'Monthly Spend';
+
+  @override
+  String get payNow => 'Pay Now';
+
+  @override
+  String get addSubscription => 'Add Subscription';
+
+  @override
+  String get billingCycle => 'Billing Cycle';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get daysBefore => 'days before';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String get yearly => 'Yearly';
+
+  @override
+  String get noSubscriptions => 'No subscriptions';
+
+  @override
+  String get subscriptionAdded => 'Subscription added successfully';
+
+  @override
+  String get subscriptionDeleted => 'Subscription deleted';
+
+  @override
+  String get subscriptionPaid => 'Subscription paid';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get reminderToday => 'On the day of payment';
+
+  @override
+  String get reminder1Day => '1 day before';
+
+  @override
+  String get reminder2Days => '2 days before';
+
+  @override
+  String get reminder3Days => '3 days before';
+
+  @override
+  String get splitTransaction => 'Split Transaction';
+
+  @override
+  String splitRemaining(String amount) {
+    return 'Remaining to allocate: $amount';
+  }
+
+  @override
+  String splitOverallocated(String amount) {
+    return 'Overallocated: $amount';
+  }
+
+  @override
+  String get splitSuccess => 'Transaction successfully split!';
+
+  @override
+  String get addSplitPart => 'Add part';
+
+  @override
+  String splitPartTitle(int index) {
+    return 'Part $index';
+  }
+
+  @override
+  String get splitValidationError =>
+      'Total sum of parts must equal original transaction amount';
+
+  @override
+  String get selectCategoryError => 'Please select categories for all parts';
 }

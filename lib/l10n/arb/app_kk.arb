@@ -5,9 +5,14 @@
   "transactions": "Транзакциялар",
   "settings": "Баптаулар",
   "darkMode": "Қараңғы режим",
+  "themeLight": "Ашық",
+  "themeDark": "Қараңғы",
+  "themeSystem": "Жүйелік",
+  "sectionAppearance": "Сыртқы түр",
+  "sectionDataNotifications": "Деректер мен хабарландырулар",
   "language": "Тіл",
   "exportData": "Деректерді экспорттау",
-  "scheduleReminder": "Еске салғышты жоспарлау",
+  "scheduleReminder": "Админмен байланысу",
   "exportSuccess": "Сәтті экспортталды",
   "reminderSet": "Еске салғыш 9:00-ге орнатылды",
   "totalBalance": "Жалпы баланс",
@@ -59,6 +64,8 @@
   "notifications": "Хабарландырулар",
   "noNotifications": "Әзірге хабарландырулар жоқ",
   "unknown": "Белгісіз",
+  "summary": "Жиынтық",
+  "noNote": "Ескертпе жоқ",
   "jointBudgetGroup": "Бірлескен бюджет тобы",
   "yourGroupCode": "Сіздің топ кодыңыз",
   "copy": "Көшіру",
@@ -170,6 +177,178 @@
   "reset": "Құпия сөзді қалпына келтіру",
   "invalidCode": "Қате немесе ескірген код",
   "emailNotFound": "Email табылмады",
-  "checkConnection": "Қосылымды тексеріңіз",
-  "failedToSendCode": "Жіберу қатесі, кейінірек қайталап көріңіз"
+  "checkConnection": "Байланысты тексеріңіз",
+  "failedToSendCode": "Жіберу қатесі, кейінірек қайталаңыз",
+  "budgets": "Бюджеттер",
+  "addBudget": "Бюджет қосу",
+  "monthlyLimit": "Айлық лимит",
+  "spent": "Жұмсалды",
+  "remaining": "Қалды",
+  "exceedsBudgetBy": "⚠️ Лимиттен {amount} асып кетті",
+  "@exceedsBudgetBy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remainingBudget": "Лимит бойынша қалды: {amount}",
+  "@remainingBudget": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "editBudget": "Өзгерту",
+  "deleteBudget": "Бюджетті өшіру",
+  "budgetSaved": "Бюджет сақталды!",
+  "adminAnnouncement": "Әкімші хабарландыруы",
+  "viewDetails": "Оқу",
+  "dismiss": "Жасыру",
+  "registration": "Тіркелу",
+  "registrationFailed": "Тіркелу қатесі",
+  "welcomeBack": "Қайта оралуыңызбен!",
+  "createAccount": "Аккаунт құру",
+  "enterLoginDetails": "Кіру деректерін енгізіңіз",
+  "fillRegistrationForm": "Тіркелу үшін пішінді толтырыңыз",
+  "pleaseEnterEmail": "Электронды поштаны енгізіңіз",
+  "pleaseEnterValidEmail": "Дұрыс электронды поштаны енгізіңіз",
+  "pleaseEnterPassword": "Құпия сөзді енгізіңіз",
+  "passwordLengthError": "Құпия сөз кемінде 6 таңбадан тұруы керек",
+  "confirmPassword": "Құпия сөзді растаңыз",
+  "register": "Тіркелу",
+  "noAccountRegister": "Аккаунт жоқ па? Тіркеліңіз",
+  "alreadyHaveAccountLogin": "Аккаунт бар ма? Кіріңіз",
+  "loginFailed": "Кіру қатесі",
+  "onboardingTrackExpenses": "Шығындарыңызды оңай бақылаңыз.",
+  "onboardingAnalyze": "Талдау",
+  "onboardingSeeMoney": "Ақшаңыздың қайда жұмсалатынын көріңіз.",
+  "skip": "Өткізу",
+  "next": "Келесі",
+  "getStarted": "Бастау",
+  "contactAdmin": "Администратормен байланысу",
+  "supportMessage": "Хабарлама",
+  "send": "Жіберу",
+  "messageSent": "Хабарлама сәтті жіберілді!",
+  "adminMessages": "Хабарламалар",
+  "noMessages": "Хабарламалар жоқ",
+  "markAsRead": "Оқылды",
+  "savingsGoals": "Жинақтар",
+  "savingsGoalsManage": "Мақсаттарды басқару",
+  "addSavingsGoal": "Жинақтау мақсатын қосу",
+  "savingsGoalName": "Мақсат атауы (мысалы: Көлік)",
+  "targetAmount": "Мақсатты сома",
+  "currentAmount": "Бастапқы сома",
+  "targetDate": "Мақсатты күн",
+  "addMoney": "Толықтыру",
+  "amountToAdd": "Толықтыру сомасы",
+  "goalCompleted": "Мақсатқа қол жеткізілді!",
+  "noGoalsYet": "Белсенді жинақтау мақсаттары әлі жоқ",
+  "deleteGoal": "Мақсатты өшіру",
+  "editGoal": "Мақсатты өзгерту",
+  "savingGoalSaved": "Мақсат сақталды!",
+  "save": "Сақтау",
+  "debts": "Қарыздар",
+  "noDebts": "Белсенді қарыздар жоқ",
+  "addDebt": "Қарыз қосу",
+  "creditor": "Кредитор (Банк/адам)",
+  "debtType": "Қарыз түрі",
+  "currency": "Валюта",
+  "remaining": "Қалды",
+  "total": "Барлығы",
+  "makePayment": "Төлем жасау",
+  "invalidPaymentAmount": "Қате төлем сомасы",
+  "invalidInputData": "Дұрыс деректерді енгізіңіз",
+  "addDebtError": "Қарызды қосу кезіндегі қате",
+  "kaspiCalculator": "Kaspi калькуляторы",
+  "earlyRepaymentSavings": "Бүгін мерзімінен бұрын өтесеңіз, пайыздарды үнемдейсіз:",
+  "earlyRepaymentNote": "Барлық сома негізгі борышты азайтуға бағытталады, болашақ пайыздар жойылады.",
+  "close": "Жабу",
+  "earlyRepayment": "Мерзімінен бұрын өтеу",
+  "kaspiProduct": "Kaspi өнімі",
+  "kaspiCredit": "Несие / Kaspi Red",
+  "kaspiInstallment": "Бөліп төлеу (Жұма)",
+  "annualRateLabel": "Жылдық мөлшерлеме (%)",
+  "rateHint": "Мысалы, 24",
+  "termLabel": "Мерзімі",
+  "monthsCount": "{count} ай",
+  "@monthsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dateOfIssue": "Ресімделген күні",
+  "kaspiInstallmentInfo": "Kaspi Бөліп төлеу • {months} ай",
+  "@kaspiInstallmentInfo": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "kaspiCreditInfo": "Kaspi Несие • {rate}% • {months} ай",
+  "@kaspiCreditInfo": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      },
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptions": "Жазылымдар",
+  "activeSubscriptions": "Белсенді жазылымдар",
+  "upcomingPayments": "Жақын арадағы төлемдер",
+  "totalMonthlySpend": "Айына жұмсалатын қаражат",
+  "payNow": "Төлеу",
+  "addSubscription": "Жазылымды қосу",
+  "billingCycle": "Төлем кезеңі",
+  "reminder": "Еске салу",
+  "daysBefore": "күн бұрын еске салу",
+  "weekly": "Апта сайын",
+  "monthly": "Ай сайын",
+  "yearly": "Жыл сайын",
+  "noSubscriptions": "Жазылымдар жоқ",
+  "subscriptionAdded": "Жазылым сәтті қосылды",
+  "subscriptionDeleted": "Жазылым жойылды",
+  "subscriptionPaid": "Жазылым төленді",
+  "name": "Атауы",
+  "daily": "Күнделікті",
+  "reminderToday": "Төлем күнінде",
+  "reminder1Day": "1 күн бұрын",
+  "reminder2Days": "2 күн бұрын",
+  "reminder3Days": "3 күн бұрын",
+  "splitTransaction": "Транзакцияны бөлу",
+  "splitRemaining": "Бөлуге қалды: {amount}",
+  "@splitRemaining": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitOverallocated": "Артық бөлу: {amount}",
+  "@splitOverallocated": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitSuccess": "Транзакция сәтті бөлінді!",
+  "addSplitPart": "Бөлікті қосу",
+  "splitPartTitle": "Бөлік {index}",
+  "@splitPartTitle": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "splitValidationError": "Бөліктердің жалпы сомасы бастапқы транзакция сомасына тең болуы керек",
+  "selectCategoryError": "Барлық бөліктер үшін санаттарды таңдаңыз"
 }

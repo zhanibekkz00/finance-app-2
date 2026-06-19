@@ -43,6 +43,10 @@ export class UpdateTransactionDto {
   isPinned?: boolean;
 
   @IsOptional()
+  @IsNumber()
+  reminderDaysBefore?: number;
+
+  @IsOptional()
   @IsString()
   groupId?: string;
 }

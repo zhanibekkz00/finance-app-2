@@ -6,6 +6,7 @@ import '../models/transaction_model.dart';
 import '../models/category_model.dart';
 import 'package:intl/intl.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
+import '../utils/debt_utils.dart';
 
 class CategoryStatsScreen extends ConsumerWidget {
   final String categoryId;
@@ -28,6 +29,19 @@ class CategoryStatsScreen extends ConsumerWidget {
     final totalEarned = stats['totalEarned'] as double;
     final count = stats['count'] as int;
     final average = stats['average'] as double;
+
+    // Determine category display name and type
+    final isSavings = transactions.isNotEmpty && transactions.first.note.startsWith('Накопление:');
+    final isDebt = transactions.isNotEmpty && DebtUtils.parseDebtTransaction(l10n, transactions.first) != null;
+
+    String displayName = l10n.unknown;
+    if (category != null) {
+      displayName = category.getLocalizedName(context);
+    } else if (isSavings) {
+      displayName = l10n.savingsGoals;
+    } else if (isDebt) {
+      displayName = l10n.debts;
+    }
 
     // Calculate monthly stats
     final monthlyStats = <String, double>{};
@@ -53,24 +67,26 @@ class CategoryStatsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    if (category != null)
-                      CircleAvatar(
-                        backgroundColor: Color(category.colorValue),
-                        radius: 30,
-                        child: Icon(
-                          IconData(category.iconCode,
-                              fontFamily: 'MaterialIcons'),
-                          color: Colors.white,
-                          size: 30,
-                        ),
+                    CircleAvatar(
+                      backgroundColor: category != null
+                          ? Color(category.colorValue)
+                          : (isSavings ? const Color(0xFF6366F1) : Colors.amber),
+                      radius: 30,
+                      child: Icon(
+                        category != null
+                            ? IconData(category.iconCode, fontFamily: 'MaterialIcons')
+                            : (isSavings ? Icons.savings : Icons.account_balance_wallet),
+                        color: Colors.white,
+                        size: 30,
                       ),
+                    ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            category?.getLocalizedName(context) ?? 'Unknown',
+                            displayName,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           Text(
@@ -95,7 +111,7 @@ class CategoryStatsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Summary',
+                      l10n.summary,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const Divider(),
@@ -161,12 +177,12 @@ class CategoryStatsScreen extends ConsumerWidget {
                     ...transactions.take(10).map((tx) {
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
-                        title: Text(tx.note.isEmpty ? 'No note' : tx.note),
+                        title: Text(tx.note.isEmpty ? l10n.noNote : tx.note),
                         subtitle: Text(DateFormat.yMMMd(
                                 Localizations.localeOf(context).toString())
                             .format(tx.date)),
                         trailing: Text(
-                          '${tx.type == TransactionType.income ? '+' : '-'}${tx.amount} ${tx.currency}',
+                          '${tx.type == TransactionType.income ? '+' : '-'}${DebtUtils.formatAmount(tx.amount, tx.currency)}',
                           style: TextStyle(
                             color: tx.type == TransactionType.income
                                 ? Colors.green

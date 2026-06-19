@@ -12,8 +12,13 @@ export class DebtsService {
   ) {}
 
   async findAll(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const userIds = user?.groupId
+      ? (await this.prisma.user.findMany({ where: { groupId: user.groupId }, select: { id: true } })).map((u) => u.id)
+      : [userId];
+
     const debts = await this.prisma.debt.findMany({
-      where: { userId },
+      where: { userId: { in: userIds } },
       orderBy: { createdAt: 'desc' },
     });
     return debts.map((d) => ({
@@ -33,6 +38,10 @@ export class DebtsService {
         totalAmount: dto.amount,
         remainingAmount: dto.amount,
         currency,
+        bankProduct: dto.bankProduct,
+        annualRate: dto.annualRate,
+        termMonths: dto.termMonths,
+        startDate: dto.startDate ? new Date(dto.startDate) : undefined,
       },
     });
 
@@ -61,8 +70,13 @@ export class DebtsService {
   }
 
   async pay(userId: string, id: string, dto: PayDebtDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const userIds = user?.groupId
+      ? (await this.prisma.user.findMany({ where: { groupId: user.groupId }, select: { id: true } })).map((u) => u.id)
+      : [userId];
+
     const debt = await this.prisma.debt.findFirst({
-      where: { id, userId },
+      where: { id, userId: { in: userIds } },
     });
 
     if (!debt) {
@@ -81,8 +95,6 @@ export class DebtsService {
         remainingAmount: updatedRemaining,
       },
     });
-
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     await this.prisma.transaction.create({
       data: {
@@ -107,8 +119,13 @@ export class DebtsService {
   }
 
   async delete(userId: string, id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const userIds = user?.groupId
+      ? (await this.prisma.user.findMany({ where: { groupId: user.groupId }, select: { id: true } })).map((u) => u.id)
+      : [userId];
+
     const debt = await this.prisma.debt.findFirst({
-      where: { id, userId },
+      where: { id, userId: { in: userIds } },
     });
 
     if (!debt) {

@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/group_service.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ShareCodeScreen extends ConsumerStatefulWidget {
   const ShareCodeScreen({super.key});
@@ -119,6 +120,20 @@ class _ShareCodeScreenState extends ConsumerState<ShareCodeScreen> {
                             color: Theme.of(context).primaryColor,
                             letterSpacing: 4,
                           ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: QrImageView(
+                          data: _inviteCode!,
+                          version: QrVersions.auto,
+                          size: 200.0,
+                          foregroundColor: Colors.black,
                         ),
                       ),
                       const SizedBox(height: 32),

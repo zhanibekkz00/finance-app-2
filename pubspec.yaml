@@ -20,6 +20,9 @@ dependencies:
   # State Management
   flutter_riverpod: ^2.4.9
   riverpod_annotation: ^2.3.3
+  image_picker: ^1.1.2
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^5.1.1
 
   # Database
   sqflite: ^2.3.0
@@ -42,6 +45,8 @@ dependencies:
   shared_preferences: ^2.2.2
   share_plus: ^7.2.2
   timezone: ^0.9.4
+  google_generative_ai: ^0.4.7
+  image_cropper: ^12.2.1
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +59,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/images/

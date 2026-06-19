@@ -14,4 +14,20 @@ export class CreateDebtDto {
   @IsString()
   @IsOptional()
   currency?: string;
+
+  @IsString()
+  @IsOptional()
+  bankProduct?: string;
+
+  @IsNumber()
+  @IsOptional()
+  annualRate?: number;
+
+  @IsNumber()
+  @IsOptional()
+  termMonths?: number;
+
+  @IsString()
+  @IsOptional()
+  startDate?: string;
 }

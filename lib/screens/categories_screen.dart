@@ -1,65 +1,346 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
+import '../../utils/image_crop_helper.dart';
 import '../../providers/category_provider.dart';
 import '../../models/category_model.dart';
+import '../../services/upload_service.dart';
+import '../../widgets/glass_container.dart';
 import 'package:uuid/uuid.dart';
+import 'package:finance_app/l10n/generated/app_localizations.dart';
 
-class CategoriesScreen extends ConsumerWidget {
+class CategoriesScreen extends ConsumerStatefulWidget {
   const CategoriesScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CategoriesScreen> createState() => _CategoriesScreenState();
+}
+
+class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
+  final UploadService _uploadService = UploadService();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final categories = ref.watch(categoryProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Categories')),
-      body: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final c = categories[index];
-          return ListTile(
-            leading: CircleAvatar(backgroundColor: Color(c.colorValue)),
-            title: Text(c.getLocalizedName(context)),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () => ref.read(categoryProvider.notifier).delete(c.id),
-            ),
-          );
-        },
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(
+          l10n.category,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: categories.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final c = categories[index];
+                    final color = Color(c.colorValue);
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: GlassContainer(
+                        borderRadius: 16.0,
+                        padding: 8.0,
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          leading: Container(
+                            width: 44,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: color.withOpacity(0.15),
+                              border: Border.all(color: color.withOpacity(0.3), width: 1),
+                              image: c.imageUrl != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(c.imageUrl!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                            ),
+                            child: c.imageUrl == null
+                                ? Icon(
+                                    IconData(c.iconCode, fontFamily: 'MaterialIcons'),
+                                    color: color,
+                                  )
+                                : null,
+                          ),
+                          title: Text(
+                            c.getLocalizedName(context),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                          trailing: PopupMenuButton<String>(
+                            icon: const Icon(Icons.more_vert, color: Colors.white70),
+                            color: const Color(0xFF1E293B),
+                            onSelected: (val) {
+                              if (val == 'edit') {
+                                _showAddDialog(context, category: c);
+                              } else if (val == 'delete') {
+                                _confirmDelete(context, ref, c);
+                              }
+                            },
+                            itemBuilder: (ctx) => [
+                              const PopupMenuItem(
+                                value: 'edit',
+                                child: Text('Редактировать', style: TextStyle(color: Colors.white)),
+                              ),
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Text('Удалить', style: TextStyle(color: Colors.redAccent)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddDialog(context, ref),
-        child: const Icon(Icons.add),
+        heroTag: 'categories_fab',
+        onPressed: () => _showAddDialog(context),
+        backgroundColor: const Color(0xFF6366F1),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  void _showAddDialog(BuildContext context, WidgetRef ref) {
-    final nameCtrl = TextEditingController();
+  void _confirmDelete(BuildContext context, WidgetRef ref, CategoryModel category) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Add Category'),
-        content: TextField(
-            controller: nameCtrl,
-            decoration: const InputDecoration(labelText: 'Name')),
+        backgroundColor: const Color(0xFF1E293B),
+        title: Text(l10n.delete, style: const TextStyle(color: Colors.white)),
+        content: Text('Удалить категорию "${category.name}"?', style: const TextStyle(color: Colors.white70)),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          ElevatedButton(
+            child: Text(l10n.cancel, style: TextStyle(color: Colors.white.withOpacity(0.5))),
+            onPressed: () => Navigator.pop(ctx),
+          ),
+          TextButton(
+            child: Text(l10n.delete, style: const TextStyle(color: Colors.redAccent)),
             onPressed: () {
-              ref.read(categoryProvider.notifier).add(CategoryModel(
-                    id: const Uuid().v4(),
-                    name: nameCtrl.text,
-                    colorValue: 0xFF9E9E9E, // Default grey
-                    iconCode:
-                        58826, // Icons.category (0xe16a) as int, but let's use a safe default 0xe57f (shopping_cart)
-                  ));
+              ref.read(categoryProvider.notifier).delete(category.id);
               Navigator.pop(ctx);
             },
-            child: const Text('Add'),
-          )
+          ),
         ],
+      ),
+    );
+  }
+
+  void _showAddDialog(BuildContext context, {CategoryModel? category}) {
+    final nameCtrl = TextEditingController(text: category?.name ?? '');
+    String categoryType = category?.type ?? 'expense';
+    int selectedColor = category?.colorValue ?? 0xFF6366F1;
+    String? localImagePath;
+    String? uploadedImageUrl = category?.imageUrl;
+    bool isUploading = false;
+
+    final colorOptions = [
+      0xFF6366F1, // Indigo
+      0xFFEC4899, // Pink
+      0xFF10B981, // Emerald/Green
+      0xFFF59E0B, // Amber/Orange
+      0xFF3B82F6, // Blue
+      0xFF8B5CF6, // Purple
+    ];
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          backgroundColor: const Color(0xFF1E293B),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            category == null ? 'Создать категорию' : 'Редактировать категорию',
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Name field
+                TextField(
+                  controller: nameCtrl,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Название категории',
+                    labelStyle: TextStyle(color: Colors.white54),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF6366F1))),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Image Picker Row
+                Row(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Color(selectedColor).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Color(selectedColor).withOpacity(0.3)),
+                        image: localImagePath != null
+                            ? DecorationImage(
+                                image: kIsWeb
+                                    ? NetworkImage(localImagePath!) as ImageProvider
+                                    : FileImage(File(localImagePath!)),
+                                fit: BoxFit.cover,
+                              )
+                            : (uploadedImageUrl != null
+                                ? DecorationImage(image: NetworkImage(uploadedImageUrl!), fit: BoxFit.cover)
+                                : null),
+                      ),
+                      child: localImagePath == null && uploadedImageUrl == null
+                          ? const Icon(Icons.image_outlined, color: Colors.white38)
+                          : null,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: isUploading
+                          ? const Center(child: CircularProgressIndicator(strokeWidth: 2))
+                          : ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white.withOpacity(0.06),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                              icon: const Icon(Icons.photo_library_outlined, size: 18),
+                              label: const Text('Загрузить фото', style: TextStyle(fontSize: 13)),
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final image = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                );
+                                if (image != null) {
+                                  if (!mounted) return;
+                                  final cropped = await ImageCropHelper.cropImage(
+                                    sourcePath: image.path,
+                                    cropStyle: CropStyle.rectangle,
+                                    context: context,
+                                  );
+                                  if (cropped == null) return;
+
+                                  setState(() {
+                                    localImagePath = cropped.path;
+                                    isUploading = true;
+                                  });
+                                  final bytes = await cropped.readAsBytes();
+                                  final url = await _uploadService.uploadImage(bytes, image.name);
+                                  setState(() {
+                                    uploadedImageUrl = url;
+                                    isUploading = false;
+                                  });
+                                }
+                              },
+                            ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Color options palette
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Цвет категории:', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: colorOptions.map((cValue) {
+                    final isSelected = selectedColor == cValue;
+                    return GestureDetector(
+                      onTap: () => setState(() => selectedColor = cValue),
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: Color(cValue),
+                          shape: BoxShape.circle,
+                          border: isSelected ? Border.all(color: Colors.white, width: 2) : null,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text('Отмена', style: TextStyle(color: Colors.white.withOpacity(0.5))),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6366F1),
+                foregroundColor: Colors.white,
+              ),
+              onPressed: isUploading
+                  ? null
+                  : () {
+                      final name = nameCtrl.text.trim();
+                      if (name.isNotEmpty) {
+                        if (category == null) {
+                          ref.read(categoryProvider.notifier).add(CategoryModel(
+                                id: const Uuid().v4(),
+                                name: name,
+                                colorValue: selectedColor,
+                                iconCode: 58826, // Icons.category default code
+                                type: categoryType,
+                                imageUrl: uploadedImageUrl,
+                                isDefault: false,
+                              ));
+                        } else {
+                          ref.read(categoryProvider.notifier).updateCategory(
+                                category.id,
+                                CategoryModel(
+                                  id: category.id,
+                                  name: name,
+                                  colorValue: selectedColor,
+                                  iconCode: category.iconCode,
+                                  type: categoryType,
+                                  imageUrl: uploadedImageUrl,
+                                  isDefault: false,
+                                ),
+                              );
+                        }
+                        Navigator.pop(ctx);
+                      }
+                    },
+              child: Text(category == null ? 'Создать' : 'Сохранить'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -24,20 +24,8 @@ class DebtNotifier extends StateNotifier<DebtState> {
   final ApiService _apiService = ApiService();
   final Ref _ref;
 
-  DebtNotifier(this._ref) : super(DebtState(debts: [])) {
-    _init();
-  }
-
-  void _init() {
-    _ref.listen(authProvider, (previous, next) {
-      if (next.status == AuthStatus.authenticated) {
-        fetchDebts();
-      } else {
-        state = state.copyWith(debts: []);
-      }
-    });
-
-    if (_ref.read(authProvider).status == AuthStatus.authenticated) {
+  DebtNotifier(this._ref, AuthState authState) : super(DebtState(debts: [])) {
+    if (authState.status == AuthStatus.authenticated) {
       fetchDebts();
     }
   }
@@ -59,13 +47,26 @@ class DebtNotifier extends StateNotifier<DebtState> {
     }
   }
 
-  Future<bool> addDebt(String type, String creditorName, double amount, String currency) async {
+  Future<bool> addDebt(
+    String type,
+    String creditorName,
+    double amount,
+    String currency, {
+    String? bankProduct,
+    double? annualRate,
+    int? termMonths,
+    String? startDate,
+  }) async {
     try {
       final response = await _apiService.post('/debts', {
         'type': type,
         'creditorName': creditorName,
         'amount': amount,
         'currency': currency,
+        if (bankProduct != null) 'bankProduct': bankProduct,
+        if (annualRate != null) 'annualRate': annualRate,
+        if (termMonths != null) 'termMonths': termMonths,
+        if (startDate != null) 'startDate': startDate,
       });
 
       if (response.statusCode == 201) {
@@ -111,5 +112,6 @@ class DebtNotifier extends StateNotifier<DebtState> {
 }
 
 final debtProvider = StateNotifierProvider<DebtNotifier, DebtState>((ref) {
-  return DebtNotifier(ref);
+  final authState = ref.watch(authProvider);
+  return DebtNotifier(ref, authState);
 });

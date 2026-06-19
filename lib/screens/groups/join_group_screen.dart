@@ -4,6 +4,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/transaction_provider.dart';
 import '../../services/group_service.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
+import 'qr_scanner_screen.dart';
 
 class JoinGroupScreen extends ConsumerStatefulWidget {
   const JoinGroupScreen({super.key});
@@ -22,6 +23,20 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
   void dispose() {
     _codeController.dispose();
     super.dispose();
+  }
+
+  Future<void> _scanQrCode() async {
+    final scannedCode = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (context) => const QrScannerScreen()),
+    );
+    if (scannedCode != null && scannedCode.isNotEmpty) {
+      setState(() {
+        _codeController.text = scannedCode.toUpperCase();
+        _errorText = null;
+      });
+      _joinGroup();
+    }
   }
 
   Future<void> _joinGroup() async {
@@ -92,6 +107,10 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
                 errorText: _errorText,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.qr_code_scanner_rounded, color: Colors.blueAccent),
+                  onPressed: _scanQrCode,
                 ),
               ),
               onChanged: (_) {

@@ -58,4 +58,28 @@ class NotificationService {
     }
     return scheduledDate;
   }
+
+  Future<void> showNotification({required String title, required String body}) async {
+    if (kIsWeb) return;
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'admin_channel_id',
+      'Admin Notifications',
+      channelDescription: 'Notifications from the administrator',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      (DateTime.now().millisecondsSinceEpoch ~/ 1000) & 0x7FFFFFFF,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
+  }
 }
+

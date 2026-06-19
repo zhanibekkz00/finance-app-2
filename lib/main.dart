@@ -7,6 +7,7 @@ import 'firebase_options.dart';
 import 'app.dart';
 import 'repositories/database_helper.dart';
 import 'services/notification_service.dart';
+import 'services/currency_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,13 @@ void main() async {
     debugPrint('Notification initialization error: $e');
     // Continue anyway - notifications are optional
   }
+
+  // Preload exchange rates in background (non-blocking)
+  CurrencyService.getRates().then((_) {
+    debugPrint('[main] Exchange rates ready');
+  }).catchError((e) {
+    debugPrint('[main] Exchange rates load failed: $e');
+  });
 
   runApp(
     const ProviderScope(

@@ -3,6 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
+import 'group_provider.dart';
+import 'balance_provider.dart';
+import 'transaction_provider.dart';
+import 'chart_provider.dart';
+import 'savings_goal_provider.dart';
+import 'debt_provider.dart';
+import 'notification_provider.dart';
 
 enum AuthStatus { authenticated, unauthenticated, loading }
 
@@ -12,6 +19,7 @@ class AuthState {
   final String? userId;
   final String? role;
   final String? displayName;
+  final String? avatarUrl;
 
   AuthState({
     this.status = AuthStatus.unauthenticated,
@@ -19,13 +27,15 @@ class AuthState {
     this.userId,
     this.role,
     this.displayName,
+    this.avatarUrl,
   });
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final ApiService _apiService = ApiService();
+  final Ref _ref;
 
-  AuthNotifier() : super(AuthState(status: AuthStatus.loading)) {
+  AuthNotifier(this._ref) : super(AuthState(status: AuthStatus.loading)) {
     _init();
   }
 
@@ -40,6 +50,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  void _clearUserData() {
+    Future.microtask(() {
+      _ref.invalidate(groupProvider);
+      _ref.invalidate(balanceProvider);
+      _ref.invalidate(transactionProvider);
+      _ref.invalidate(chartProvider);
+      _ref.invalidate(savingsGoalProvider);
+      _ref.invalidate(debtProvider);
+      _ref.invalidate(notificationsProvider);
+    });
+  }
+
   Future<void> fetchProfile() async {
     try {
       final response = await _apiService.get('/auth/me');
@@ -51,6 +73,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           userId: data['id'],
           role: data['role'] ?? 'user',
           displayName: data['displayName'],
+          avatarUrl: data['avatarUrl'],
         );
       } else {
         await logout();
@@ -77,6 +100,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
 
+        _clearUserData();
         await fetchProfile();
         return true;
       }
@@ -105,6 +129,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
 
+        _clearUserData();
         await fetchProfile();
         return true;
       }
@@ -135,10 +160,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
+    _clearUserData();
     state = AuthState(status: AuthStatus.unauthenticated);
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier();
+  return AuthNotifier(ref);
 });

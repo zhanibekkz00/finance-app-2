@@ -76,6 +76,20 @@ export class TransactionsService {
 
   async create(userId: string, dto: CreateTransactionDto) {
     const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { groupId: true } });
+    
+    let nextOccurrence = dto.nextOccurrence ? new Date(dto.nextOccurrence) : null;
+    if (dto.isRecurring && !nextOccurrence && dto.recurrenceInterval !== 'none') {
+      const baseDate = new Date(dto.date);
+      if (dto.recurrenceInterval === 'daily') {
+        baseDate.setDate(baseDate.getDate() + 1);
+      } else if (dto.recurrenceInterval === 'weekly') {
+        baseDate.setDate(baseDate.getDate() + 7);
+      } else if (dto.recurrenceInterval === 'monthly') {
+        baseDate.setMonth(baseDate.getMonth() + 1);
+      }
+      nextOccurrence = baseDate;
+    }
+
     return this.prisma.transaction.create({
       data: {
         ...dto,
@@ -83,11 +97,12 @@ export class TransactionsService {
         groupId: dto.groupId || user?.groupId,
         categoryId: (dto.categoryId && dto.categoryId !== '') ? dto.categoryId : null,
         date: new Date(dto.date),
-        nextOccurrence: dto.nextOccurrence ? new Date(dto.nextOccurrence) : null,
+        nextOccurrence,
         note: dto.note || '',
         isRecurring: dto.isRecurring || false,
         recurrenceInterval: dto.recurrenceInterval || 'none',
         isPinned: dto.isPinned || false,
+        reminderDaysBefore: dto.reminderDaysBefore || 0,
       },
       include: { category: true },
     });

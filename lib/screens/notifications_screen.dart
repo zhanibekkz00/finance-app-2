@@ -13,6 +13,11 @@ class NotificationsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
 
+    // Mark notifications as read when the screen is opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(notificationsProvider.notifier).markAllAsRead();
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.notifications),

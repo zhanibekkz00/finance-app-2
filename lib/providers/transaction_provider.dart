@@ -57,21 +57,9 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
   final Ref _ref;
   final GroupService _groupService = GroupService();
 
-  TransactionNotifier(this._ref)
+  TransactionNotifier(this._ref, AuthState authState)
       : super(TransactionState(transactions: [], filter: TransactionFilter())) {
-    _init();
-  }
-
-  void _init() {
-    _ref.listen(authProvider, (previous, next) {
-      if (next.status == AuthStatus.authenticated) {
-        fetchTransactions();
-      } else {
-        state = state.copyWith(transactions: [], currentGroupId: null);
-      }
-    });
-
-    if (_ref.read(authProvider).status == AuthStatus.authenticated) {
+    if (authState.status == AuthStatus.authenticated) {
       fetchTransactions();
     }
   }
@@ -233,8 +221,20 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
   }
 
   Map<String, dynamic> getCategoryStats(String categoryId) {
-    final categoryTxs =
-        state.transactions.where((tx) => tx.categoryId == categoryId).toList();
+    final List<TransactionModel> categoryTxs;
+    if (categoryId == 'SYSTEM_SAVINGS') {
+      categoryTxs = state.transactions
+          .where((tx) => tx.categoryId.isEmpty && tx.note.startsWith('Накопление:'))
+          .toList();
+    } else if (categoryId == 'SYSTEM_DEBTS') {
+      categoryTxs = state.transactions
+          .where((tx) => tx.categoryId.isEmpty && !tx.note.startsWith('Накопление:'))
+          .toList();
+    } else {
+      categoryTxs = state.transactions
+          .where((tx) => tx.categoryId == categoryId)
+          .toList();
+    }
 
     if (categoryTxs.isEmpty) {
       return {
@@ -268,5 +268,6 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
 
 final transactionProvider =
     StateNotifierProvider<TransactionNotifier, TransactionState>((ref) {
-  return TransactionNotifier(ref);
+  final authState = ref.watch(authProvider);
+  return TransactionNotifier(ref, authState);
 });

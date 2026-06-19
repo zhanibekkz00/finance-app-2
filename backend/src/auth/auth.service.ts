@@ -178,6 +178,12 @@ export class AuthService {
       },
     });
 
+    // Output OTP clearly to console for local testing and development
+    console.log('\n============================================================');
+    console.log(`🔑 PASSWORD RESET REQUESTED FOR: ${user.email}`);
+    console.log(`👉 YOUR OTP CODE IS: ${otpCode}`);
+    console.log('============================================================\n');
+
     try {
       await this.mailerService.sendMail({
         to: user.email,
@@ -186,7 +192,7 @@ export class AuthService {
       });
     } catch (e) {
       console.error('Failed to send SMTP email:', e);
-      throw new InternalServerErrorException('Ошибка отправки, попробуйте позже');
+      console.log('⚠️ Development notice: SMTP failed, but resetting is allowed with the code printed above.');
     }
 
     return { success: true };

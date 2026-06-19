@@ -53,7 +53,7 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: _brandColor,
       brightness: Brightness.dark,
-      primary: _brandColor,
+      primary: const Color(0xFF818CF8),
       secondary: _secondaryColor,
       error: _errorColor,
       surface: const Color(0xFF0F172A), // Slate 900

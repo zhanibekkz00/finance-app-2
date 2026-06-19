@@ -53,17 +53,30 @@ class GlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultGradient = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        Colors.white.withOpacity(0.15),
-        Colors.white.withOpacity(0.02),
-        Colors.white.withOpacity(0.05),
-        Colors.white.withOpacity(0.15),
-      ],
-      stops: const [0.0, 0.4, 0.6, 1.0],
-    );
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaultGradient = isDark
+        ? LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.white.withOpacity(0.15),
+              Colors.white.withOpacity(0.02),
+              Colors.white.withOpacity(0.05),
+              Colors.white.withOpacity(0.15),
+            ],
+            stops: const [0.0, 0.4, 0.6, 1.0],
+          )
+        : LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.black.withOpacity(0.08),
+              Colors.black.withOpacity(0.01),
+              Colors.black.withOpacity(0.03),
+              Colors.black.withOpacity(0.08),
+            ],
+            stops: const [0.0, 0.4, 0.6, 1.0],
+          );
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
@@ -78,7 +91,10 @@ class GlassContainer extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(padding),
             decoration: BoxDecoration(
-              color: backgroundColor ?? Colors.white.withOpacity(0.03),
+              color: backgroundColor ??
+                  (isDark
+                      ? Colors.white.withOpacity(0.03)
+                      : Colors.white.withOpacity(0.75)),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             child: child,

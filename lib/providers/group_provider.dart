@@ -7,14 +7,16 @@ class GroupMember {
   final String id;
   final String email;
   final String? displayName;
+  final String? avatarUrl;
 
-  GroupMember({required this.id, required this.email, this.displayName});
+  GroupMember({required this.id, required this.email, this.displayName, this.avatarUrl});
 
   factory GroupMember.fromJson(Map<String, dynamic> json) {
     return GroupMember(
       id: json['id'] as String,
       email: json['email'] as String,
       displayName: json['displayName'] as String?,
+      avatarUrl: json['avatarUrl'] as String?,
     );
   }
 }

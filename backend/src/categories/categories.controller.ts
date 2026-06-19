@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Body, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, UseGuards, Request } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -22,6 +22,11 @@ export class CategoriesController {
   @Post()
   async create(@Request() req, @Body() dto: CreateCategoryDto) {
     return this.categoriesService.create(req.user.id, dto);
+  }
+
+  @Patch(':id')
+  async update(@Request() req, @Param('id') id: string, @Body() dto: Partial<CreateCategoryDto>) {
+    return this.categoriesService.update(req.user.id, id, dto);
   }
 
   @Delete(':id')

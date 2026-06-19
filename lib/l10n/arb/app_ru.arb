@@ -5,9 +5,14 @@
   "transactions": "Транзакции",
   "settings": "Настройки",
   "darkMode": "Темная тема",
+  "themeLight": "Светлая",
+  "themeDark": "Тёмная",
+  "themeSystem": "Системная",
+  "sectionAppearance": "Внешний вид",
+  "sectionDataNotifications": "Данные и уведомления",
   "language": "Язык",
   "exportData": "Экспорт данных",
-  "scheduleReminder": "Напоминание",
+  "scheduleReminder": "Связаться с админом",
   "exportSuccess": "Экспорт выполнен",
   "reminderSet": "Напоминание установлено на 9:00",
   "totalBalance": "Общий баланс",
@@ -59,6 +64,8 @@
   "notifications": "Уведомления",
   "noNotifications": "Уведомлений пока нет",
   "unknown": "Неизвестно",
+  "summary": "Итого",
+  "noNote": "Без примечания",
   "jointBudgetGroup": "Группа совместного бюджета",
   "yourGroupCode": "Код вашей группы",
   "copy": "Копировать",
@@ -171,5 +178,177 @@
   "invalidCode": "Неверный или просроченный код",
   "emailNotFound": "Email не найден",
   "checkConnection": "Проверьте соединение",
-  "failedToSendCode": "Ошибка отправки, попробуйте позже"
+  "failedToSendCode": "Ошибка отправки, попробуйте позже",
+  "budgets": "Бюджеты",
+  "addBudget": "Добавить бюджет",
+  "monthlyLimit": "Лимит на месяц",
+  "spent": "Потрачено",
+  "remaining": "Осталось",
+  "exceedsBudgetBy": "⚠️ Превышает лимит на {amount}",
+  "@exceedsBudgetBy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remainingBudget": "Осталось по лимиту: {amount}",
+  "@remainingBudget": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "editBudget": "Изменить",
+  "deleteBudget": "Удалить бюджет",
+  "budgetSaved": "Бюджет сохранен!",
+  "adminAnnouncement": "Объявление от админа",
+  "viewDetails": "Прочитать",
+  "dismiss": "Скрыть",
+  "registration": "Регистрация",
+  "registrationFailed": "Ошибка регистрации",
+  "welcomeBack": "С возвращением!",
+  "createAccount": "Создать аккаунт",
+  "enterLoginDetails": "Введите данные для входа",
+  "fillRegistrationForm": "Заполните форму для регистрации",
+  "pleaseEnterEmail": "Введите email",
+  "pleaseEnterValidEmail": "Введите корректный email",
+  "pleaseEnterPassword": "Введите пароль",
+  "passwordLengthError": "Пароль должен быть не менее 6 символов",
+  "confirmPassword": "Подтвердите пароль",
+  "register": "Зарегистрироваться",
+  "noAccountRegister": "Нет аккаунта? Зарегистрироваться",
+  "alreadyHaveAccountLogin": "Уже есть аккаунт? Войти",
+  "loginFailed": "Ошибка входа",
+  "onboardingTrackExpenses": "Легко отслеживайте свои расходы.",
+  "onboardingAnalyze": "Анализ",
+  "onboardingSeeMoney": "Смотрите, куда уходят ваши деньги.",
+  "skip": "Пропустить",
+  "next": "Далее",
+  "getStarted": "Начать",
+  "contactAdmin": "Связаться с администратором",
+  "supportMessage": "Сообщение",
+  "send": "Отправить",
+  "messageSent": "Сообщение успешно отправлено!",
+  "adminMessages": "Сообщения",
+  "noMessages": "Сообщений нет",
+  "markAsRead": "Прочитано",
+  "savingsGoals": "Накопления",
+  "savingsGoalsManage": "Управление целями",
+  "addSavingsGoal": "Добавить цель накопления",
+  "savingsGoalName": "Название цели (например: Машина)",
+  "targetAmount": "Целевая сумма",
+  "currentAmount": "Начальная сумма",
+  "targetDate": "Целевая дата",
+  "addMoney": "Пополнить",
+  "amountToAdd": "Сумма пополнения",
+  "goalCompleted": "Цель достигнута!",
+  "noGoalsYet": "Пока нет активных целей накопления",
+  "deleteGoal": "Удалить цель",
+  "editGoal": "Редактировать цель",
+  "savingGoalSaved": "Цель сохранена!",
+  "save": "Сохранить",
+  "debts": "Долги",
+  "noDebts": "Нет активных долгов",
+  "addDebt": "Добавить долг",
+  "creditor": "Кредитор (Банк/человек)",
+  "debtType": "Тип долга",
+  "currency": "Валюта",
+  "remaining": "Осталось",
+  "total": "Всего",
+  "makePayment": "Внести платеж",
+  "invalidPaymentAmount": "Неверная сумма платежа",
+  "invalidInputData": "Пожалуйста, введите корректные данные",
+  "addDebtError": "Ошибка при добавлении долга",
+  "kaspiCalculator": "Калькулятор Kaspi",
+  "earlyRepaymentSavings": "При досрочном погашении сегодня, вы сэкономите на процентах:",
+  "earlyRepaymentNote": "Вся сумма пойдет на уменьшение основного долга, аннулируя будущие проценты.",
+  "close": "Закрыть",
+  "earlyRepayment": "Досрочное погашение",
+  "kaspiProduct": "Продукт Kaspi",
+  "kaspiCredit": "Кредит / Kaspi Red",
+  "kaspiInstallment": "Рассрочка (Пятница)",
+  "annualRateLabel": "Годовая ставка (%)",
+  "rateHint": "Например, 24",
+  "termLabel": "Срок",
+  "monthsCount": "{count} мес.",
+  "@monthsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dateOfIssue": "Дата оформления",
+  "kaspiInstallmentInfo": "Kaspi Рассрочка • {months} мес.",
+  "@kaspiInstallmentInfo": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "kaspiCreditInfo": "Kaspi Кредит • {rate}% • {months} мес.",
+  "@kaspiCreditInfo": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      },
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptions": "Подписки",
+  "activeSubscriptions": "Активные подписки",
+  "upcomingPayments": "Ближайшие платежи",
+  "totalMonthlySpend": "Траты в месяц",
+  "payNow": "Оплатить",
+  "addSubscription": "Добавить подписку",
+  "billingCycle": "Период оплаты",
+  "reminder": "Напоминание",
+  "daysBefore": "дн. до оплаты",
+  "weekly": "Еженедельно",
+  "monthly": "Ежемесячно",
+  "yearly": "Ежегодно",
+  "noSubscriptions": "Нет подписок",
+  "subscriptionAdded": "Подписка успешно добавлена",
+  "subscriptionDeleted": "Подписка удалена",
+  "subscriptionPaid": "Subscription paid",
+  "name": "Название",
+  "daily": "Ежедневно",
+  "reminderToday": "В день оплаты",
+  "reminder1Day": "За 1 день",
+  "reminder2Days": "За 2 дня",
+  "reminder3Days": "За 3 дня",
+  "splitTransaction": "Разделить транзакцию",
+  "splitRemaining": "Осталось распределить: {amount}",
+  "@splitRemaining": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitOverallocated": "Лишнее распределение: {amount}",
+  "@splitOverallocated": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitSuccess": "Транзакция успешно разделена!",
+  "addSplitPart": "Добавить часть",
+  "splitPartTitle": "Часть {index}",
+  "@splitPartTitle": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "splitValidationError": "Сумма частей должна быть в точности равна общей сумме транзакции",
+  "selectCategoryError": "Пожалуйста, выберите категории для всех частей"
 }

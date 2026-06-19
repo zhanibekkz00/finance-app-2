@@ -2,48 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/transaction_model.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
+import '../services/currency_service.dart';
 
 class DebtUtils {
-  /// Converts an amount from one currency to another using fixed exchange rates.
+  /// Converts an amount from one currency to another using live exchange rates.
+  /// Uses CurrencyService which fetches rates from open.er-api.com (cached 24h).
   static double convertCurrency(double amount, String fromCurrency, String toCurrency) {
-    if (fromCurrency.toUpperCase() == toCurrency.toUpperCase()) return amount;
-
-    // Convert fromCurrency -> USD
-    double amountInUSD;
-    switch (fromCurrency.toUpperCase()) {
-      case 'KZT':
-        amountInUSD = amount / 450.0;
-        break;
-      case 'RUB':
-        amountInUSD = amount / 90.0;
-        break;
-      case 'EUR':
-        amountInUSD = amount / 0.92;
-        break;
-      case 'USD':
-      default:
-        amountInUSD = amount;
-        break;
-    }
-
-    // Convert USD -> toCurrency
-    double result;
-    switch (toCurrency.toUpperCase()) {
-      case 'KZT':
-        result = amountInUSD * 450.0;
-        break;
-      case 'RUB':
-        result = amountInUSD * 90.0;
-        break;
-      case 'EUR':
-        result = amountInUSD * 0.92;
-        break;
-      case 'USD':
-      default:
-        result = amountInUSD;
-        break;
-    }
-    return result;
+    return CurrencyService.convertSync(amount, fromCurrency, toCurrency);
   }
 
   /// Get appropriate symbol for each currency.
@@ -63,12 +28,12 @@ class DebtUtils {
 
   /// Format amount with thousands separator.
   static String formatAmount(double amount, String currency) {
-    final formatter = NumberFormat('#,##0.00', 'ru');
-    // Format and clean up trailing .00 if they are zeroes, for cleaner look
-    String formatted = formatter.format(amount).replaceAll(',', ' ');
+    final formatter = NumberFormat('#,##0.00', 'en_US');
+    String formatted = formatter.format(amount);
     if (formatted.endsWith('.00')) {
       formatted = formatted.substring(0, formatted.length - 3);
     }
+    formatted = formatted.replaceAll(',', ' ').replaceAll('.', ',');
     return '$formatted ${getCurrencySymbol(currency)}';
   }
 

@@ -33,7 +33,7 @@ export class AdminService {
       where: { type: 'expense', categoryId: { not: null } },
       _sum: { amount: true },
       orderBy: { _sum: { amount: 'desc' } },
-      take: 5,
+  
     });
 
     const popularCategoriesObj: Record<string, number> = {};

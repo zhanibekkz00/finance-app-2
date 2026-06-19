@@ -5,9 +5,14 @@
   "transactions": "Transactions",
   "settings": "Settings",
   "darkMode": "Dark Mode",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "System",
+  "sectionAppearance": "Appearance",
+  "sectionDataNotifications": "Data & Notifications",
   "language": "Language",
   "exportData": "Export Data",
-  "scheduleReminder": "Schedule Reminder",
+  "scheduleReminder": "Contact admin",
   "exportSuccess": "Export Success",
   "reminderSet": "Reminder set for 9:00",
   "totalBalance": "Total Balance",
@@ -59,6 +64,8 @@
   "notifications": "Notifications",
   "noNotifications": "No notifications yet",
   "unknown": "Unknown",
+  "summary": "Summary",
+  "noNote": "No note",
   "jointBudgetGroup": "Joint Budget Group",
   "yourGroupCode": "Your Group Code",
   "copy": "Copy",
@@ -171,5 +178,177 @@
   "invalidCode": "Invalid or expired reset code",
   "emailNotFound": "Email not found",
   "checkConnection": "Check your connection",
-  "failedToSendCode": "Failed to send code, try again later"
+  "failedToSendCode": "Failed to send code, try again later",
+  "budgets": "Budgets",
+  "addBudget": "Add Budget",
+  "monthlyLimit": "Monthly Limit",
+  "spent": "Spent",
+  "remaining": "Remaining",
+  "exceedsBudgetBy": "⚠️ Exceeds budget by {amount}",
+  "@exceedsBudgetBy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remainingBudget": "Remaining budget: {amount}",
+  "@remainingBudget": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "editBudget": "Edit Budget",
+  "deleteBudget": "Delete Budget",
+  "budgetSaved": "Budget saved!",
+  "adminAnnouncement": "Admin Announcement",
+  "viewDetails": "Read",
+  "dismiss": "Dismiss",
+  "registration": "Registration",
+  "registrationFailed": "Registration failed",
+  "welcomeBack": "Welcome back!",
+  "createAccount": "Create Account",
+  "enterLoginDetails": "Enter your login details",
+  "fillRegistrationForm": "Fill out the registration form",
+  "pleaseEnterEmail": "Please enter email",
+  "pleaseEnterValidEmail": "Please enter a valid email",
+  "pleaseEnterPassword": "Please enter password",
+  "passwordLengthError": "Password must be at least 6 characters",
+  "confirmPassword": "Confirm Password",
+  "register": "Register",
+  "noAccountRegister": "Don't have an account? Register",
+  "alreadyHaveAccountLogin": "Already have an account? Login",
+  "loginFailed": "Login failed",
+  "onboardingTrackExpenses": "Track your expenses easily.",
+  "onboardingAnalyze": "Analyze",
+  "onboardingSeeMoney": "See where your money goes.",
+  "skip": "Skip",
+  "next": "Next",
+  "getStarted": "Get Started",
+  "contactAdmin": "Contact Administrator",
+  "supportMessage": "Message",
+  "send": "Send",
+  "messageSent": "Message sent successfully!",
+  "adminMessages": "Messages",
+  "noMessages": "No messages found",
+  "markAsRead": "Mark as read",
+  "savingsGoals": "Savings Goals",
+  "savingsGoalsManage": "Manage Goals",
+  "addSavingsGoal": "Add Savings Goal",
+  "savingsGoalName": "Goal Name (e.g., Car)",
+  "targetAmount": "Target Amount",
+  "currentAmount": "Initial Savings",
+  "targetDate": "Target Date",
+  "addMoney": "Add Money",
+  "amountToAdd": "Amount to Add",
+  "goalCompleted": "Goal Completed!",
+  "noGoalsYet": "No active savings goals yet",
+  "deleteGoal": "Delete Goal",
+  "editGoal": "Edit Goal",
+  "savingGoalSaved": "Goal saved!",
+  "save": "Save",
+  "debts": "Debts",
+  "noDebts": "No active debts",
+  "addDebt": "Add Debt",
+  "creditor": "Creditor (Bank/Person)",
+  "debtType": "Debt Type",
+  "currency": "Currency",
+  "remaining": "Remaining",
+  "total": "Total",
+  "makePayment": "Make Payment",
+  "invalidPaymentAmount": "Invalid payment amount",
+  "invalidInputData": "Please enter valid data",
+  "addDebtError": "Error adding debt",
+  "kaspiCalculator": "Kaspi Calculator",
+  "earlyRepaymentSavings": "If repaid early today, you will save on interest:",
+  "earlyRepaymentNote": "The entire amount will go towards reducing the principal debt, canceling future interest.",
+  "close": "Close",
+  "earlyRepayment": "Early Repayment",
+  "kaspiProduct": "Kaspi Product",
+  "kaspiCredit": "Credit / Kaspi Red",
+  "kaspiInstallment": "Installment (Friday)",
+  "annualRateLabel": "Annual Rate (%)",
+  "rateHint": "e.g., 24",
+  "termLabel": "Term",
+  "monthsCount": "{count} months",
+  "@monthsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dateOfIssue": "Date of Issue",
+  "kaspiInstallmentInfo": "Kaspi Installment • {months} mo.",
+  "@kaspiInstallmentInfo": {
+    "placeholders": {
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "kaspiCreditInfo": "Kaspi Credit • {rate}% • {months} mo.",
+  "@kaspiCreditInfo": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      },
+      "months": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptions": "Subscriptions",
+  "activeSubscriptions": "Active Subscriptions",
+  "upcomingPayments": "Upcoming Payments",
+  "totalMonthlySpend": "Monthly Spend",
+  "payNow": "Pay Now",
+  "addSubscription": "Add Subscription",
+  "billingCycle": "Billing Cycle",
+  "reminder": "Reminder",
+  "daysBefore": "days before",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "noSubscriptions": "No subscriptions",
+  "subscriptionAdded": "Subscription added successfully",
+  "subscriptionDeleted": "Subscription deleted",
+  "subscriptionPaid": "Subscription paid",
+  "name": "Name",
+  "daily": "Daily",
+  "reminderToday": "On the day of payment",
+  "reminder1Day": "1 day before",
+  "reminder2Days": "2 days before",
+  "reminder3Days": "3 days before",
+  "splitTransaction": "Split Transaction",
+  "splitRemaining": "Remaining to allocate: {amount}",
+  "@splitRemaining": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitOverallocated": "Overallocated: {amount}",
+  "@splitOverallocated": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "splitSuccess": "Transaction successfully split!",
+  "addSplitPart": "Add part",
+  "splitPartTitle": "Part {index}",
+  "@splitPartTitle": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "splitValidationError": "Total sum of parts must equal original transaction amount",
+  "selectCategoryError": "Please select categories for all parts"
 }

@@ -28,6 +28,17 @@ export class GroupsService {
             },
         });
 
+        // Retroactively link all past personal transactions of the creator to the new group
+        await this.prisma.transaction.updateMany({
+            where: {
+                userId,
+                groupId: null,
+            },
+            data: {
+                groupId: group.id,
+            },
+        });
+
         return group;
     }
 
@@ -50,6 +61,17 @@ export class GroupsService {
             data: { groupId: group.id },
         });
 
+        // Retroactively link all past personal transactions of the joining user to the joined group
+        await this.prisma.transaction.updateMany({
+            where: {
+                userId,
+                groupId: null,
+            },
+            data: {
+                groupId: group.id,
+            },
+        });
+
         return group;
     }
 
@@ -64,6 +86,7 @@ export class GroupsService {
                                 id: true,
                                 email: true,
                                 displayName: true,
+                                avatarUrl: true,
                             },
                         },
                     },
