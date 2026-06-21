@@ -22,36 +22,18 @@ export class CategoriesService {
       userIds = groupUsers.map((u) => u.id);
     }
 
-    const userCategories = await this.prisma.category.findMany({
-      where: { userId: { in: userIds } },
-      orderBy: { name: 'asc' },
-    });
-
-    if (userCategories.length > 0) {
-      const uniqueCategories: any[] = [];
-      const seen = new Set<string>();
-      for (const cat of userCategories) {
-        const key = `${cat.name.trim().toLowerCase()}_${cat.type}`;
-        if (!seen.has(key)) {
-          seen.add(key);
-          uniqueCategories.push(cat);
-        }
-      }
-      return uniqueCategories;
-    }
-
-    // If user/group has no categories, fetch default categories and clone them for the user
+    // 1. Fetch default categories
     const defaultCategories = await this.prisma.category.findMany({
       where: { isDefault: true },
     });
 
-    const created: any[] = [];
+    // 2. Clone any missing default categories for this user/group context
     for (const defCat of defaultCategories) {
       // Generate deterministic UUID to prevent race conditions on concurrent requests
       const hash = crypto.createHash('sha256').update(`${userId}-${defCat.id}`).digest('hex');
       const deterministicId = `${hash.substring(0, 8)}-${hash.substring(8, 12)}-${hash.substring(12, 16)}-${hash.substring(16, 20)}-${hash.substring(20, 32)}`;
 
-      const copy = await this.prisma.category.upsert({
+      await this.prisma.category.upsert({
         where: { id: deterministicId },
         update: {},
         create: {
@@ -65,10 +47,24 @@ export class CategoriesService {
           isDefault: false,
         },
       });
-      created.push(copy);
     }
 
-    return created;
+    // 3. Fetch all categories for user/group
+    const userCategories = await this.prisma.category.findMany({
+      where: { userId: { in: userIds } },
+      orderBy: { name: 'asc' },
+    });
+
+    const uniqueCategories: any[] = [];
+    const seen = new Set<string>();
+    for (const cat of userCategories) {
+      const key = `${cat.name.trim().toLowerCase()}_${cat.type}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueCategories.push(cat);
+      }
+    }
+    return uniqueCategories;
   }
 
   async create(userId: string, dto: CreateCategoryDto) {
