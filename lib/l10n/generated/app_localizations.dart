@@ -322,6 +322,12 @@ abstract class AppLocalizations {
   /// **'Unpin'**
   String get unpin;
 
+  /// No description provided for @pinnedTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get pinnedTransactions;
+
   /// No description provided for @viewCategoryStats.
   ///
   /// In en, this message translates to:

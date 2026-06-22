@@ -120,6 +120,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get unpin => 'Открепить';
 
   @override
+  String get pinnedTransactions => 'Закрепленные';
+
+  @override
   String get viewCategoryStats => 'Статистика категории';
 
   @override

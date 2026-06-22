@@ -37,6 +37,7 @@
   "changeCategory": "Изменить категорию",
   "pin": "Закрепить",
   "unpin": "Открепить",
+  "pinnedTransactions": "Закрепленные",
   "viewCategoryStats": "Статистика категории",
   "deleteConfirmTitle": "Удалить транзакцию?",
   "deleteConfirmMessage": "Вы уверены, что хотите удалить эту транзакцию?",

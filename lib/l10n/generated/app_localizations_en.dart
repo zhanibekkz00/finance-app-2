@@ -120,6 +120,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unpin => 'Unpin';
 
   @override
+  String get pinnedTransactions => 'Pinned';
+
+  @override
   String get viewCategoryStats => 'View Category Stats';
 
   @override

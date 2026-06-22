@@ -37,6 +37,7 @@
   "changeCategory": "Санатты өзгерту",
   "pin": "Бекіту",
   "unpin": "Босату",
+  "pinnedTransactions": "Бекітілгендер",
   "viewCategoryStats": "Санат статистикасы",
   "deleteConfirmTitle": "Транзакцияны жою керек пе?",
   "deleteConfirmMessage": "Бұл транзакцияны жойғыңыз келетініне сенімдісіз бе?",

@@ -353,7 +353,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       final today = DateTime(now.year, now.month, now.day);
       final yesterday = today.subtract(const Duration(days: 1));
       String label;
-      if (txDate == today) {
+      if (tx.isPinned) {
+        label = l10n.pinnedTransactions;
+      } else if (txDate == today) {
         label = _today(l10n);
       } else if (txDate == yesterday) {
         label = _yesterday(l10n);

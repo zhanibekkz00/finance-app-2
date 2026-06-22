@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Поменяйте на true и укажите ваш URL на Render.com перед сборкой/деплоем приложения
-  static const bool isProduction = false;
-  static const String productionUrl = 'https://YOUR-APP-NAME.onrender.com/api';
+  static const bool isProduction = true;
+  static const String productionUrl = 'https://my-finance-app-backend.onrender.com/api';
 
   static String get baseUrl {
     if (isProduction) {
@@ -20,13 +20,12 @@ class ApiService {
     }
     try {
       if (Platform.isAndroid) {
-        // Since USB debugging is active, we use adb reverse tcp:3000 tcp:3000
-        // and connect to localhost / 127.0.0.1.
-        return 'http://127.0.0.1:3000/api';
+        // Use the local network IP so the physical device can connect over Wi-Fi
+        return 'http://192.168.1.66:3000/api';
       }
     } catch (_) {}
-    // Fallback to localhost.
-    return 'http://127.0.0.1:3000/api';
+    // Fallback to local network IP
+    return 'http://192.168.1.66:3000/api';
   }
 
   Future<String?> getToken() async {
@@ -48,11 +47,14 @@ class ApiService {
       final hostPort = baseUri.port == 80 || baseUri.port == 443
           ? baseUri.host
           : "${baseUri.host}:${baseUri.port}";
+      final scheme = baseUri.scheme;
 
-      final sanitizedBody = response.body
-          .replaceAll('localhost:3000', hostPort)
-          .replaceAll('127.0.0.1:3000', hostPort)
-          .replaceAll('10.0.2.2:3000', hostPort);
+      // Replace localhost, 10.0.2.2, and any 192.168.x.x IPs
+      final ipPattern = RegExp(r'https?:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2|192\.168\.\d+\.\d+):\d+');
+      
+      final sanitizedBody = response.body.replaceAllMapped(ipPattern, (match) {
+        return '$scheme://$hostPort';
+      });
 
       return http.Response(
         sanitizedBody,

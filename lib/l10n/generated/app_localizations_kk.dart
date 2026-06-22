@@ -120,6 +120,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get unpin => 'Босату';
 
   @override
+  String get pinnedTransactions => 'Бекітілгендер';
+
+  @override
   String get viewCategoryStats => 'Санат статистикасы';
 
   @override
