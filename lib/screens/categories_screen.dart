@@ -164,11 +164,21 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
 
     final colorOptions = [
       0xFF6366F1, // Indigo
-      0xFFEC4899, // Pink
-      0xFF10B981, // Emerald/Green
-      0xFFF59E0B, // Amber/Orange
-      0xFF3B82F6, // Blue
       0xFF8B5CF6, // Purple
+      0xFFEC4899, // Pink
+      0xFFEF4444, // Red
+      0xFFF97316, // Orange
+      0xFFF59E0B, // Amber
+      0xFFEAB308, // Yellow
+      0xFF84CC16, // Lime
+      0xFF10B981, // Emerald
+      0xFF14B8A6, // Teal
+      0xFF06B6D4, // Cyan
+      0xFF0EA5E9, // Light Blue
+      0xFF3B82F6, // Blue
+      0xFF64748B, // Slate
+      0xFF94A3B8, // Light Slate
+      0xFFF43F5E, // Rose
     ];
 
     showDialog(
@@ -274,8 +284,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                   child: Text('Цвет категории:', style: TextStyle(color: Colors.white70, fontSize: 13)),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
                   children: colorOptions.map((cValue) {
                     final isSelected = selectedColor == cValue;
                     return GestureDetector(
