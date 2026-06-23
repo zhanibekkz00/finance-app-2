@@ -44,6 +44,7 @@ export class TransactionsService {
       where,
       include: {
         category: true,
+        user: { select: { displayName: true } },
       },
       orderBy: [
         { isPinned: 'desc' },
@@ -64,7 +65,7 @@ export class TransactionsService {
           ...(user?.groupId ? [{ groupId: user.groupId }] : []),
         ],
       },
-      include: { category: true },
+      include: { category: true, user: { select: { displayName: true } } },
     });
 
     if (!transaction) {
@@ -104,7 +105,7 @@ export class TransactionsService {
         isPinned: dto.isPinned || false,
         reminderDaysBefore: dto.reminderDaysBefore || 0,
       },
-      include: { category: true },
+      include: { category: true, user: { select: { displayName: true } } },
     });
   }
 
@@ -135,7 +136,7 @@ export class TransactionsService {
     return this.prisma.transaction.update({
       where: { id },
       data: updateData,
-      include: { category: true },
+      include: { category: true, user: { select: { displayName: true } } },
     });
   }
 
@@ -165,7 +166,7 @@ export class TransactionsService {
     return this.prisma.transaction.update({
       where: { id },
       data: { isPinned: !transaction.isPinned },
-      include: { category: true },
+      include: { category: true, user: { select: { displayName: true } } },
     });
   }
 

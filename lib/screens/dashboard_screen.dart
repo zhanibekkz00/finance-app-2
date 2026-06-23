@@ -46,7 +46,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   void _showTransactionMenu(BuildContext context, TransactionModel tx) {
     final l10n = AppLocalizations.of(context)!;
-    final category =
+    final category = tx.category ??
         ref.read(categoryProvider.notifier).getCategoryById(tx.categoryId);
 
     showModalBottomSheet(
@@ -322,7 +322,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final transactions = txState.transactions.where((tx) {
       if (_searchQuery.isEmpty) return true;
       final q = _searchQuery.toLowerCase();
-      final category =
+      final category = tx.category ??
           ref.read(categoryProvider.notifier).getCategoryById(tx.categoryId);
       final catName = category?.getLocalizedName(context).toLowerCase() ?? '';
 
@@ -937,7 +937,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           ),
                           // --- Transactions for this date ---
                           ...dayTxs.map((tx) {
-                            final category = ref
+                            final category = tx.category ?? ref
                                 .read(categoryProvider.notifier)
                                 .getCategoryById(tx.categoryId);
                             final debtInfo = DebtUtils.parseDebtTransaction(l10n, tx);
@@ -948,8 +948,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 : isSavings
                                     ? l10n.savingsGoals
                                     : (category?.getLocalizedName(context) ?? l10n.unknown);
-                            final displaySubtitle =
-                                isDebt ? debtInfo.subtitle : tx.note;
+                            String subtitle = isDebt ? debtInfo.subtitle : tx.note;
+                            if (tx.userName != null && tx.userName!.isNotEmpty) {
+                              if (subtitle.isNotEmpty) {
+                                subtitle = '${tx.userName} • $subtitle';
+                              } else {
+                                subtitle = tx.userName!;
+                              }
+                            }
+                            final displaySubtitle = subtitle;
 
                             Color amountColor;
                             if (isDebt) {

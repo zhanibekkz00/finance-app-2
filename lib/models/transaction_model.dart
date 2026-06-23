@@ -1,3 +1,5 @@
+import 'category_model.dart';
+
 enum TransactionType {
   income,
   expense,
@@ -25,6 +27,8 @@ class TransactionModel {
   final int reminderDaysBefore;
   final String? userId; // Added for joint budget
   final String? groupId; // Added for joint budget
+  final String? userName;
+  final CategoryModel? category;
 
   TransactionModel({
     required this.id,
@@ -41,6 +45,8 @@ class TransactionModel {
     this.reminderDaysBefore = 0,
     this.userId,
     this.groupId,
+    this.userName,
+    this.category,
   });
 
   TransactionModel copyWith({
@@ -58,6 +64,8 @@ class TransactionModel {
     int? reminderDaysBefore,
     String? userId,
     String? groupId,
+    String? userName,
+    CategoryModel? category,
   }) {
     return TransactionModel(
       id: id ?? this.id,
@@ -74,6 +82,8 @@ class TransactionModel {
       reminderDaysBefore: reminderDaysBefore ?? this.reminderDaysBefore,
       userId: userId ?? this.userId,
       groupId: groupId ?? this.groupId,
+      userName: userName ?? this.userName,
+      category: category ?? this.category,
     );
   }
 
@@ -124,6 +134,8 @@ class TransactionModel {
       reminderDaysBefore: int.tryParse(map['reminderDaysBefore'].toString()) ?? 0,
       userId: map['userId'],
       groupId: map['groupId'],
+      userName: map['user']?['displayName'],
+      category: map['category'] != null ? CategoryModel.fromMap(map['category']) : null,
     );
   }
 }
