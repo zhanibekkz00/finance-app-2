@@ -19,12 +19,16 @@ class CategoryStatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final category =
+    CategoryModel? category =
         ref.read(categoryProvider.notifier).getCategoryById(categoryId);
     final stats =
         ref.read(transactionProvider.notifier).getCategoryStats(categoryId);
 
     final transactions = stats['transactions'] as List<TransactionModel>? ?? [];
+    if (category == null && transactions.isNotEmpty && transactions.first.category != null) {
+      category = transactions.first.category;
+    }
+
     final totalSpent = stats['totalSpent'] as double;
     final totalEarned = stats['totalEarned'] as double;
     final count = stats['count'] as int;

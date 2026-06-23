@@ -115,8 +115,12 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
 
     final Map<String, double> amountMap = {};
     final Map<String, int> countMap = {};
+    final Map<String, CategoryModel> categoryObjectsMap = {};
     for (final tx in filtered) {
       String key = tx.categoryId;
+      if (tx.category != null) {
+        categoryObjectsMap[key] = tx.category!;
+      }
       if (key.isEmpty) {
         final isSavings = tx.note.startsWith('Накопление:');
         final isDebt = DebtUtils.parseDebtTransaction(l10n, tx) != null;
@@ -152,7 +156,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         colorValue = 0xFF9E9E9E;
         iconCode = 58826;
       } else {
-        final cat = categories.firstWhere(
+        final cat = categoryObjectsMap[entry.key] ?? categories.firstWhere(
           (c) => c.id == entry.key,
           orElse: () => CategoryModel(
             id: entry.key,
