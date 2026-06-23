@@ -207,7 +207,7 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
           .toList();
     } else {
       categoryTxs = state.transactions
-          .where((tx) => tx.categoryId == categoryId)
+          .where((tx) => tx.categoryId == categoryId || (tx.category != null && tx.category!.name == categoryId))
           .toList();
     }
 

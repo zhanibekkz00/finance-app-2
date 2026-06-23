@@ -117,23 +117,32 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     final Map<String, int> countMap = {};
     final Map<String, CategoryModel> categoryObjectsMap = {};
     for (final tx in filtered) {
-      String key = tx.categoryId;
-      if (tx.category != null) {
-        categoryObjectsMap[key] = tx.category!;
-      }
-      if (key.isEmpty) {
+      String id = tx.categoryId;
+      String nameKey;
+
+      if (id.isEmpty) {
         final isSavings = tx.note.startsWith('Накопление:');
         final isDebt = DebtUtils.parseDebtTransaction(l10n, tx) != null;
         if (isSavings) {
-          key = 'SYSTEM_SAVINGS';
+          nameKey = 'SYSTEM_SAVINGS';
         } else if (isDebt) {
-          key = 'SYSTEM_DEBTS';
+          nameKey = 'SYSTEM_DEBTS';
         } else {
-          key = 'SYSTEM_UNKNOWN';
+          nameKey = 'SYSTEM_UNKNOWN';
+        }
+      } else {
+        if (tx.category != null) {
+          nameKey = tx.category!.name;
+          categoryObjectsMap[nameKey] = tx.category!;
+        } else {
+          final cat = categories.where((c) => c.id == id).firstOrNull;
+          nameKey = cat?.name ?? id;
+          if (cat != null) categoryObjectsMap[nameKey] = cat;
         }
       }
-      amountMap[key] = (amountMap[key] ?? 0) + tx.amount;
-      countMap[key] = (countMap[key] ?? 0) + 1;
+
+      amountMap[nameKey] = (amountMap[nameKey] ?? 0) + tx.amount;
+      countMap[nameKey] = (countMap[nameKey] ?? 0) + 1;
     }
 
     final result = <CategoryAnalytics>[];
@@ -157,7 +166,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         iconCode = 58826;
       } else {
         final cat = categoryObjectsMap[entry.key] ?? categories.firstWhere(
-          (c) => c.id == entry.key,
+          (c) => c.name == entry.key,
           orElse: () => CategoryModel(
             id: entry.key,
             name: entry.key,

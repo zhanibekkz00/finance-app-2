@@ -123,10 +123,10 @@ class CategoryNotifier extends StateNotifier<List<CategoryModel>> {
     }
   }
 
-  CategoryModel? getCategoryById(String id) {
+  CategoryModel? getCategoryById(String identifier) {
     if (state.isEmpty) return null;
     try {
-      return state.firstWhere((c) => c.id == id);
+      return state.firstWhere((c) => c.id == identifier || c.name == identifier);
     } catch (_) {
       return null;
     }
