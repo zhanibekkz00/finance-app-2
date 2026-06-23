@@ -11,6 +11,7 @@ import '../../services/upload_service.dart';
 import '../../widgets/glass_container.dart';
 import 'package:uuid/uuid.dart';
 import 'package:finance_app/l10n/generated/app_localizations.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
   const CategoriesScreen({super.key});
@@ -287,21 +288,72 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
-                  children: colorOptions.map((cValue) {
-                    final isSelected = selectedColor == cValue;
-                    return GestureDetector(
-                      onTap: () => setState(() => selectedColor = cValue),
+                  children: [
+                    ...colorOptions.map((cValue) {
+                      final isSelected = selectedColor == cValue;
+                      return GestureDetector(
+                        onTap: () => setState(() => selectedColor = cValue),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Color(cValue),
+                            shape: BoxShape.circle,
+                            border: isSelected ? Border.all(color: Colors.white, width: 2) : null,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext ctx2) {
+                            Color tempColor = Color(selectedColor);
+                            return AlertDialog(
+                              backgroundColor: const Color(0xFF1E293B),
+                              title: const Text('Выберите цвет', style: TextStyle(color: Colors.white)),
+                              content: SingleChildScrollView(
+                                child: ColorPicker(
+                                  pickerColor: tempColor,
+                                  onColorChanged: (Color color) {
+                                    tempColor = color;
+                                  },
+                                  pickerAreaHeightPercent: 0.8,
+                                  enableAlpha: false,
+                                  labelTypes: const [],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Готово', style: TextStyle(color: const Color(0xFF6366F1).withOpacity(0.8))),
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedColor = tempColor.value;
+                                      if (!colorOptions.contains(selectedColor)) {
+                                        colorOptions.add(selectedColor);
+                                      }
+                                    });
+                                    Navigator.of(ctx2).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       child: Container(
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: Color(cValue),
+                          color: Colors.transparent,
                           shape: BoxShape.circle,
-                          border: isSelected ? Border.all(color: Colors.white, width: 2) : null,
+                          border: Border.all(color: Colors.white54, width: 1),
                         ),
+                        child: const Icon(Icons.palette, color: Colors.white70, size: 18),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -1,3 +1,5 @@
+import 'category_model.dart';
+
 class BudgetModel {
   final String id;
   final String categoryId;
@@ -5,6 +7,7 @@ class BudgetModel {
   final int month;
   final int year;
   final double spentAmount;
+  final CategoryModel? category;
 
   BudgetModel({
     required this.id,
@@ -13,6 +16,7 @@ class BudgetModel {
     required this.month,
     required this.year,
     this.spentAmount = 0.0,
+    this.category,
   });
 
   factory BudgetModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,7 @@ class BudgetModel {
       month: json['month'],
       year: json['year'],
       spentAmount: (json['spentAmount'] as num?)?.toDouble() ?? 0.0,
+      category: json['category'] != null ? CategoryModel.fromMap(json['category']) : null,
     );
   }
 

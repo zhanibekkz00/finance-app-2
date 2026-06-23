@@ -120,18 +120,18 @@ class TransactionModel {
       id: map['id'],
       type: TransactionType.values.firstWhere((e) => e.name == map['type']),
       amount: parsedAmount,
-      categoryId: map['categoryId'],
+      categoryId: map['categoryId'] ?? '',
       date: DateTime.parse(map['date']),
-      note: map['note'],
+      note: map['note'] ?? '',
       isRecurring: map['isRecurring'] == true || map['isRecurring'] == 1,
-      currency: map['currency'],
+      currency: map['currency'] ?? 'USD',
       recurrenceInterval: RecurrenceInterval.values
-          .firstWhere((e) => e.name == map['recurrenceInterval']),
+          .firstWhere((e) => e.name == (map['recurrenceInterval'] ?? 'none'), orElse: () => RecurrenceInterval.none),
       nextOccurrence: map['nextOccurrence'] != null
           ? DateTime.parse(map['nextOccurrence'])
           : null,
       isPinned: map['isPinned'] == true || map['isPinned'] == 1,
-      reminderDaysBefore: int.tryParse(map['reminderDaysBefore'].toString()) ?? 0,
+      reminderDaysBefore: int.tryParse(map['reminderDaysBefore']?.toString() ?? '0') ?? 0,
       userId: map['userId'],
       groupId: map['groupId'],
       userName: map['user']?['displayName'],

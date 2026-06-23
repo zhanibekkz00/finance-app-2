@@ -68,7 +68,7 @@ class BudgetsScreen extends ConsumerWidget {
                 itemCount: budgetState.budgets.length,
                 itemBuilder: (context, index) {
                   final budget = budgetState.budgets[index];
-                  final category = ref.read(categoryProvider.notifier).getCategoryById(budget.categoryId);
+                  final category = budget.category ?? ref.read(categoryProvider.notifier).getCategoryById(budget.categoryId);
                   if (category == null) return const SizedBox.shrink();
 
                   final double progress = budget.amount > 0 ? (budget.spentAmount / budget.amount) : 0;

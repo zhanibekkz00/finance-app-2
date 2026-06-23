@@ -84,32 +84,7 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
         final List<dynamic> data = jsonDecode(response.body);
         final transactions = data.map((json) {
           try {
-            // Robust parsing of amount (handles both String and num from Decimal)
-            double parsedAmount = 0.0;
-            if (json['amount'] is num) {
-              parsedAmount = (json['amount'] as num).toDouble();
-            } else if (json['amount'] is String) {
-              parsedAmount = double.tryParse(json['amount']) ?? 0.0;
-            }
-
-            return TransactionModel(
-              id: json['id'],
-              type: TransactionType.values.firstWhere((e) => e.name == json['type']),
-              amount: parsedAmount,
-              categoryId: json['categoryId'] ?? '',
-              date: DateTime.parse(json['date']),
-              note: json['note'] ?? '',
-              isRecurring: json['isRecurring'] ?? false,
-              currency: json['currency'] ?? 'USD',
-              recurrenceInterval: RecurrenceInterval.values.firstWhere(
-                  (e) => e.name == (json['recurrenceInterval'] ?? 'none')),
-              nextOccurrence: json['nextOccurrence'] != null
-                  ? DateTime.parse(json['nextOccurrence'])
-                  : null,
-              isPinned: json['isPinned'] ?? false,
-              userId: json['userId'],
-              groupId: json['groupId'],
-            );
+            return TransactionModel.fromMap(json);
           } catch (e) {
             debugPrint('Error parsing transaction ${json['id']}: $e');
             return null;
