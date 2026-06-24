@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/budget_provider.dart';
 import '../providers/category_provider.dart';
@@ -61,12 +62,59 @@ class BudgetsScreen extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        child: budgetState.isLoading && budgetState.budgets.isEmpty
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: budgetState.budgets.length,
-                itemBuilder: (context, index) {
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.chevron_left, color: textColor),
+                    onPressed: () => ref.read(budgetProvider.notifier).previousMonth(),
+                  ),
+                  Text(
+                    DateFormat('MMMM yyyy', Localizations.localeOf(context).languageCode).format(DateTime(budgetState.year, budgetState.month)),
+                    style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.chevron_right, color: textColor),
+                    onPressed: () => ref.read(budgetProvider.notifier).nextMonth(),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: budgetState.isLoading && budgetState.budgets.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : budgetState.budgets.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Нет бюджетов в этом месяце',
+                                style: TextStyle(color: subTextColor),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF6366F1),
+                                  foregroundColor: Colors.white,
+                                ),
+                                icon: const Icon(Icons.copy),
+                                label: const Text('Скопировать с прошлого'),
+                                onPressed: () {
+                                  ref.read(budgetProvider.notifier).copyBudgetsFromPreviousMonth();
+                                },
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: budgetState.budgets.length,
+                          itemBuilder: (context, index) {
                   final budget = budgetState.budgets[index];
                   final category = budget.category ?? ref.read(categoryProvider.notifier).getCategoryById(budget.categoryId);
                   if (category == null) return const SizedBox.shrink();
@@ -191,6 +239,9 @@ class BudgetsScreen extends ConsumerWidget {
                   );
                 },
               ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'budgets_fab',

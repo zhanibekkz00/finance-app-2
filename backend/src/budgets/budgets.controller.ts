@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Delete, Param, Query, UseGuards, Request } from '@nestjs/common';
 import { BudgetsService } from './budgets.service';
-import { UpsertBudgetDto } from './dto/budget.dto';
+import { UpsertBudgetDto, CopyBudgetDto } from './dto/budget.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
@@ -21,6 +21,11 @@ export class BudgetsController {
   @Post()
   async upsertBudget(@Request() req, @Body() dto: UpsertBudgetDto) {
     return this.budgetsService.upsertBudget(req.user.id, dto);
+  }
+
+  @Post('copy')
+  async copyBudgets(@Request() req, @Body() dto: CopyBudgetDto) {
+    return this.budgetsService.copyBudgets(req.user.id, dto);
   }
 
   @Delete(':id')

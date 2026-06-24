@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UpsertBudgetDto } from './dto/budget.dto';
+import { UpsertBudgetDto, CopyBudgetDto } from './dto/budget.dto';
 
 @Injectable()
 export class BudgetsService {
@@ -94,5 +94,50 @@ export class BudgetsService {
 
     await this.prisma.budget.delete({ where: { id } });
     return { success: true };
+  }
+
+  async copyBudgets(userId: string, dto: CopyBudgetDto) {
+    // Get budgets from previous month
+    const previousBudgets = await this.prisma.budget.findMany({
+      where: {
+        userId,
+        month: dto.fromMonth,
+        year: dto.fromYear,
+      },
+    });
+
+    if (previousBudgets.length === 0) {
+      return [];
+    }
+
+    // Upsert them into the new month
+    const results = [];
+    for (const b of previousBudgets) {
+      const budget = await this.prisma.budget.upsert({
+        where: {
+          userId_categoryId_month_year: {
+            userId,
+            categoryId: b.categoryId,
+            month: dto.toMonth,
+            year: dto.toYear,
+          },
+        },
+        update: {
+          // If a budget already exists for the new month, we don't necessarily want to overwrite it,
+          // but if we call copy we can assume we want to overwrite. Let's overwrite:
+          amount: b.amount,
+        },
+        create: {
+          userId,
+          categoryId: b.categoryId,
+          amount: b.amount,
+          month: dto.toMonth,
+          year: dto.toYear,
+        },
+        include: { category: true },
+      });
+      results.push(budget);
+    }
+    return results;
   }
 }

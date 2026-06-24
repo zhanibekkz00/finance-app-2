@@ -76,6 +76,42 @@ class BudgetNotifier extends StateNotifier<BudgetState> {
       return null;
     }
   }
+
+  void nextMonth() {
+    int nextMonth = state.month + 1;
+    int nextYear = state.year;
+    if (nextMonth > 12) {
+      nextMonth = 1;
+      nextYear++;
+    }
+    loadBudgets(nextMonth, nextYear);
+  }
+
+  void previousMonth() {
+    int prevMonth = state.month - 1;
+    int prevYear = state.year;
+    if (prevMonth < 1) {
+      prevMonth = 12;
+      prevYear--;
+    }
+    loadBudgets(prevMonth, prevYear);
+  }
+
+  Future<void> copyBudgetsFromPreviousMonth() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      int prevMonth = state.month - 1;
+      int prevYear = state.year;
+      if (prevMonth < 1) {
+        prevMonth = 12;
+        prevYear--;
+      }
+      await _repository.copyBudgets(prevMonth, prevYear, state.month, state.year);
+      await loadBudgets(state.month, state.year);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
 }
 
 final budgetRepositoryProvider = Provider<BudgetRepository>((ref) {

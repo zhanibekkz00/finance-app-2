@@ -81,9 +81,9 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
             // Currency Dropdown
             DropdownButtonFormField<String>(
               value: _selectedCurrency,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText:
-                      l10n.amount), // Reuse amount label context or add new key
+                      'Валюта'),
               items: _currencies
                   .map((c) => DropdownMenuItem(value: c, child: Text(c)))
                   .toList(),

@@ -35,4 +35,16 @@ class BudgetRepository {
       throw Exception('Failed to delete budget');
     }
   }
+
+  Future<void> copyBudgets(int fromMonth, int fromYear, int toMonth, int toYear) async {
+    final response = await _apiService.post('/budgets/copy', {
+      'fromMonth': fromMonth,
+      'fromYear': fromYear,
+      'toMonth': toMonth,
+      'toYear': toYear,
+    });
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to copy budgets');
+    }
+  }
 }

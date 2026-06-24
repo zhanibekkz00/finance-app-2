@@ -15,3 +15,21 @@ export class UpsertBudgetDto {
   @IsInt()
   year: number;
 }
+
+export class CopyBudgetDto {
+  @IsInt()
+  @Min(1)
+  @Max(12)
+  fromMonth: number;
+
+  @IsInt()
+  fromYear: number;
+
+  @IsInt()
+  @Min(1)
+  @Max(12)
+  toMonth: number;
+
+  @IsInt()
+  toYear: number;
+}

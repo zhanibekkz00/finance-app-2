@@ -529,11 +529,11 @@ class SavingsGoalsScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Срок:', style: TextStyle(color: Colors.white70)),
+                    const Text('Мерзімі:', style: TextStyle(color: Colors.white70)),
                     TextButton(
                       child: Text(
                         selectedDate == null
-                            ? 'Выбрать дату'
+                            ? 'Күнді таңдау'
                             : DateFormat('dd.MM.yyyy').format(selectedDate!),
                         style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold),
                       ),
@@ -569,7 +569,7 @@ class SavingsGoalsScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 const Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Цвет цели:', style: TextStyle(color: Colors.white70)),
+                  child: Text('Мақсат түсі:', style: TextStyle(color: Colors.white70)),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -605,7 +605,7 @@ class SavingsGoalsScreen extends ConsumerWidget {
                             Color tempColor = Color(selectedColorValue ?? colorOptions[0]);
                             return AlertDialog(
                               backgroundColor: const Color(0xFF1E293B),
-                              title: const Text('Выберите цвет', style: TextStyle(color: Colors.white)),
+                              title: const Text('Түсті таңдаңыз', style: TextStyle(color: Colors.white)),
                               content: SingleChildScrollView(
                                 child: ColorPicker(
                                   pickerColor: tempColor,
@@ -619,7 +619,7 @@ class SavingsGoalsScreen extends ConsumerWidget {
                               ),
                               actions: <Widget>[
                                 TextButton(
-                                  child: Text('Готово', style: TextStyle(color: const Color(0xFF6366F1).withOpacity(0.8))),
+                                  child: Text('Дайын', style: TextStyle(color: const Color(0xFF6366F1).withOpacity(0.8))),
                                   onPressed: () {
                                     setState(() {
                                       selectedColorValue = tempColor.value;

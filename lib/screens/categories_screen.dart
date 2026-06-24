@@ -106,11 +106,11 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                             itemBuilder: (ctx) => [
                               const PopupMenuItem(
                                 value: 'edit',
-                                child: Text('Редактировать', style: TextStyle(color: Colors.white)),
+                                child: Text('Өңдеу', style: TextStyle(color: Colors.white)),
                               ),
                               const PopupMenuItem(
                                 value: 'delete',
-                                child: Text('Удалить', style: TextStyle(color: Colors.redAccent)),
+                                child: Text('Өшіру', style: TextStyle(color: Colors.redAccent)),
                               ),
                             ],
                           ),
@@ -137,7 +137,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF1E293B),
         title: Text(l10n.delete, style: const TextStyle(color: Colors.white)),
-        content: Text('Удалить категорию "${category.name}"?', style: const TextStyle(color: Colors.white70)),
+        content: Text('"${category.name}" санатын өшіру керек пе?', style: const TextStyle(color: Colors.white70)),
         actions: [
           TextButton(
             child: Text(l10n.cancel, style: TextStyle(color: Colors.white.withOpacity(0.5))),
@@ -189,7 +189,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           backgroundColor: const Color(0xFF1E293B),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            category == null ? 'Создать категорию' : 'Редактировать категорию',
+            category == null ? 'Санат құру' : 'Санатты өңдеу',
             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           content: SingleChildScrollView(
@@ -201,7 +201,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                   controller: nameCtrl,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'Название категории',
+                    labelText: 'Санат атауы',
                     labelStyle: TextStyle(color: Colors.white54),
                     enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
                     focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF6366F1))),
@@ -246,7 +246,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               ),
                               icon: const Icon(Icons.photo_library_outlined, size: 18),
-                              label: const Text('Загрузить фото', style: TextStyle(fontSize: 13)),
+                              label: const Text('Фото жүктеу', style: TextStyle(fontSize: 13)),
                               onPressed: () async {
                                 final picker = ImagePicker();
                                 final image = await picker.pickImage(
@@ -282,7 +282,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                 // Color options palette
                 const Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Цвет категории:', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                  child: Text('Санат түсі:', style: TextStyle(color: Colors.white70, fontSize: 13)),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -312,7 +312,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                             Color tempColor = Color(selectedColor);
                             return AlertDialog(
                               backgroundColor: const Color(0xFF1E293B),
-                              title: const Text('Выберите цвет', style: TextStyle(color: Colors.white)),
+                              title: const Text('Түсті таңдаңыз', style: TextStyle(color: Colors.white)),
                               content: SingleChildScrollView(
                                 child: ColorPicker(
                                   pickerColor: tempColor,
@@ -326,7 +326,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                               ),
                               actions: <Widget>[
                                 TextButton(
-                                  child: Text('Готово', style: TextStyle(color: const Color(0xFF6366F1).withOpacity(0.8))),
+                                  child: Text('Дайын', style: TextStyle(color: const Color(0xFF6366F1).withOpacity(0.8))),
                                   onPressed: () {
                                     setState(() {
                                       selectedColor = tempColor.value;
@@ -361,7 +361,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Отмена', style: TextStyle(color: Colors.white.withOpacity(0.5))),
+              child: Text('Болдырмау', style: TextStyle(color: Colors.white.withOpacity(0.5))),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -400,7 +400,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                         Navigator.pop(ctx);
                       }
                     },
-              child: Text(category == null ? 'Создать' : 'Сохранить'),
+              child: Text(category == null ? 'Құру' : 'Сақтау'),
             ),
           ],
         ),
